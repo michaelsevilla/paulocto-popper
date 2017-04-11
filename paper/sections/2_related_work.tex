@@ -1,0 +1,134 @@
+\section{Related Work}
+
+% What is the problem the authors are trying to solve?
+Checkpointing performs small writes to a single shared file but because
+filesystems are optimized for large writes, performance is poor. To be
+specific, it easier for applications to write checkpoints to a single file with
+small, unaligned, writes of varying length varying write (N-1) but
+general-purpose distributed file systems are designed for writes to different
+files (N-N).
+
+% What is the general problem
+The problem is that the application understands the workload but it cannot
+communicate a solution to the storages system. The common solution is to add
+middleware (i.e. software that sits between the application and the storage
+system) to translate the data into a format the storage system performs well
+at. In this section, we examine a motivating example
+(Section~\ref{sec:motivating-example-plfs}) and a compression technique for that example
+use to communicate (Section~\ref{sec:language-patterned-io})
+(Section~\ref{sec:adapting-to-the-workload-with-cudele}).  
+
+\subsection{Motivating Example: PLFS}
+\label{sec:motivating-example-plfs}
+%@noah: there is an index because applications do not have regular IO
+%PLFS may not be the use case
+
+% What is the authors' approach or solution?
+PLFS maps an application's preferred data layout into one that the file system
+performs well on. Each process appends writes to a different data file in the
+hierarchical file system and records an offset and length are recorded in an
+index file. Reads aggregate per-process index files into a global index file,
+which it uses as lookup table for logical file. 
+
+% Why is it better than the other approaches or solutions?
+This solution improves write bandwidth and the single indexing reduces the
+number of files in a container. This PLFS layer successfully takes an N-1
+checkpoint format and changes the layout and organizes the checkpoints as an
+N-N checkpoint directory hierarchy. Each directory represents a node and has
+data and indexes (which improve reads). This way, writes are are not small and
+interspersed but can be done quickly and effectively in each subdirectory
+underneath the checkpoint1 root.
+
+% What other approaches or solutions existed at the time that this work was done?
+Checkpointing is the most common way to save the state of the application to
+persistent storage for fault tolerance. There are 3 flavors of checkpointing:
+N-N (unique files), N-1 (1 file), and N-1 striped (1 file with blocks). LFS
+systems (WAFL and Panasas's Object Storage) have a similar approach to PLFS
+which reorganizes disk layouts for sequential writing, Berkeley Lab Checkpoint
+/ Restart and Condor checkpointing use applications to check node states,
+stdchk saves checkpoints in a  diskless cloud, adaptable IO systems
+aggressively log and use write-behinds, and Zest uses a manager for each disk
+to pull data from distributed queues.
+
+% What was wrong with the other approaches or solutions?
+An N-1 checkpoint pattern receives far less bandwidth than an N-N pattern. N-N
+applications have more overhead, are harder to manage/archive, are harder to
+visualize, and have worse failure recovery (all in 1 file) than N-1 patterns.
+Furthermore, N-1 programmers do not want change their code to an N-N
+checkpointing scheme and do not want to change their coding style to facilitate
+the increased bandwidth. All systems current hybrid systems have drawbacks,
+such as a failure to decouple concurrency, storage overhead, the behavior of
+HPC parallel applications (utilizing all memory), application modification, and
+availability of data.
+
+\subsection{Language: Pattern PLFS}
+\label{sec:language-patterned-io}
+
+% What other approaches or solutions existed at the time that this work was done?
+I/O access patterns are studied extensively and results are integrated into
+existing systems. The common checkpointing technique, employed by ADIOS and
+PLFS, transform the concurrently written file into exclusively written file
+fragments. 
+
+% What was wrong with the other approaches or solutions?
+Despite extensive studies on I/O access patterns, current systems do not
+dynamically recognize patterns at a fine granularity. Because the PLFS
+checkpoint technique makes many small writes, it is either slow (on disk) or
+consumes a large amount of space (memory).  
+
+% What is the authors' approach or solution?
+The authors present algorithms to discover and replace PLFS metadata. The
+system is composed of: 
+
+\begin{itemize}
+
+  \item local per-process metadata: split based on pattern discovering engine
+  (get tuples using sliding window)
+
+  \item merge local indices into a single global one per PLFS (check if local
+  neighbors abut each other)
+
+\end{itemize}
+
+% Why is it better than the other approaches or solutions?
+The authors' algorithms rediscover information as data moves through POSIX. By
+dynamically  pattern matching and compression, they are able to reduce latency
+and disk/memory usage on reads. 
+
+% How does it perform?
+They tested with FS-TEST, MapReplayer, and real applications. In their
+experiments, metadata is reduced by several orders of magnitude, write
+performance is increased (by 40\%), and reads are increased (by 480\%). 
+
+% Why is this work important?
+
+Discovering structure in unstructured IO is useful for other systems, like
+pre-fetching and pre-allocation of blocks in file system or SciHadoop
+(metadata/data). This work that these algorithms (applied to compress metadata)
+can successfully optimize I/O. 
+
+% 3+ comments/questions
+\begin{itemize}
+
+  \item What PLFS structures allow us to to this?
+
+  \item How dependent on workloads are these?
+
+  \item Can this be extended to other file systems?
+
+\end{itemize}
+
+\subsection{Structured Namespaces in PLFS}
+
+% How does PLFS create namespaces
+When PLFS maps a logical file to many physical files, it deterministically
+creates the file system namespace in the backend file system. The metadata
+writes are fomulaic:
+
+\(\text{depth} = 2 + \text{file\_depth}\)
+
+\(\text{dirs @ level 1} = \text{hosts}\)
+
+\(\text{files per dir} = \text{processes}/\text{hosts} \)
+
+
