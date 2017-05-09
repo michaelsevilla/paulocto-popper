@@ -118,17 +118,3 @@ can successfully optimize I/O.
 
 \end{itemize}
 
-\subsection{Structured Namespaces in PLFS}
-
-% How does PLFS create namespaces
-When PLFS maps a logical file to many physical files, it deterministically
-creates the file system namespace in the backend file system. The metadata
-writes are fomulaic:
-
-\(\text{depth} = 2 + \text{file\_depth}\)
-
-\(\text{dirs @ level 1} = \text{hosts}\)
-
-\(\text{files per dir} = \text{processes}/\text{hosts} \)
-
-
