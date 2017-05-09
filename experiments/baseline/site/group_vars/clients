@@ -1,0 +1,5 @@
+---
+cluster: ceph
+client_containerized_deployment: true
+
+collectl_args: "-scnm -i 1"
