@@ -1,7 +1,5 @@
 \section{Introduction}
 \label{sec:introduction}
-Well, well, well. You want me to talk about namespaces... I have already done
-great work in this field~\cite{sevilla:sc15-mantle, sevilla:sc15-malacology}.
 
 % What is PLFS
 PLFS~\cite{bent_plfs_2009} solved the checkpoint problem by mapping logical
@@ -55,46 +53,41 @@ index by reading each process's local index. This process incurrs a
 container~\cite{bent_plfs_2009}.
 
 % What is our solution
-We propose XXX, a file system that uses the Cudele API, to succinctly express
-metadata structure. Clients dictate the structure and patterns of the metadata
-they intend to create for their workload to the underlying storage system. They
-can also merge new metadata (that they did not explicitly state up front) into
-the global namespace.  The benefits of the this approach are:
+We propose PaulOctoFS, a file system that allows users to succinctly express
+the structure and patterns of the metadata they intend to create.  They can
+also merge new metadata (that they did not explicitly state up front) into the
+global namespace.  Using this semantic knowledge, PaulOctoFS can optimize
+performance by reducing the number of RPCs needed for:
 
 \begin{itemize}
 
-  \item metadata compaction: describing the structure of the resulting
-  namespace and inodes lets XXX enjoy the performance advantages
-  of~\cite{he:hpdc13-plfs-patterns}
+  \item metadata writes because clients/servers can create metadata
+  independently
 
-  \item reducing RPCs: if the client and server both understand the final
-  structure of the file system metadata, there is no need to communicate; this
-  results in higher throughput at the cost of increased latency for read operations
+  \item metadata reads because clients can construct metadata and pull data
+  directly from the object store
 
 \end{itemize}
 
-The idea uses concepts from decoupled namespaces~\cite{zheng:pdsw2014-batchfs,
+The fundamental insight is that the client and server both understand the final
+structure of the file system metadata so there is no need to communicate.  The
+idea uses concepts from decoupled namespaces~\cite{zheng:pdsw2014-batchfs,
 zheng:pdsw2015-deltafs} and patterned IO~\cite{he:hpdc13-plfs-patterns} to
 build a scalable global namespace. Less work is done on the metadata servers
 and clients pick up some of the metadata load.  This approach is similar to
 predicate push down in databases, where structure is described using XML or
 JSON and pushed as predicates to the lower storage
-layers~\cite{shel:pc17-pushdown}. It is our hope the XXX will also be able to
-change the representation or structure of the file system metadata according to
-the file type or workload.
-
-We have the following contributions:
+layers~\cite{shel:pc17-pushdown}. It is our hope the PaulOctoFS will also be
+able to change the representation or structure of the file system metadata
+according to the file type or workload.  We have the following contributions:
 
 \begin{itemize}
 
-  \item a prototype implementation, XXX, that leverages metadata
-  compaction and reduces RPC amplification to improve performance
+  \item a prototype implementation that leverages metadata compaction and
+  reduces RPC amplification to improve performance
 
   \item structured and unstructured namespaces, a paradigm that helps
-  applications optimize performance by giving the storage system information.
+  applications optimize performance by conveying semantic knowledge to the
+  storage system.
 
 \end{itemize}
-
-
-Caching can reduce RPC amplification but for
-consitency writes (e.g., file creates) require at least one RPC. 

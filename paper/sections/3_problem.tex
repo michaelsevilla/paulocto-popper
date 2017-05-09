@@ -1,0 +1,13 @@
+\section{Cost of Transformative Write IO}
+
+Transforming write IO has space and read overheads. In PLFS, this is a problem
+because index files need to be coalesced on reads.  Patterned
+PLFS~\cite{he:hpdc13-plfs-patterns} reduces the space overheads by storing
+formulas, instead of index files, to represent write behavior. Diddlings
+~\cite{grider:pc17-diddlings} transfers index files after each write to absorb
+the transfer overheads up front. While these approaches help alleviate read
+overheads, they do not reduce the file system metadata load, which is the real
+problem.
+
+Reading the index file still requires a file system metadata operation. To
+demonstrate the load this generates on the underlying file system
