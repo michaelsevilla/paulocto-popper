@@ -16,6 +16,7 @@ mkdir -p results/logs || true
 cp site/configs/base.yml site/group_vars/all
 cp site/* site/roles/ceph-ansible || true
 cp -r site/group_vars site/roles/ceph-ansible/
+cp site/inventory/6client site/hosts
 cp site/hosts site/roles/ceph-ansible/hosts
 
 # setup
@@ -24,11 +25,9 @@ $CEPH_ANSIBLE ceph.yml cephfs.yml
 $SRL_ANSIBLE ceph_pgs.yml ceph_monitor.yml ceph_wait.yml
  
 # benchmark
-./ansible-playbook.sh -e nfiles=10 ../workloads/creates.yml
-./ansible-playbook.sh -e nfiles=100 ../workloads/creates.yml
-./ansible-playbook.sh -e nfiles=1000 ../workloads/creates.yml
-./ansible-playbook.sh -e nfiles=10000 ../workloads/creates.yml
-./ansible-playbook.sh -e nfiles=100000 ../workloads/creates.yml
-./ansible-playbook.sh -e nfiles=1000000 ../workloads/creates.yml
-#./ansible-playbook.sh -e site=$nfiles collect.yml
-#mv results results-run${i}
+for i in 1 2 3 4 5 6; do
+  cp site/inventory/${i}client site/hosts
+  cp site/hosts site/roles/ceph-ansible/hosts
+  ./ansible-playbook.sh -e nfiles=${i} ../workloads/creates.yml
+done
+##mv results results-run${i}

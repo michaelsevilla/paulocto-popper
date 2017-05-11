@@ -5,10 +5,10 @@
   roles: 
     - monitor/graphite
 
-- hosts: osds
-  become: True
-  roles:
-    - monitor/collectl
+#- hosts: osds
+#  become: True
+#  roles:
+#    - monitor/collectl
 
 - hosts: mdss
   become: True
