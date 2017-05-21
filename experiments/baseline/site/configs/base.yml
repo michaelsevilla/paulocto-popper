@@ -47,19 +47,19 @@ ceph_conf_overrides:
 ################
 ceph_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_docker_imagename: daemon
-ceph_docker_image_tag: f4d39ca
+ceph_docker_image_tag: 72cf732
 ceph_mon_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_mon_docker_imagename: daemon
-ceph_mon_docker_image_tag: f4d39ca
+ceph_mon_docker_image_tag: 72cf732
 ceph_osd_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_osd_docker_imagename: daemon
-ceph_osd_docker_image_tag: f4d39ca
+ceph_osd_docker_image_tag: 72cf732
 ceph_mds_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_mds_docker_imagename: daemon
-ceph_mds_docker_image_tag: f4d39ca
+ceph_mds_docker_image_tag: 72cf732
 ceph_client_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_client_docker_imagename: daemon
-ceph_client_docker_image_tag: f4d39ca
+ceph_client_docker_image_tag: 72cf732
 
 ####################
 # experiment stuff #
