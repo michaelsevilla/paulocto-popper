@@ -11,32 +11,39 @@ checkpoint style can be transformed with a thin interposition layer. To map
 offsets in the logical file to physical files each process maintains an index
 of \{logical offset, physical offset, length, physical block id\}. 
 
-
 \begin{figure}
   \centering
-  \begin{subfigure}[b]{0.25\textwidth}
-    \includegraphics[width=\textwidth]{figures/intro.png}
-   \label{fig:intro}
-  \end{subfigure}
-  ~ 
-  \begin{subfigure}[b]{0.3\textwidth}
-    \begin{tabular}{ r | l }
-      Type         & Overhead       \\\hline\\
-      Structured   & 1 RPC          \\
-      Namespace    & O(1)           \\\\\hdashline\\
-      Unstructured & 1 RPC + Replay \\
-      Namespace    & O(1)           \\\\\hdashline\\
-      Traditional  & \(n\) RPCs     \\
-      Namespace    & O(\(n\))       \\
-    \end{tabular}
-    \\\\\\ % I am a hack
-   \label{table:intro}
-  \end{subfigure}
+  \includegraphics[width=90mm]{figures/intro.png}
   \caption{Clients decouple the file system subtrees and interact with their
   private copiese locally for high performance. They can specify the structure of
   the metadata they intend to create (structured namespace) or they can create
-  ad-hoc metadata (unstructured namespace), which is merged later.}
+  ad-hoc metadata (unstructured namespace), which is merged later.\label{fig:intro}}
 \end{figure}
+%\begin{figure}
+%  \centering
+%  \begin{subfigure}[b]{0.25\textwidth}
+%    \includegraphics[width=\textwidth]{figures/intro.png}
+%   \label{fig:intro}
+%  \end{subfigure}
+%  ~ 
+%  \begin{subfigure}[b]{0.3\textwidth}
+%    \begin{tabular}{ r | l }
+%      Type         & Overhead       \\\hline\\
+%      Structured   & 1 RPC          \\
+%      Namespace    & O(1)           \\\\\hdashline\\
+%      Unstructured & 1 RPC + Replay \\
+%      Namespace    & O(1)           \\\\\hdashline\\
+%      Traditional  & \(n\) RPCs     \\
+%      Namespace    & O(\(n\))       \\
+%    \end{tabular}
+%    \\\\\\ % I am a hack
+%   \label{table:intro}
+%  \end{subfigure}
+%  \caption{Clients decouple the file system subtrees and interact with their
+%  private copiese locally for high performance. They can specify the structure of
+%  the metadata they intend to create (structured namespace) or they can create
+%  ad-hoc metadata (unstructured namespace), which is merged later.}
+%\end{figure}
 %    \caption{Traditional namespaces require at least 1 RPC per metadata
 %    operation. Structured namespaces only need the initial RPC so clients/servers
 %    understand (and can construct) the namespace.  Unstructured namespaces cannot
