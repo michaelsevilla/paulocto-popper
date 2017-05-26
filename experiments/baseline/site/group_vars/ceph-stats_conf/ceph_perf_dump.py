@@ -40,23 +40,11 @@ def namespace():
   data = json.loads(json_data)
 
   # get the temperature of each inode
-  heat = {}
-  for inos in data:
-    ino = inos['ino']
-    if ino < 1500 or ino > 1599: # it's a snap
-      if 'dirfrags' in inos:
-        for df in inos['dirfrags']:
-          heat[int(df['dirfrag'], 16)] = df['Decay Counters']
-  
-  # match inode to path and print
   ret = []
-  for inos in data:
-    snap = True
-    for dirfrags in inos['dirfrags']:
-      path = dirfrags['path']
-      if "~mds" not in path:
-        ret.append((path, heat[inos['ino']][1]['value']))
-        snap = False
+  for cell in data:
+    for df in cell['dirfrags']:
+      ret.append((df['path'], df['heat']))
+
   print ret
   return ret
   
@@ -68,7 +56,7 @@ parser.add_argument('--interval', metavar='i', type=int, default=1, help='port o
 parser.add_argument('--jsonfile', metavar='f', type=str, default="/tmp/ceph_perf_dump.json", help='where the json dump is')
 parser.add_argument('--throughput', metavar='t', type=int, default=1, help='whether to collect throughput')
 parser.add_argument('--nspace', metavar='n', type=int, default=0, help='whether to collect namespace heat')
-parser.add_argument('--depth', metavar='d', type=int, default=0, help='depth of namespace dump')
+parser.add_argument('--depth', metavar='d', type=int, default=100, help='depth of namespace dump')
 parser.add_argument('--nspacejsonfile', metavar='o', type=str, default="/tmp/ceph_nspace_dump.json", help='where the namespace json dump is')
 args = parser.parse_args()
 print "args:", args
@@ -109,7 +97,7 @@ while 1:
         path = dirs[0]
         if path == "":
           path = "/root"
-        metrics[socket.gethostname() + ".namespace" + path.replace("/", ".")] = (date, dirs[1])
+        metrics[socket.gethostname() + ".namespace" + path.replace("/", ".") + "-heat"] = (date, dirs[1])
 
     # save off the previous metrics
     pmetrics = metrics;
@@ -120,4 +108,3 @@ while 1:
     payload = pickle.dumps(m, protocol=2)
     header = struct.pack("!L", len(payload))
     s.send(header + payload)
-    print "... sent to", args.ip, "at port", args.port
