@@ -13,5 +13,5 @@
 - hosts: mdss
   become: True
   roles:
-    - monitor/collectl
+    #- monitor/collectl
     - ceph/ceph-stats

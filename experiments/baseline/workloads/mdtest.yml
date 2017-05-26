@@ -2,32 +2,16 @@
 - name: drop the os file cache
   shell: sudo sh -c "$(which echo) 3 > /proc/sys/vm/drop_caches"
 
-- name: stop old containers
-  shell: docker stop client plfs
-  ignore_errors: True
-
 - name: remove old containers
-  shell: docker rm client plfs
+  shell: docker rm -f client
   ignore_errors: True
-
-- name: start plfs container
-  shell: >
-         docker run -d \
-           --name=plfs \
-           -v /dev:/dev \
-           -v {{ plfs_mount_point }}:{{ plfs_mount_point }}:shared \
-           -v /tmp:/tmp \
-           --privileged \
-           --volumes-from cephfs \
-           michaelsevilla/plfs \
-           {{ plfs_mount_point }} {{ mount_point }}
 
 - name: remove old testdir
-  shell: docker exec plfs mv {{ plfs_mount_point }}/testdir {{ plfs_mount_point }}/testdir-nfiles-{{ nfiles }}-{{ ansible_date_time.date }}-{{ ansible_date_time.time }}-{{ ansible_hostname }}
+  shell: docker exec cephfs mv {{ mount_point }}/testdir {{ mount_point }}/testdir-nfiles-{{ nfiles }}-{{ ansible_date_time.date }}-{{ ansible_date_time.time }}-{{ ansible_hostname }}
   ignore_errors: True
 
 - name: create the test directory
-  shell: docker exec plfs mkdir {{ plfs_mount_point }}/testdir
+  shell: docker exec cephfs mkdir {{ mount_point }}/testdir
   ignore_errors: True
     
 - name: sleep 
@@ -37,7 +21,7 @@
   shell: >
          docker run -d \
            --name=client \
-           --volumes-from plfs \
+           --volumes-from cephfs \
            michaelsevilla/mdtest \
-           -F -C -n {{ nfiles }} -d {{ plfs_mount_point }}/testdir/nfiles-{{ nfiles }}-{{ ansible_hostname }}
+           -F -C -n {{ nfiles }} -d {{ mount_point }}/testdir/nfiles-{{ nfiles }}-{{ ansible_hostname }}
 

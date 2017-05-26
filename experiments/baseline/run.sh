@@ -25,9 +25,10 @@ $CEPH_ANSIBLE ceph.yml cephfs.yml
 $SRL_ANSIBLE ceph_pgs.yml ceph_monitor.yml ceph_wait.yml
  
 # benchmark
-for i in 1 2 3 4 5 6; do
-  cp site/inventory/${i}client site/hosts
-  cp site/hosts site/roles/ceph-ansible/hosts
-  ./ansible-playbook.sh -e nfiles=${i} ../workloads/creates.yml
-done
+#for i in 6; do
+#  cp site/inventory/${i}client site/hosts
+#  cp site/hosts site/roles/ceph-ansible/hosts
+#  ./ansible-playbook.sh -e nfiles=${i} ../workloads/creates.yml
+#done
+#./ansible-playbook.sh collect.yml
 ##mv results results-run${i}

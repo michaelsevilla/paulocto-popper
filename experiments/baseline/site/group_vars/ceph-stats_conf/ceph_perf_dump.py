@@ -32,6 +32,33 @@ def throughput(name, pmetric, metric, interval):
   tput = (m[0], d/interval)
   print "throughput: tput=" + str(tput) + " m=" + str(m) + " p=" + str(p) + " time=" + str(t) + " diff=" + str(d)
   return tput
+
+# get the namespace heats
+def namespace():
+  os.popen("ceph --admin-daemon /var/run/ceph/ceph-mds* dump tree / " + str(args.depth) + " > " + args.nspacejsonfile)
+  json_data=open(args.nspacejsonfile).read()
+  data = json.loads(json_data)
+
+  # get the temperature of each inode
+  heat = {}
+  for inos in data:
+    ino = inos['ino']
+    if ino < 1500 or ino > 1599: # it's a snap
+      if 'dirfrags' in inos:
+        for df in inos['dirfrags']:
+          heat[int(df['dirfrag'], 16)] = df['Decay Counters']
+  
+  # match inode to path and print
+  ret = []
+  for inos in data:
+    snap = True
+    for dirfrags in inos['dirfrags']:
+      path = dirfrags['path']
+      if "~mds" not in path:
+        ret.append((path, heat[inos['ino']][1]['value']))
+        snap = False
+  print ret
+  return ret
   
 # main
 parser = argparse.ArgumentParser(description='Parse Ceph perf counter dump and send to graphite')
@@ -39,7 +66,10 @@ parser.add_argument('ip', metavar='ip', type=str, help='where the graphite colle
 parser.add_argument('--port', metavar='p', type=int, default=2004, help='port of the graphite collector daemon (carbon)')
 parser.add_argument('--interval', metavar='i', type=int, default=1, help='port of the graphite collector daemon (carbon)')
 parser.add_argument('--jsonfile', metavar='f', type=str, default="/tmp/ceph_perf_dump.json", help='where the json dump is')
-parser.add_argument('--throughput', metavar='t', type=bool, default=True, help='whether to collect throughput')
+parser.add_argument('--throughput', metavar='t', type=int, default=1, help='whether to collect throughput')
+parser.add_argument('--nspace', metavar='n', type=int, default=0, help='whether to collect namespace heat')
+parser.add_argument('--depth', metavar='d', type=int, default=0, help='depth of namespace dump')
+parser.add_argument('--nspacejsonfile', metavar='o', type=str, default="/tmp/ceph_nspace_dump.json", help='where the namespace json dump is')
 args = parser.parse_args()
 print "args:", args
 
@@ -63,15 +93,23 @@ while 1:
         metrics = json_to_dict(date, json.load(f))
     except IOError:
       print "WARNING: couldn't find JSON dump, did you dump the Ceph JSON (" + args.jsonfile + ")?"
-      continue
+      sys.exit(-1)
     except ValueError:
       print "ERROR: couldn't read the JSON dump, malformed"
-      continue
+      sys.exit(-1)
 
     # calculate throughput
     if (args.throughput and len(pmetrics) > 0):
       key = socket.gethostname() + ".mds_server.handle_client_request"
       metrics[key + "_tput"] = throughput(key, pmetrics, metrics, float(args.interval))
+
+    # calculate namespace
+    if (args.nspace):
+      for dirs in namespace():
+        path = dirs[0]
+        if path == "":
+          path = "/root"
+        metrics[socket.gethostname() + ".namespace" + path.replace("/", ".")] = (date, dirs[1])
 
     # save off the previous metrics
     pmetrics = metrics;

@@ -1,0 +1,81 @@
+- hosts: mdss[0]
+  become: True
+  tasks:
+  - name: dump perf counters
+    shell: docker exec ceph-{{ ansible_hostname }}-mds ceph daemon mds.{{ ansible_hostname }} perf dump
+    register: results
+  - local_action: copy content="{{ results.stdout }}" dest="{{ playbook_dir|dirname }}/results/perfdump_{{ nfiles }}_before"
+
+- hosts: clients
+  become: True
+  tasks:
+  - fail: msg="Uh oh. Please define nfiles"
+    when: nfiles is not defined
+
+  - name: drop the os file cache
+    shell: sudo sh -c "$(which echo) 3 > /proc/sys/vm/drop_caches"
+  
+  - name: stop old containers
+    shell: docker stop plfs-{{ item }}
+    ignore_errors: True
+    with_sequence: start=0 end=2
+  
+  - name: remove old containers
+    shell: docker rm -f plfs-{{ item }}
+    ignore_errors: True
+    with_sequence: start=0 end=2
+
+  - name: get rid of mount error
+    shell: sudo umount {{ plfs_mount_point }}
+    ignore_errors: True
+    with_sequence: start=0 end=2
+  
+  - name: start plfs container
+    shell: >
+           docker run -d \
+             --name=plfs-{{ item }} \
+             -v /dev:/dev \
+             -v {{ plfs_mount_point }}:{{ plfs_mount_point }}:shared \
+             -v /tmp:/tmp \
+             --privileged \
+             --volumes-from cephfs \
+             michaelsevilla/plfs \
+             {{ plfs_mount_point }} {{ mount_point }}
+    with_sequence: start=0 end=2
+
+  - name: get rid of any lingering data
+    shell: docker exec plfs rm -r {{ plfs_mount_point }}/*
+    ignore_errors: True
+
+  - name: get the script over to the client
+    copy: src="{{ playbook_dir }}/writeoffset.sh" dest="/tmp/writeoffset.sh" mode=0750
+
+  - name: run the benchmark
+    shell: /tmp/writeoffset.sh plfs-0 "/plfs"
+
+- hosts: clients[0]
+  become: True
+  tasks:
+  - name: get the size of the namespace
+    shell: docker exec plfs-0 find {{ mount_point }}/vfile.txt -type f | wc -l
+    register: results
+  - local_action: >
+      lineinfile dest="{{ playbook_dir|dirname }}/results/files.txt" line="{{ nfiles }},{{ ansible_date_time.time }},{{ results.delta }},{{ results.stdout }}" create="yes"
+
+  - name: get the size of the namespace
+    shell: docker exec plfs-0 find {{ mount_point }}/vfile.txt -type d | wc -l
+    register: results
+  - local_action: >
+      lineinfile dest="{{ playbook_dir|dirname }}/results/dirs.txt" line="{{ nfiles }},{{ ansible_date_time.time }},{{ results.delta }},{{ results.stdout }}" create="yes"
+
+  - name: get the read overheads
+    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+
+- hosts: mdss[0]
+  become: True
+  tasks:
+  - name: dump perf counters
+    shell: docker exec ceph-{{ ansible_hostname }}-mds ceph daemon mds.{{ ansible_hostname }} perf dump
+    register: results
+  - local_action: copy content="{{ results.stdout }}" dest="{{ playbook_dir|dirname }}/results/perfdump_{{ nfiles }}_after"
+

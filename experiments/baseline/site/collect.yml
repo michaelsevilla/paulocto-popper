@@ -15,14 +15,23 @@
         - "{{ result.stdout_lines }}"
     
     - name: get those tars
-      fetch: src=/tmp/graphite/whisper/{{ item }}.tar.gz dest={{ playbook_dir|dirname }}/results/{{ site }}/{{ item }}.tar.gz flat=yes
+      fetch: src=/tmp/graphite/whisper/{{ item }}.tar.gz dest={{ playbook_dir|dirname }}/results//{{ item }}.tar.gz flat=yes
       with_items:
         - "{{ result.stdout_lines }}" 
 
 - hosts: mdss
+  become: True
   tasks:
     - name: dump the logs
       shell: docker logs ceph-{{ ansible_hostname }}-mds > out 2>&1
 
     - name: get those logs
-      fetch: src=out dest={{ playbook_dir|dirname }}/results/{{ site }}/logs/{{ ansible_hostname }}-daemon.log flat=yes
+      fetch: src=out dest={{ playbook_dir|dirname }}/results/logs/{{ ansible_hostname }}-daemon.log flat=yes
+
+    - name: get the tars of namespace dump
+      shell: tar czf /etc/ceph/cache_dump.tar.gz /etc/ceph/cache_dump
+
+    - name: get it
+      fetch: src=/etc/ceph/cache_dump.tar.gz dest={{ playbook_dir|dirname }}/results/cache_dump.tar.gz flat=yes
+      
+      
