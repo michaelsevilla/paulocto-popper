@@ -18,17 +18,17 @@
   - name: stop old containers
     shell: docker stop plfs-{{ item }}
     ignore_errors: True
-    with_sequence: start=0 end=2
+    with_sequence: start=0 end=0
   
   - name: remove old containers
     shell: docker rm -f plfs-{{ item }}
     ignore_errors: True
-    with_sequence: start=0 end=2
+    with_sequence: start=0 end=0
 
   - name: get rid of mount error
     shell: sudo umount {{ plfs_mount_point }}
     ignore_errors: True
-    with_sequence: start=0 end=2
+    with_sequence: start=0 end=0
   
   - name: start plfs container
     shell: >
@@ -41,10 +41,10 @@
              --volumes-from cephfs \
              michaelsevilla/plfs \
              {{ plfs_mount_point }} {{ mount_point }}
-    with_sequence: start=0 end=2
+    with_sequence: start=0 end=0
 
   - name: get rid of any lingering data
-    shell: docker exec plfs rm -r {{ plfs_mount_point }}/*
+    shell: docker exec plfs-0 rm -r {{ plfs_mount_point }}/*
     ignore_errors: True
 
   - name: get the script over to the client
@@ -56,6 +56,23 @@
 - hosts: clients[0]
   become: True
   tasks:
+
+  - pause: minutes=1
+  - name: get the read overheads which triggers readdir
+    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+
+  - pause: minutes=1
+  - name: get the read overheads which triggers open
+    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+
+  - pause: minutes=1
+  - name: get the read overheads which triggers open
+    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+
+  - pause: minutes=1
+  - name: get the read overheads which triggers open
+    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+
   - name: get the size of the namespace
     shell: docker exec plfs-0 find {{ mount_point }}/vfile.txt -type f | wc -l
     register: results
@@ -68,8 +85,7 @@
   - local_action: >
       lineinfile dest="{{ playbook_dir|dirname }}/results/dirs.txt" line="{{ nfiles }},{{ ansible_date_time.time }},{{ results.delta }},{{ results.stdout }}" create="yes"
 
-  - name: get the read overheads
-    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+
 
 - hosts: mdss[0]
   become: True

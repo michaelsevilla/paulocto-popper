@@ -43,7 +43,12 @@ def namespace():
   ret = []
   for cell in data:
     for df in cell['dirfrags']:
-      ret.append((df['path'], df['heat']))
+      for op in ['ird', 'iwr', 'readdir', 'store', 'fetch']:
+        path = df['path']
+        if path == "":
+          path = "/root"
+        key = 'heat_' + op
+        ret.append((path + '-' + key, df[key]))
 
   print ret
   return ret
@@ -95,9 +100,7 @@ while 1:
     if (args.nspace):
       for dirs in namespace():
         path = dirs[0]
-        if path == "":
-          path = "/root"
-        metrics[socket.gethostname() + ".namespace" + path.replace("/", ".") + "-heat"] = (date, dirs[1])
+        metrics[socket.gethostname() + ".namespace" + path.replace("/", ".")] = (date, dirs[1])
 
     # save off the previous metrics
     pmetrics = metrics;

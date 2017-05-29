@@ -1,7 +1,7 @@
 # broken: issdm-3
 
 [osds]
-issdm-0 ansible_ssh_user=issdm
+#issdm-0 ansible_ssh_user=issdm
 issdm-1 ansible_ssh_user=issdm
 #issdm-6 ansible_ssh_user=issdm
 issdm-14 ansible_ssh_user=issdm
@@ -20,7 +20,7 @@ issdm-15 ansible_ssh_user=issdm
 issdm-18 ansible_ssh_user=issdm
 
 [clients]
-issdm-0 ansible_ssh_user=issdm
+issdm-45 ansible_ssh_user=issdm
 issdm-1 ansible_ssh_user=issdm
 #issdm-40 ansible_ssh_user=issdm
 #issdm-14 ansible_ssh_user=issdm
