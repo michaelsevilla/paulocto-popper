@@ -57,7 +57,9 @@
 
 - hosts: graphite
   tasks:
-  - shell: docker rm -f graphite
+  - shell: docker rm stop graphite
+    ignore_errors: True
+  - shell: docker rm rm graphite
     ignore_errors: True
 
 - hosts: all

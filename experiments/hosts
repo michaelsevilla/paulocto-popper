@@ -1,0 +1,14 @@
+[osds]
+<ADD HOSTS>
+
+[mons]
+<ADD HOSTS>
+
+[mdss]
+<ADD HOSTS>
+
+[clients]
+<ADD HOSTS>
+
+[graphite]
+<ADD HOSTS>

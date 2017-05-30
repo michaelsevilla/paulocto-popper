@@ -4,3 +4,6 @@
 [submodule "experiments/n1/site/roles/ceph-ansible"]
 	path = experiments/n1/site/roles/ceph-ansible
 	url = https://github.com/michaelsevilla/ceph-ansible.git
+[submodule "experiments/baseliner"]
+	path = experiments/baseliner
+	url = https://github.com/michaelsevilla/ceph-popper-template.git
