@@ -9,22 +9,22 @@ fi
 echo "let's go!"
 set -ex
 
-## BASELINE
-#cp conf/hosts/all baseliner/site/hosts
-#cp conf/ceph.conf baseliner/site/group_vars/all
-#cp conf/osds.conf baseliner/site/group_vars/osds
-#cd baseliner
-#./deploy.sh
-#./baseliner.sh
-#cd -
+# BASELINE
+cp conf/hosts/all baseliner/site/hosts
+cp conf/ceph.conf baseliner/site/group_vars/all
+cp conf/osds.conf baseliner/site/group_vars/osds
+cd baseliner
+./deploy.sh
+./baseliner.sh
+cd -
 
-## N1
-#cp conf/hosts/* n1/site/inventory/
-#cp conf/ceph.conf n1/site/group_vars/all
-#cp conf/osds.conf baseliner/site/group_vars/osds
-#cd n1
-#./run.sh
-#cd -
+# N1
+cp conf/hosts/* n1/site/inventory/
+cp conf/ceph.conf n1/site/group_vars/all
+cp conf/osds.conf baseliner/site/group_vars/osds
+cd n1
+./run.sh
+cd -
 
 # NN
 cp conf/hosts/* nn/inventory/
