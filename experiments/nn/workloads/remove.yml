@@ -1,0 +1,12 @@
+- hosts: clients[0]
+  become: True
+  tasks:
+  - name: delete files... aye
+    shell: docker exec cephfs rm -r {{ mount_point }}/testdir
+    ignore_errors: True
+    register: results
+  - local_action: >
+      copy content={{ results }} 
+      dest="{{ playbook_dir|dirname }}/results/{{ site }}/remove-{{ nfiles }}-{{ ansible_hostname }}-{{ results.start | replace(' ', '_') }}.txt"
+
+

@@ -12,10 +12,10 @@
   - shell: docker rm -f client
     ignore_errors: True
 
-  - shell: docker exec cephfs sudo umount {{ mount_point }}
+  - shell: docker exec cephfs sudo umount /cephfs
     ignore_errors: True
 
-  - shell: docker exec cephfs sudo umount {{ mount_point }}
+  - shell: docker exec cephfs sudo umount /cephfs
     ignore_errors: True
 
 - hosts: localhost
@@ -57,9 +57,7 @@
 
 - hosts: graphite
   tasks:
-  - shell: docker stop graphite
-    ignore_errors: True
-  - shell: docker rm graphite
+  - shell: docker rm -f graphite
     ignore_errors: True
 
 - hosts: all

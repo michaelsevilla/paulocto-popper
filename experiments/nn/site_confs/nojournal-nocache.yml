@@ -10,12 +10,10 @@ ceph_mon_docker_subnet: 192.168.140.0/24
 fsid: "e9570dd8-03ad-45f0-8a74-ec9b3bb7095f"
 docker: true
 install_docker: false
-ceph_pgs: [128]
 
 #############
 # ceph.conf #
 #############
-#     max mds: 5
 ceph_conf_overrides:
    global:
      osd pool default size: 1
@@ -32,40 +30,39 @@ ceph_conf_overrides:
    mds: 
      debug ms: 0
      debug mds: 0
-     mds log: true
+     max mds: 5
+     mds log: false
      mds bal max until: -1
      mds bal mode: 2
      mds log max expiring: -1
      mds log max segments: -1
-     mds cache size: 2000000
+     mds cache size: 100000
      mds bal fragment size max: 200000
    client:
      debug client: 0
-     client cache size: 2000000
+     client cache size: 100000
 
 ################
 # docker stuff #
 ################
 ceph_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_docker_imagename: daemon
-ceph_docker_image_tag: e1471d7
+ceph_docker_image_tag: ec12610
 ceph_mon_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_mon_docker_imagename: daemon
-ceph_mon_docker_image_tag: e1471d7
+ceph_mon_docker_image_tag: ec12610
 ceph_osd_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_osd_docker_imagename: daemon
-ceph_osd_docker_image_tag: e1471d7
+ceph_osd_docker_image_tag: ec12610
 ceph_mds_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_mds_docker_imagename: daemon
-ceph_mds_docker_image_tag: e1471d7
+ceph_mds_docker_image_tag: ec12610
 ceph_client_docker_username: piha.soe.ucsc.edu:5000/ceph
 ceph_client_docker_imagename: daemon
-ceph_client_docker_image_tag: e1471d7
+ceph_client_docker_image_tag: ec12610
 
 ####################
 # experiment stuff #
 repetitions: 3
 ####################
-
-mount_point: "/cephfs-plfs"
-plfs_mount_point: "/plfs"
+mount_point: /newmount

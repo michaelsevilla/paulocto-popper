@@ -1,0 +1,23 @@
+2017-05-30 20:43:28  /entrypoint.sh: static: does not generate config
+HEALTH_WARN too few PGs per OSD (13 < min 30)
+2017-05-30 20:43:29  /entrypoint.sh: static: does not generate the admin key, so we can not get it.
+2017-05-30 20:43:29  /entrypoint.sh: static: make it available with the help of your configuration management system.
+2017-05-30 20:43:29  /entrypoint.sh: static: ceph-ansible is a good candidate to deploy a containerized version of Ceph.
+2017-05-30 20:43:29  /entrypoint.sh: static: ceph-ansible will help you fetching the keys and push them on the right nodes.
+2017-05-30 20:43:29  /entrypoint.sh: static: if you're interested, please visit: https://github.com/ceph/ceph-ansible
+2017-05-30 20:43:30  /entrypoint.sh: SUCCESS
+2017-05-30 20:43:30.100371 7fd479f05300  0 set uid:gid to 64045:64045 (ceph:ceph)
+2017-05-30 20:43:30.100414 7fd479f05300  0 ceph version 9.0.0-18992-ge1471d7 (e1471d7b776bf000f8620c24a5c1f29706301fb8), process ceph-mds, pid 109
+starting mds.issdm-18 at -
+2017-05-30 20:43:30.102887 7fd479f05300  0 pidfile_write: ignore empty --pid-file
+2017-05-30 20:44:29.774184 7fd472905700  0 mds.1.cache creating system inode with ino:101
+2017-05-30 20:44:29.794407 7fd472905700  0 mds.1.cache creating system inode with ino:60a
+2017-05-30 20:44:29.815816 7fd472905700  0 mds.1.cache creating system inode with ino:60b
+2017-05-30 20:44:29.815953 7fd472905700  0 mds.1.cache creating system inode with ino:60c
+2017-05-30 20:44:29.820802 7fd472905700  0 mds.1.cache creating system inode with ino:60d
+2017-05-30 20:44:29.820924 7fd472905700  0 mds.1.cache creating system inode with ino:60e
+2017-05-30 20:44:29.821055 7fd472905700  0 mds.1.cache creating system inode with ino:60f
+2017-05-30 20:44:29.821187 7fd472905700  0 mds.1.cache creating system inode with ino:610
+2017-05-30 20:44:29.821326 7fd472905700  0 mds.1.cache creating system inode with ino:611
+2017-05-30 20:44:29.821533 7fd472905700  0 mds.1.cache creating system inode with ino:612
+2017-05-30 20:44:29.821694 7fd472905700  0 mds.1.cache creating system inode with ino:613

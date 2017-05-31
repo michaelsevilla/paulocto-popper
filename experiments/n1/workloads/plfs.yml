@@ -4,13 +4,13 @@
   - name: dump perf counters
     shell: docker exec ceph-{{ ansible_hostname }}-mds ceph daemon mds.{{ ansible_hostname }} perf dump
     register: results
-  - local_action: copy content="{{ results.stdout }}" dest="{{ playbook_dir|dirname }}/results/perfdump_{{ nfiles }}_before"
+  - local_action: copy content="{{ results.stdout }}" dest="{{ playbook_dir|dirname }}/results/perfdump_{{ nclients }}_before"
 
 - hosts: clients
   become: True
   tasks:
-  - fail: msg="Uh oh. Please define nfiles"
-    when: nfiles is not defined
+  - fail: msg="Uh oh. Please define nclients"
+    when: nclients is not defined
 
   - name: drop the os file cache
     shell: sudo sh -c "$(which echo) 3 > /proc/sys/vm/drop_caches"
@@ -56,34 +56,39 @@
 - hosts: clients[0]
   become: True
   tasks:
-
-  - pause: minutes=1
   - name: get the read overheads which triggers readdir
-    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
-
+    pause: minutes=1
+  - shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+    register: results
+  - local_action: >
+      lineinfile dest="{{ playbook_dir|dirname }}/results/read.txt" line="{{ nclients }},1,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
   - pause: minutes=1
-  - name: get the read overheads which triggers open
-    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
-
+  - shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+    register: results
+  - local_action: >
+      lineinfile dest="{{ playbook_dir|dirname }}/results/read.txt" line="{{ nclients }},2,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
   - pause: minutes=1
-  - name: get the read overheads which triggers open
-    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
-
+  - shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+    register: results
+  - local_action: >
+      lineinfile dest="{{ playbook_dir|dirname }}/results/read.txt" line="{{ nclients }},3,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
   - pause: minutes=1
-  - name: get the read overheads which triggers open
-    shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+  - shell: docker exec plfs-0 cat {{ plfs_mount_point }}/vfile.txt
+    register: results
+  - local_action: >
+      lineinfile dest="{{ playbook_dir|dirname }}/results/read.txt" line="{{ nclients }},4,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 
   - name: get the size of the namespace
     shell: docker exec plfs-0 find {{ mount_point }}/vfile.txt -type f | wc -l
     register: results
   - local_action: >
-      lineinfile dest="{{ playbook_dir|dirname }}/results/files.txt" line="{{ nfiles }},{{ ansible_date_time.time }},{{ results.delta }},{{ results.stdout }}" create="yes"
+      lineinfile dest="{{ playbook_dir|dirname }}/results/files.txt" line="{{ nclients }},{{ ansible_date_time.time }},{{ results.delta }},{{ results.stdout }}" create="yes"
 
   - name: get the size of the namespace
     shell: docker exec plfs-0 find {{ mount_point }}/vfile.txt -type d | wc -l
     register: results
   - local_action: >
-      lineinfile dest="{{ playbook_dir|dirname }}/results/dirs.txt" line="{{ nfiles }},{{ ansible_date_time.time }},{{ results.delta }},{{ results.stdout }}" create="yes"
+      lineinfile dest="{{ playbook_dir|dirname }}/results/dirs.txt" line="{{ nclients }},{{ ansible_date_time.time }},{{ results.delta }},{{ results.stdout }}" create="yes"
 
 
 
@@ -93,5 +98,5 @@
   - name: dump perf counters
     shell: docker exec ceph-{{ ansible_hostname }}-mds ceph daemon mds.{{ ansible_hostname }} perf dump
     register: results
-  - local_action: copy content="{{ results.stdout }}" dest="{{ playbook_dir|dirname }}/results/perfdump_{{ nfiles }}_after"
+  - local_action: copy content="{{ results.stdout }}" dest="{{ playbook_dir|dirname }}/results/perfdump_{{ nclients }}_after"
 
