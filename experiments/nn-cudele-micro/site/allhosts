@@ -1,0 +1,61 @@
+[issdm]
+issdm-0 ansible_ssh_user=issdm
+issdm-1 ansible_ssh_user=issdm
+issdm-2 ansible_ssh_user=issdm
+issdm-3 ansible_ssh_user=issdm
+issdm-4 ansible_ssh_user=issdm
+issdm-5 ansible_ssh_user=issdm
+issdm-6 ansible_ssh_user=issdm
+issdm-7 ansible_ssh_user=issdm
+issdm-8 ansible_ssh_user=issdm
+issdm-9 ansible_ssh_user=issdm
+issdm-10 ansible_ssh_user=issdm
+issdm-11 ansible_ssh_user=issdm
+issdm-12 ansible_ssh_user=issdm
+issdm-13 ansible_ssh_user=issdm
+issdm-14 ansible_ssh_user=issdm
+issdm-15 ansible_ssh_user=issdm
+issdm-16 ansible_ssh_user=issdm
+issdm-17 ansible_ssh_user=issdm
+issdm-18 ansible_ssh_user=issdm
+issdm-19 ansible_ssh_user=issdm
+issdm-20 ansible_ssh_user=issdm
+issdm-21 ansible_ssh_user=issdm
+issdm-22 ansible_ssh_user=issdm
+issdm-23 ansible_ssh_user=issdm
+issdm-24 ansible_ssh_user=issdm
+issdm-25 ansible_ssh_user=issdm
+issdm-26 ansible_ssh_user=issdm
+issdm-27 ansible_ssh_user=issdm
+issdm-28 ansible_ssh_user=issdm
+issdm-29 ansible_ssh_user=issdm
+issdm-30 ansible_ssh_user=issdm
+issdm-31 ansible_ssh_user=issdm
+issdm-32 ansible_ssh_user=issdm
+issdm-33 ansible_ssh_user=issdm
+issdm-34 ansible_ssh_user=issdm
+issdm-35 ansible_ssh_user=issdm
+issdm-36 ansible_ssh_user=issdm
+issdm-37 ansible_ssh_user=issdm
+issdm-38 ansible_ssh_user=issdm
+issdm-39 ansible_ssh_user=issdm
+issdm-40 ansible_ssh_user=issdm
+issdm-41 ansible_ssh_user=issdm
+issdm-42 ansible_ssh_user=issdm
+issdm-43 ansible_ssh_user=issdm
+issdm-44 ansible_ssh_user=issdm
+issdm-45 ansible_ssh_user=issdm
+issdm-46 ansible_ssh_user=issdm
+issdm-47 ansible_ssh_user=issdm
+
+[opterons]
+192.168.140.80 ansible_ssh_user=issdm
+192.168.140.81 ansible_ssh_user=issdm
+192.168.140.82 ansible_ssh_user=issdm
+192.168.140.83 ansible_ssh_user=issdm
+192.168.140.84 ansible_ssh_user=issdm
+
+[proliant]
+192.168.140.85 ansible_ssh_user=issdm
+192.168.140.86 ansible_ssh_user=issdm
+192.168.140.87 ansible_ssh_user=issdm

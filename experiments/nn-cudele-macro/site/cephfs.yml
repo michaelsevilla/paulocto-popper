@@ -1,0 +1,9 @@
+---
+- hosts: mdss[0]
+  tasks:
+    - name: turn off metadata load balancing
+      shell: "docker exec ceph-{{ ansible_hostname }}-mds ceph daemon mds.{{ ansible_hostname }} config set mds_bal_interval -1"
+
+    - name: set up multiple mdss
+      command: "{{ ceph }} mds set allow_multimds true --yes-i-really-mean-it"
+

@@ -1,0 +1,31 @@
+[issdm]
+issdm-1 ansible_ssh_user=minion
+issdm-10 ansible_ssh_user=minion
+issdm-11 ansible_ssh_user=minion
+issdm-12 ansible_ssh_user=minion
+issdm-14 ansible_ssh_user=minion
+issdm-15 ansible_ssh_user=minion
+issdm-16 ansible_ssh_user=minion
+issdm-17 ansible_ssh_user=minion
+issdm-18 ansible_ssh_user=minion
+issdm-20 ansible_ssh_user=minion
+issdm-24 ansible_ssh_user=minion
+issdm-27 ansible_ssh_user=minion
+issdm-29 ansible_ssh_user=minion
+issdm-30 ansible_ssh_user=minion
+issdm-31 ansible_ssh_user=minion
+issdm-32 ansible_ssh_user=minion
+issdm-34 ansible_ssh_user=minion
+issdm-38 ansible_ssh_user=minion
+issdm-40 ansible_ssh_user=minion
+issdm-41 ansible_ssh_user=minion
+issdm-45 ansible_ssh_user=minion
+issdm-47 ansible_ssh_user=minion
+
+[opterons]
+192.168.140.81 ansible_ssh_user=minion
+192.168.140.84 ansible_ssh_user=minion
+
+[proliant]
+192.168.140.85 ansible_ssh_user=minion
+192.168.140.86 ansible_ssh_user=minion

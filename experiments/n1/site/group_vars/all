@@ -46,21 +46,21 @@ ceph_conf_overrides:
 ################
 # docker stuff #
 ################
-ceph_docker_username: piha.soe.ucsc.edu:5000/ceph
-ceph_docker_imagename: daemon
-ceph_docker_image_tag: e1471d7
-ceph_mon_docker_username: piha.soe.ucsc.edu:5000/ceph
-ceph_mon_docker_imagename: daemon
-ceph_mon_docker_image_tag: e1471d7
-ceph_osd_docker_username: piha.soe.ucsc.edu:5000/ceph
-ceph_osd_docker_imagename: daemon
-ceph_osd_docker_image_tag: e1471d7
-ceph_mds_docker_username: piha.soe.ucsc.edu:5000/ceph
-ceph_mds_docker_imagename: daemon
-ceph_mds_docker_image_tag: e1471d7
-ceph_client_docker_username: piha.soe.ucsc.edu:5000/ceph
-ceph_client_docker_imagename: daemon
-ceph_client_docker_image_tag: e1471d7
+ceph_docker_username: michaelsevilla
+ceph_docker_imagename: cephdaemon
+ceph_docker_image_tag: f91680128ef51a85d28019c9afd29109bd178b1c
+ceph_mon_docker_username: michaelsevilla
+ceph_mon_docker_imagename: cephdaemon
+ceph_mon_docker_image_tag: f91680128ef51a85d28019c9afd29109bd178b1c
+ceph_osd_docker_username: michaelsevilla
+ceph_osd_docker_imagename: cephdaemon
+ceph_osd_docker_image_tag: f91680128ef51a85d28019c9afd29109bd178b1c
+ceph_mds_docker_username: michaelsevilla
+ceph_mds_docker_imagename: cephdaemon
+ceph_mds_docker_image_tag: f91680128ef51a85d28019c9afd29109bd178b1c
+ceph_client_docker_username: michaelsevilla
+ceph_client_docker_imagename: cephdaemon
+ceph_client_docker_image_tag: f91680128ef51a85d28019c9afd29109bd178b1c
 
 ####################
 # experiment stuff #
