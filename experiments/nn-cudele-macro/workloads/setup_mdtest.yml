@@ -1,9 +1,0 @@
-- hosts: clients, interfere
-  tasks:
-  - name: remove old testdir
-    shell: docker exec cephfs mv {{ mount_point }}/testdir {{ mount_point }}/testdir-nfiles-{{ nfiles }}-{{ ansible_date_time.date }}-{{ ansible_date_time.time }}-{{ ansible_hostname }}
-    ignore_errors: True
-  
-  - name: create the decoupled directories
-    shell: docker exec cephfs mkdir -p {{ mount_point }}/testdir/nfiles-{{ nfiles }}-{{ ansible_hostname }}
- 
