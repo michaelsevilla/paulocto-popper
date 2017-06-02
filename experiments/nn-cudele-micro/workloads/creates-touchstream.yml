@@ -11,8 +11,14 @@
   tasks:
   - pause: seconds={{ drop_delay }}
   - shell: for i in `seq 0 1000`; do docker exec cephfs touch {{ mount_point }}/testdir/nfiles-{{ nfiles }}-{{ item }}/#test-dir.0/mdtest_tree.0/file-$i.txt; done
+    ignore_errors: true
     with_items:
     - "{{ groups['clients'] }}"
+
+  - name: interfere again
+    pause: seconds={{ drop_delay }}
+
+- include: journal-vapply.yml
 
 - hosts: clients
   become: True

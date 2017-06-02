@@ -15,27 +15,27 @@
   - local_action: lineinfile dest="{{ output }}" line="snapshot,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 
   - name: add events to the in memory journal (the flag SHOULD be save)
-    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --persist false
+    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --persist false --decoupled_dir mydir
     register: results
   - local_action: lineinfile dest="{{ output }}" line="create,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 
-  - name: add events to the in memory journal and save to a file
-    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --persist true --file /etc/ceph/events.bin
+  - name: add events to the in memory journal and save to a file (give me like 100K inodes)
+    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --persist true --file /etc/ceph/events.bin --decoupled_dir mydir --start_ino 1099511727776
     register: results
   - local_action: lineinfile dest="{{ output }}" line="save,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 
   - name: persist (and make redundant) our journal of additional events
-    shell: docker exec cephfs rados -p cephfs_metadata put bogusjournal.bin /etc/ceph/events.bin
+    shell: docker exec cephfs rados -p cephfs_metadata put bogusjournal.bin /etc/ceph/events.bin --decoupled_dir mydir
     register: results
   - local_action: lineinfile dest="{{ output }}" line="persist,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 
   - name: add events to the in memory journal and apply them to the metadata store
-    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --memapply true
+    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --memapply true --decoupled_dir mydir
     register: results
   - local_action: lineinfile dest="{{ output }}" line="apply,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 
   - name: apply the events again (required for correctness -- it is a bug)
-    shell: docker exec cephfs cephfs-journal-tool event apply summary
+    shell: docker exec cephfs cephfs-journal-tool event apply summary --decoupled_dir mydir
     register: results
   - local_action: lineinfile dest="{{ output }}" line="apply1,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 
@@ -60,3 +60,16 @@
     shell: docker exec ceph-{{ ansible_hostname }}-mds ceph daemon mds.{{ ansible_hostname }} merge /etc/ceph/events.bin
     register: results
   - local_action: lineinfile dest="{{ output }}" line="v.apply,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
+
+- hosts: clients[0]
+  become: True
+  tasks:
+
+  - name: touch the root directory to make it mydir real
+    shell: docker exec cephfs touch {{ mount_point }}/poke
+    register: results
+  - local_action: lineinfile dest="{{ output }}" line="pokeroot,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
+  - name: touch the mydir to make it real
+    shell: docker exec cephfs touch {{ mount_point }}/mydir/poke
+    register: results
+  - local_action: lineinfile dest="{{ output }}" line="pokemydir,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"

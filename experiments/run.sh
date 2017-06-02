@@ -38,16 +38,11 @@ cd -
 
 # NN CUDELE MICRO
 cp conf/hosts/all nn-cudele-micro/site/hosts
-cp conf/ceph.conf nn-cudele-micro/site/group_vars/all
+cp conf/hosts/* nn-cudele-micro/inventory/
+cp conf/ceph.conf nn-cudele-micro/site/configs/stream.yml
+cp conf/ceph-nostream.conf nn-cudele-micro/site/configs/nostream.yml
 cp conf/osds.conf nn-cudele-micro/site/group_vars/osds
 cd nn-cudele-micro
-./run.sh
-cd -
-
-# NN CUDELE MACRO
-cp conf/hosts/* nn-cudele-macro/inventory/
-cp conf/ceph.conf nn-cudele-macro/site_confs/journal-cache.yml
-cp conf/osds.conf nn-cudele-macro/site/group_vars/osds
-cd nn-cudele-macro
-./run.sh
+./run-microbenchmark.sh
+./run-macrobenchmark.sh
 cd -

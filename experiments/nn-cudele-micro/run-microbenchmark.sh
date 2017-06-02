@@ -10,7 +10,7 @@ SRL_ANSIBLE="$RUN -v `pwd`/site:/root $ANSIBLE"
 
 # cleanup and start ceph
 for i in 0; do
-  for nfiles in 10; do  #100 1000 10000 100000; do
+  for nfiles in 10 100 1000 10000 100000; do
     mkdir -p results/${nfiles}/logs || true
     for stream in "nostream" "stream"; do
       # configure ceph and setup results directory
@@ -23,12 +23,12 @@ for i in 0; do
       $SRL_ANSIBLE cleanup.yml
       $CEPH_ANSIBLE ceph.yml cephfs.yml
       $SRL_ANSIBLE ceph_pgs.yml ceph_monitor.yml ceph_wait.yml
-       
+      
       # benchmark
       ./ansible-playbook.sh -e nfiles=$nfiles -e stream=$stream \
         ../workloads/journal-rpcs.yml ../workloads/journal-vapply.yml
       ./ansible-playbook.sh -e site=$nfiles collect.yml
     done
   done
-  mv results results-run${i}
+  mv results results-microbenchmark-run${i}
 done
