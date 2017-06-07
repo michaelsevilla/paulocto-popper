@@ -13,9 +13,9 @@
 [submodule "experiments/nn/site/roles/ceph-ansible"]
 	path = experiments/nn/site/roles/ceph-ansible
 	url = https://github.com/michaelsevilla/ceph-ansible.git
-[submodule "experiments/nn-cudele-micro/site/roles/srl-ansible"]
-	path = experiments/nn-cudele-micro/site/roles/srl-ansible
+[submodule "experiments/nn-cudele/site/roles/ceph-ansible"]
+	path = experiments/nn-cudele/site/roles/ceph-ansible
+	url = https://github.com/michaelsevilla/ceph-ansible
+[submodule "experiments/nn-cudele/site/roles/srl-ansible"]
+	path = experiments/nn-cudele/site/roles/srl-ansible
 	url = https://github.com/systemslab/srl-roles.git
-[submodule "experiments/nn-cudele-micro/site/roles/ceph-ansible"]
-	path = experiments/nn-cudele-micro/site/roles/ceph-ansible
-	url = https://github.com/michaelsevilla/ceph-ansible.git

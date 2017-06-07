@@ -8,7 +8,7 @@ fi
 
 echo "let's go!"
 set -ex
-rm -rf */results/* || true
+rm -rf */results* || true
 
 # BASELINE
 cp conf/hosts/all baseliner/site/hosts
@@ -36,12 +36,12 @@ cd nn
 cd -
 
 # NN CUDELE MICRO
-cp conf/hosts/all nn-cudele-micro/site/hosts
-cp conf/hosts/* nn-cudele-micro/inventory/
-cp conf/ceph.conf nn-cudele-micro/site/configs/stream.yml
-cp conf/ceph-nostream.conf nn-cudele-micro/site/configs/nostream.yml
-cp conf/osds.conf nn-cudele-micro/site/group_vars/osds
-cd nn-cudele-micro
+cp conf/hosts/all nn-cudele/site/hosts
+cp conf/hosts/* nn-cudele/inventory/
+cp conf/ceph.conf nn-cudele/site/configs/stream.yml
+cp conf/ceph-nostream.conf nn-cudele/site/configs/nostream.yml
+cp conf/osds.conf nn-cudele/site/group_vars/osds
+cd nn-cudele
 ./run-microbenchmark.sh
 ./run-macrobenchmark.sh
 cd -

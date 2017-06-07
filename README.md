@@ -29,6 +29,3 @@ Experiments for PaulOcto.
    ```
    ./run.sh
    ```
-
-
-TODO: remove ivnentory dirs
