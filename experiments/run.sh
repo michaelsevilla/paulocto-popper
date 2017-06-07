@@ -7,9 +7,8 @@ if [ $? -eq 0 ]; then
 fi
 
 echo "let's go!"
-rm -rf */results/* || true
-
 set -ex
+rm -rf */results/* || true
 
 # BASELINE
 cp conf/hosts/all baseliner/site/hosts

@@ -19,8 +19,8 @@
     register: results
   - local_action: lineinfile dest="{{ output }}" line="create,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 
-  - name: add events to the in memory journal and save to a file (give me like 100K inodes)
-    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --persist true --file /etc/ceph/events.bin --decoupled_dir mydir --start_ino 1099511727776
+  - name: add events to the in memory journal and save to a file (give me like 200K inodes)
+    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --persist true --file /etc/ceph/events.bin --decoupled_dir mydir --start_ino 1099511827776
     register: results
   - local_action: lineinfile dest="{{ output }}" line="save,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
 

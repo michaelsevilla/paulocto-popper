@@ -9,7 +9,7 @@ CEPH_ANSIBLE="$RUN -v `pwd`/site/roles/ceph-ansible:/root $ANSIBLE"
 SRL_ANSIBLE="$RUN -v `pwd`/site:/root $ANSIBLE"
 
 # cleanup and start ceph
-for i in 0; do
+for i in 0 1 2; do
   for nfiles in 10 100 1000 10000 100000; do
     mkdir -p results/${nfiles}/logs || true
     for stream in "nostream" "stream"; do

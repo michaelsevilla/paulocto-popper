@@ -15,11 +15,6 @@
     with_items:
     - "{{ groups['clients'] }}"
 
-  - name: interfere again
-    pause: seconds={{ drop_delay }}
-
-- include: journal-vapply.yml
-
 - hosts: clients
   become: True
   tasks:

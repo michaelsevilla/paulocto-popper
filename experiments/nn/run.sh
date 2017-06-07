@@ -10,7 +10,7 @@ SRL_ANSIBLE="$RUN -v `pwd`/site:/root $ANSIBLE"
 
 for nclients in `ls inventory`; do
   site="journal-cache"
-  for job in "creates"; do  #"creates-touchstream" "creates-stat" "creates-touch"; do
+  for job in "creates" "creates-touchstream" "creates-stat" "creates-touch"; do
      # configure ceph and setup results directory
      results="$job-$nclients/run$run"
      mkdir -p results/$results/logs || true

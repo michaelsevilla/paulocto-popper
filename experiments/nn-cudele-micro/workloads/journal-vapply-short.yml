@@ -1,0 +1,50 @@
+- hosts: clients[0]
+  become: True
+  tasks:
+
+  - fail: msg="Uh oh. Please define nfiles"
+    when: nfiles is not defined
+  - set_fact: output="{{ playbook_dir|dirname }}/results/{{ nfiles }}/summary-{{ stream }}.txt"
+
+  - name: decouple subtree and copy the journal of events to the client (setup)
+    copy: src="{{ playbook_dir|dirname }}/site/basejournal.bin" dest="/etc/ceph/basejournal.bin"
+
+  - name: materialize the snapshot in client memory
+    shell: docker exec cephfs cephfs-journal-tool journal import /etc/ceph/basejournal.bin
+    register: results
+  - local_action: lineinfile dest="{{ output }}" line="snapshot,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
+
+  - name: add events to the in memory journal and save to a file (give me like 5200K inodes)
+    shell: docker exec cephfs cephfs-journal-tool event create summary --nfiles {{ nfiles }} --persist true --file /etc/ceph/events.bin --decoupled_dir mydir --start_ino 1099515827776
+    register: results
+  - local_action: lineinfile dest="{{ output }}" line="save,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
+
+  - name: move that file to the control server
+    fetch: src="/etc/ceph/events.bin" dest="/tmp/events.bin" flat=yes
+
+- hosts: mdss[0]
+  become: True
+  tasks:
+
+  - set_fact: output="{{ playbook_dir|dirname }}/results/{{ nfiles }}/summary-{{ stream }}.txt"
+
+  - name: move that file to the metadata server
+    copy: dest="/etc/ceph/events.bin" src="/tmp/events.bin"
+
+#  - name: merge it
+#    shell: docker exec ceph-{{ ansible_hostname }}-mds ceph daemon mds.{{ ansible_hostname }} merge /etc/ceph/events.bin
+#    register: results
+#  - local_action: lineinfile dest="{{ output }}" line="v.apply,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
+
+#- hosts: clients[0]
+#  become: True
+#  tasks:
+#
+#  - name: touch the root directory to make it mydir real
+#    shell: docker exec cephfs touch {{ mount_point }}/poke
+#    register: results
+#  - local_action: lineinfile dest="{{ output }}" line="pokeroot,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"
+#  - name: touch the mydir to make it real
+#    shell: docker exec cephfs touch {{ mount_point }}/mydir/poke
+#    register: results
+#  - local_action: lineinfile dest="{{ output }}" line="pokemydir,{{ ansible_date_time.time }},{{ results.delta }}" create="yes"

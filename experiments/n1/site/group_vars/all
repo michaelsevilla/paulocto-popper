@@ -67,5 +67,5 @@ ceph_client_docker_image_tag: f91680128ef51a85d28019c9afd29109bd178b1c
 repetitions: 3
 ####################
 
-mount_point: "/cephfs-plfs"
+mount_point: "/cephfs-plfs5"
 plfs_mount_point: "/plfs"
