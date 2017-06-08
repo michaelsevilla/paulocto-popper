@@ -8,7 +8,7 @@ fi
 
 echo "let's go!"
 set -ex
-rm -rf */results* || true
+rm -rf */results/* || true
 
 # BASELINE
 cp conf/hosts/all baseliner/site/hosts

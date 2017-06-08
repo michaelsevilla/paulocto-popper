@@ -21,7 +21,7 @@ Experiments for PaulOcto.
 3. Change the run script for each experiment:
 
    ```
-   vim */run.sh
+   vim */run*.sh
    ```
 
 3. Run your job:

@@ -1,0 +1,31 @@
+2017-06-06 23:58:02  /entrypoint.sh: static: does not generate config
+HEALTH_WARN too few PGs per OSD (16 < min 30)
+2017-06-06 23:58:03  /entrypoint.sh: static: does not generate the admin key, so we can not get it.
+2017-06-06 23:58:03  /entrypoint.sh: static: make it available with the help of your configuration management system.
+2017-06-06 23:58:03  /entrypoint.sh: static: ceph-ansible is a good candidate to deploy a containerized version of Ceph.
+2017-06-06 23:58:03  /entrypoint.sh: static: ceph-ansible will help you fetching the keys and push them on the right nodes.
+2017-06-06 23:58:03  /entrypoint.sh: static: if you're interested, please visit: https://github.com/ceph/ceph-ansible
+pool 'cephfs_data' created
+pool 'cephfs_metadata' created
+new fs with metadata pool 2 and data pool 1
+2017-06-06 23:58:07  /entrypoint.sh: SUCCESS
+2017-06-06 23:58:07.814585 7f0971d44300  0 set uid:gid to 64045:64045 (ceph:ceph)
+2017-06-06 23:58:07.814625 7f0971d44300  0 ceph version 9.0.0-18993-gf916801 (f91680128ef51a85d28019c9afd29109bd178b1c), process ceph-mds, pid 219
+starting mds.issdm-12 at -
+2017-06-06 23:58:07.816584 7f0971d44300  0 pidfile_write: ignore empty --pid-file
+2017-06-06 23:58:12.528915 7f096a741700  0 mds.0.cache creating system inode with ino:1
+2017-06-06 23:58:12.529314 7f096a741700  0 mds.0.cache creating system inode with ino:100
+2017-06-06 23:58:12.529346 7f096a741700  0 mds.0.cache creating system inode with ino:600
+2017-06-06 23:58:12.529541 7f096a741700  0 mds.0.cache creating system inode with ino:601
+2017-06-06 23:58:12.529818 7f096a741700  0 mds.0.cache creating system inode with ino:602
+2017-06-06 23:58:12.530454 7f096a741700  0 mds.0.cache creating system inode with ino:603
+2017-06-06 23:58:12.530617 7f096a741700  0 mds.0.cache creating system inode with ino:604
+2017-06-06 23:58:12.530800 7f096a741700  0 mds.0.cache creating system inode with ino:605
+2017-06-06 23:58:12.531245 7f096a741700  0 mds.0.cache creating system inode with ino:606
+2017-06-06 23:58:12.531747 7f096a741700  0 mds.0.cache creating system inode with ino:607
+2017-06-06 23:58:12.532232 7f096a741700  0 mds.0.cache creating system inode with ino:608
+2017-06-06 23:58:12.532478 7f096a741700  0 mds.0.cache creating system inode with ino:609
+2017-06-07 00:00:09.422702 7f096c6c2700  0 -- 192.168.140.189:6800/4085991215 >> 192.168.140.230:6800/2519217373 conn(0x7f097ad73000 :6800 s=STATE_ACCEPTING_WAIT_CONNECT_MSG_AUTH pgs=0 cs=0 l=0).handle_connect_msg accept connect_seq 0 vs existing csq=0 existing_state=STATE_CONNECTING_WAIT_CONNECT_REPLY
+2017-06-07 00:00:09.423788 7f096c6c2700  0 -- 192.168.140.189:6800/4085991215 >> 192.168.140.230:6800/2519217373 conn(0x7f097ad73000 :6800 s=STATE_ACCEPTING_WAIT_CONNECT_MSG pgs=0 cs=0 l=0).fault with nothing to send and in the half  accept state just closed
+2017-06-07 00:00:13.100513 7f096cec3700  0 -- 192.168.140.189:6800/4085991215 >> 192.168.140.243:6800/3275693028 conn(0x7f097ad71800 :6800 s=STATE_ACCEPTING_WAIT_CONNECT_MSG_AUTH pgs=0 cs=0 l=0).handle_connect_msg accept connect_seq 0 vs existing csq=0 existing_state=STATE_CONNECTING_WAIT_CONNECT_REPLY
+2017-06-07 00:00:13.100940 7f096cec3700  0 -- 192.168.140.189:6800/4085991215 >> 192.168.140.243:6800/3275693028 conn(0x7f097ad71800 :6800 s=STATE_ACCEPTING_WAIT_CONNECT_MSG pgs=0 cs=0 l=0).fault with nothing to send and in the half  accept state just closed

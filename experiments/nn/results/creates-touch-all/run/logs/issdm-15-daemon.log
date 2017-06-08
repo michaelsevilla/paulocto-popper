@@ -1,0 +1,25 @@
+2017-06-07 00:29:27  /entrypoint.sh: static: does not generate config
+HEALTH_WARN too few PGs per OSD (20 < min 30)
+2017-06-07 00:29:27  /entrypoint.sh: static: does not generate the admin key, so we can not get it.
+2017-06-07 00:29:27  /entrypoint.sh: static: make it available with the help of your configuration management system.
+2017-06-07 00:29:27  /entrypoint.sh: static: ceph-ansible is a good candidate to deploy a containerized version of Ceph.
+2017-06-07 00:29:27  /entrypoint.sh: static: ceph-ansible will help you fetching the keys and push them on the right nodes.
+2017-06-07 00:29:27  /entrypoint.sh: static: if you're interested, please visit: https://github.com/ceph/ceph-ansible
+2017-06-07 00:29:28  /entrypoint.sh: SUCCESS
+2017-06-07 00:29:28.268875 7fac9602d300  0 set uid:gid to 64045:64045 (ceph:ceph)
+2017-06-07 00:29:28.268913 7fac9602d300  0 ceph version 9.0.0-18993-gf916801 (f91680128ef51a85d28019c9afd29109bd178b1c), process ceph-mds, pid 109
+starting mds.issdm-15 at -
+2017-06-07 00:29:28.270853 7fac9602d300  0 pidfile_write: ignore empty --pid-file
+2017-06-07 00:31:08.853970 7fac8ea2a700  0 mds.2.cache creating system inode with ino:102
+2017-06-07 00:31:08.854107 7fac8ea2a700  0 mds.2.cache creating system inode with ino:614
+2017-06-07 00:31:08.854352 7fac8ea2a700  0 mds.2.cache creating system inode with ino:615
+2017-06-07 00:31:08.854621 7fac8ea2a700  0 mds.2.cache creating system inode with ino:616
+2017-06-07 00:31:08.854759 7fac8ea2a700  0 mds.2.cache creating system inode with ino:617
+2017-06-07 00:31:08.854851 7fac8ea2a700  0 mds.2.cache creating system inode with ino:618
+2017-06-07 00:31:08.854978 7fac8ea2a700  0 mds.2.cache creating system inode with ino:619
+2017-06-07 00:31:08.855084 7fac8ea2a700  0 mds.2.cache creating system inode with ino:61a
+2017-06-07 00:31:08.855177 7fac8ea2a700  0 mds.2.cache creating system inode with ino:61b
+2017-06-07 00:31:08.855269 7fac8ea2a700  0 mds.2.cache creating system inode with ino:61c
+2017-06-07 00:31:08.855376 7fac8ea2a700  0 mds.2.cache creating system inode with ino:61d
+2017-06-07 00:31:10.067528 7fac911ac700  0 -- 192.168.140.243:6800/1851212574 >> 192.168.140.189:6800/2680756620 conn(0x7fac9ef02000 :6800 s=STATE_ACCEPTING_WAIT_CONNECT_MSG_AUTH pgs=0 cs=0 l=0).handle_connect_msg accept connect_seq 0 vs existing csq=0 existing_state=STATE_CONNECTING_WAIT_CONNECT_REPLY
+2017-06-07 00:31:10.067681 7fac911ac700  0 -- 192.168.140.243:6800/1851212574 >> 192.168.140.189:6800/2680756620 conn(0x7fac9ef02000 :6800 s=STATE_ACCEPTING_WAIT_CONNECT_MSG pgs=0 cs=0 l=0).fault with nothing to send and in the half  accept state just closed
