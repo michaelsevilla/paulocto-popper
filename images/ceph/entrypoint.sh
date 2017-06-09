@@ -7,4 +7,4 @@ set -ex
 #cd /mantle-docker
 #make
 #cp mantledock /usr/bin/
-#cp /ceph/build/boost/lib/*.so* /usr/local/lib/
+cp /ceph/build/boost/lib/*.so* /usr/local/lib/

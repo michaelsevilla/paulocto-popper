@@ -4,6 +4,7 @@ set -ex
 
 # create the image
 SRC="/tmp/ceph-daemon"
+GIT="f91680128ef51a85d28019c9afd29109bd178b1c"
 mkdir $SRC || true
 cd $SRC
 
@@ -16,7 +17,7 @@ docker tag ceph/daemon:tag-build-master-jewel-ubuntu-14.04 ceph/daemon:jewel
 #docker pull cephbuilder/ceph:latest
 
 dmake \
-  -e SHA1_OR_REF="72cf7325446c935584a99db59bd0766ee72a38b2" \
+  -e SHA1_OR_REF="$GIT" \
   -e GIT_URL="https://github.com/michaelsevilla/ceph.git" \
   -e BUILD_THREADS=`grep processor /proc/cpuinfo | wc -l` \
   -e CONFIGURE_FLAGS="-DWITH_TESTS=OFF" \
@@ -24,6 +25,12 @@ dmake \
   cephbuilder/ceph:latest build-cmake
 cd -
 
-docker tag ceph-72cf7325446c935584a99db59bd0766ee72a38b2 ceph/daemon:72cf732
+docker tag ceph-$GIT ceph/daemon:$GIT
 docker build -t tmp .
-docker tag tmp piha.soe.ucsc.edu:5000/ceph/daemon:72cf732
+docker run -it -d -v $SRC:/ceph --name tmp --entrypoint=/bin/bash tmp
+docker exec tmp /bin/bash -c "cp /ceph/build/lib/*rados*.so* /usr/lib"
+#docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' tmp piha.soe.ucsc.edu:5000/ceph/daemon:$GIT
+docker commit --change='ENTRYPOINT ["/entrypoint.sh"]' tmp michaelsevilla/cephdaemon:$GIT
+docker rm -f tmp
+
+echo "SUCCESS"
