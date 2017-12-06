@@ -1,0 +1,92 @@
+digraph G {
+  "backend" -> "file0";
+  "backend" -> "file1";
+  "backend" -> "file2";
+  "file0" -> "hostdir
+.25";
+  "file0" -> "meta";
+  "file0" -> "version-tag
+.2
+.5
+.1-dat
+.1
+.0-chk
+.1013710565";
+  "hostdir
+.25" -> "dropping
+.data
+.1512522265
+.616970
+.moby
+.27177";
+  "hostdir
+.25" -> "dropping
+.index
+.1512522265
+.616970
+.moby
+.27177";
+  "meta" -> "3
+.3
+.1512522265
+.673026
+.moby";
+  "file1" -> "hostdir
+.25";
+  "file1" -> "meta";
+  "file1" -> "version-tag
+.2
+.5
+.1-dat
+.1
+.0-chk
+.1013710565";
+  "hostdir
+.25" -> "dropping
+.data
+.1512522265
+.758398
+.moby
+.27199";
+  "hostdir
+.25" -> "dropping
+.index
+.1512522265
+.758398
+.moby
+.27199";
+  "meta" -> "3
+.3
+.1512522265
+.815338
+.moby";
+  "file2" -> "hostdir
+.25";
+  "file2" -> "meta";
+  "file2" -> "version-tag
+.2
+.5
+.1-dat
+.1
+.0-chk
+.1013710565";
+  "hostdir
+.25" -> "dropping
+.data
+.1512522265
+.904443
+.moby
+.27220";
+  "hostdir
+.25" -> "dropping
+.index
+.1512522265
+.904443
+.moby
+.27220";
+  "meta" -> "3
+.3
+.1512522265
+.961533
+.moby";
+}

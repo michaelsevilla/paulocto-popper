@@ -7,6 +7,7 @@ docker run -dit \
   --name plfs-dev \
   -v /dev:/dev \
   -v `pwd`:/root \
+  -w /root \
   --privileged \
   michaelsevilla/plfs \
   /plfs /backend
@@ -14,6 +15,4 @@ docker run -dit \
 docker exec plfs-dev /bin/bash -c "echo hi > /plfs/file0"
 docker exec plfs-dev /bin/bash -c "echo hi > /plfs/file1"
 docker exec plfs-dev /bin/bash -c "echo hi > /plfs/file2"
-docker exec plfs-dev /bin/bash -c "/root/parse_tree.sh /backend > /root/tree.dot"
-
-#docker exec $CONTAINER /bin/bash -c "printf $HOSTNAME | dd of=/$MOUNT/vfile.txt bs=1 seek=$((${HOSTNAME//issdm-}*10)) count=20 conv=notrunc"
+docker exec plfs-dev /bin/bash -c "./parse_tree.sh /backend > tree.dot"

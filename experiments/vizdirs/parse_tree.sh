@@ -1,14 +1,17 @@
 #!/bin/bash
 
-echo "digraph G {"
+echo "digraph G {" > tree.dot
 ls -R $1 | while read p; do
   if [ ! -z $p ]; then
     if [[ "$p" == *: ]]; then
-      PARENT=`basename $p`
+      PARENT=`basename $p | sed "s/\./\\n\./g"`
       PARENT=${PARENT::-1}
     else
-      echo "  $PARENT -> $p;"
+      CHILD=`echo $p | sed "s/\./\\n\./g"`
+      echo "  \"$PARENT\" -> \"$CHILD\";" >> tree.dot
     fi
   fi
 done
-echo "}"
+echo "}" >> tree.dot
+
+dot -Tpng -o tree.png tree.dot
