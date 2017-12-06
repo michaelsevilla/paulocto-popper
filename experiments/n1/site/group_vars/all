@@ -10,7 +10,7 @@ ceph_mon_docker_subnet: 192.168.140.0/24
 fsid: "e9570dd8-03ad-45f0-8a74-ec9b3bb7095f"
 docker: true
 install_docker: false
-ceph_pgs: [128]
+ceph_pgs: [64]
 
 #############
 # ceph.conf #

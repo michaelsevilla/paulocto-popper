@@ -90,7 +90,10 @@
   - local_action: >
       lineinfile dest="{{ playbook_dir|dirname }}/results/dirs.txt" line="{{ nclients }},{{ ansible_date_time.time }},{{ results.delta }},{{ results.stdout }}" create="yes"
 
-
+  - name: get a view of the namespace
+    shell: docker exec plfs-0 ls -R {{ mount_point }}
+    register: results
+  - local_action: copy content="{{ results.stdout }}" dest="{{ playbook_dir|dirname }}/results/namespace_{{ nclients }}.txt"
 
 - hosts: mdss[0]
   become: True

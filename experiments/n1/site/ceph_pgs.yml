@@ -6,6 +6,6 @@
   - pause: minutes=1
   - command:  docker exec {{ ansible_hostname }} ceph osd pool set {{ item[1] }} {{ item[0] }} 
     with_nested:
-      - [128]
+      - [64]
       - ["cephfs_metadata pg_num", "cephfs_data pg_num", "cephfs_metadata pgp_num", "cephfs_data pgp_num"]
       #- [256, 512]
