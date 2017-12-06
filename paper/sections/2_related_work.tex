@@ -18,10 +18,28 @@ at. In this section, we examine a motivating example
 use to communicate (Section~\ref{sec:language-patterned-io})
 (Section~\ref{sec:adapting-to-the-workload-with-cudele}).  
 
+% What is the problem?
+The problem is that the underyling file system cannot keep up with the metadata
+load imposed by PLFS. PLFS creates an index entry for every write, which
+results in large per-processes tables ~\cite{grider:pc17-diddlings}. This makes
+reading or scanning a logical file slow because PLFS must construct a global
+index by reading each process's local index. This process incurrs a
+\texttt{readdir} and, if the file is open by another process, an additional
+\texttt{stat()} because metadata cannot be cached in the
+container~\cite{bent_plfs_2009}.
+
+
 \subsection{Motivating Example: PLFS}
 \label{sec:motivating-example-plfs}
 %@noah: there is an index because applications do not have regular IO
-%PLFS may not be the use case
+PLFS~\cite{bent_plfs_2009} solved the checkpoint problem by mapping logical
+files to physical files on the underlying file system. The solution targets N-1
+strided checkpoints, where many processes write small IOs to offsets in the
+same logical file. The key insight of PLFS is that general purpose file systems
+perform well for applications that use N-N checkpoints and that the N-1 strided
+checkpoint style can be transformed with a thin interposition layer. To map
+offsets in the logical file to physical files each process maintains an index
+of \{logical offset, physical offset, length, physical block id\}. 
 
 % What is the authors' approach or solution?
 PLFS maps an application's preferred data layout into one that the file system
