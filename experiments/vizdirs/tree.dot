@@ -1,92 +1,16 @@
-digraph G {
-  "backend" -> "file0";
-  "backend" -> "file1";
-  "backend" -> "file2";
-  "file0" -> "hostdir
-.25";
-  "file0" -> "meta";
-  "file0" -> "version-tag
-.2
-.5
-.1-dat
-.1
-.0-chk
-.1013710565";
-  "hostdir
-.25" -> "dropping
-.data
-.1512522265
-.616970
-.moby
-.27177";
-  "hostdir
-.25" -> "dropping
-.index
-.1512522265
-.616970
-.moby
-.27177";
-  "meta" -> "3
-.3
-.1512522265
-.673026
-.moby";
-  "file1" -> "hostdir
-.25";
-  "file1" -> "meta";
-  "file1" -> "version-tag
-.2
-.5
-.1-dat
-.1
-.0-chk
-.1013710565";
-  "hostdir
-.25" -> "dropping
-.data
-.1512522265
-.758398
-.moby
-.27199";
-  "hostdir
-.25" -> "dropping
-.index
-.1512522265
-.758398
-.moby
-.27199";
-  "meta" -> "3
-.3
-.1512522265
-.815338
-.moby";
-  "file2" -> "hostdir
-.25";
-  "file2" -> "meta";
-  "file2" -> "version-tag
-.2
-.5
-.1-dat
-.1
-.0-chk
-.1013710565";
-  "hostdir
-.25" -> "dropping
-.data
-.1512522265
-.904443
-.moby
-.27220";
-  "hostdir
-.25" -> "dropping
-.index
-.1512522265
-.904443
-.moby
-.27220";
-  "meta" -> "3
-.3
-.1512522265
-.961533
-.moby";
+digraph G {"cephfs-plfs5" -> "vfile.\ntxt";
+"vfile.\ntxt" -> "hostdir.\n13";
+"vfile.\ntxt" -> "hostdir.\n26";
+"vfile.\ntxt" -> "hostdir.\n27";
+"vfile.\ntxt" -> "meta";
+"vfile.\ntxt" -> "version-tag.\n2.\n5.\n1-dat.\n1.\n0-chk.\n276057077";
+"hostdir.\n13" -> "dropping.\ndata.\n1512602745.\n623787.\n6a1031bb1ee6.\n12118";
+"hostdir.\n13" -> "dropping.\nindex.\n1512602745.\n623787.\n6a1031bb1ee6.\n12118";
+"hostdir.\n26" -> "dropping.\ndata.\n1512602745.\n607927.\n13046e231a2f.\n25605";
+"hostdir.\n26" -> "dropping.\nindex.\n1512602745.\n607927.\n13046e231a2f.\n25605";
+"hostdir.\n27" -> "dropping.\ndata.\n1512602745.\n606106.\n18129ad67cc0.\n25559";
+"hostdir.\n27" -> "dropping.\nindex.\n1512602745.\n606106.\n18129ad67cc0.\n25559";
+"meta" -> "248.\n8.\n1512602745.\n708837.\n18129ad67cc0";
+"meta" -> "278.\n8.\n1512602745.\n694477.\n13046e231a2f";
+"meta" -> "7.\n7.\n1512602745.\n751623.\n6a1031bb1ee";
 }
