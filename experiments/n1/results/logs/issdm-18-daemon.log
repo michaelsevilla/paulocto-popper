@@ -1,13 +1,13 @@
-2017-12-06 15:18:10  /entrypoint.sh: static: does not generate config
+2017-12-07 13:13:04  /entrypoint.sh: static: does not generate config
 HEALTH_WARN too few PGs per OSD (26 < min 30)
-2017-12-06 15:18:11  /entrypoint.sh: static: does not generate the admin key, so we can not get it.
-2017-12-06 15:18:11  /entrypoint.sh: static: make it available with the help of your configuration management system.
-2017-12-06 15:18:11  /entrypoint.sh: static: ceph-ansible is a good candidate to deploy a containerized version of Ceph.
-2017-12-06 15:18:11  /entrypoint.sh: static: ceph-ansible will help you fetching the keys and push them on the right nodes.
-2017-12-06 15:18:11  /entrypoint.sh: static: if you're interested, please visit: https://github.com/ceph/ceph-ansible
-2017-12-06 15:18:12  /entrypoint.sh: SUCCESS
-2017-12-06 15:18:12.269399 7f5e7d0f5300  0 set uid:gid to 64045:64045 (ceph:ceph)
-2017-12-06 15:18:12.269439 7f5e7d0f5300  0 ceph version 9.0.0-18993-gf916801 (f91680128ef51a85d28019c9afd29109bd178b1c), process ceph-mds, pid 108
+2017-12-07 13:13:05  /entrypoint.sh: static: does not generate the admin key, so we can not get it.
+2017-12-07 13:13:05  /entrypoint.sh: static: make it available with the help of your configuration management system.
+2017-12-07 13:13:05  /entrypoint.sh: static: ceph-ansible is a good candidate to deploy a containerized version of Ceph.
+2017-12-07 13:13:05  /entrypoint.sh: static: ceph-ansible will help you fetching the keys and push them on the right nodes.
+2017-12-07 13:13:05  /entrypoint.sh: static: if you're interested, please visit: https://github.com/ceph/ceph-ansible
+2017-12-07 13:13:05  /entrypoint.sh: SUCCESS
+2017-12-07 13:13:05.721960 7fd8fe252300  0 set uid:gid to 64045:64045 (ceph:ceph)
+2017-12-07 13:13:05.722003 7fd8fe252300  0 ceph version 9.0.0-18993-gf916801 (f91680128ef51a85d28019c9afd29109bd178b1c), process ceph-mds, pid 108
 starting mds.issdm-18 at -
-2017-12-06 15:18:12.271732 7f5e7d0f5300  0 pidfile_write: ignore empty --pid-file
-2017-12-06 15:20:29.051685 7f5e762f3700  0 asok(0x7f5e862d8000) AdminSocket: request 'dump tree' args '' to 0x7f5e862ac340 failed
+2017-12-07 13:13:05.724235 7fd8fe252300  0 pidfile_write: ignore empty --pid-file
+2017-12-07 13:15:29.966195 7fd8f7450700  0 asok(0x7fd908c14000) AdminSocket: request 'dump tree' args '' to 0x7fd908be8340 failed
