@@ -13,6 +13,8 @@ docker run -it \
   michaelsevilla/plfs \
   -c "dot -Tpng -o tree.png tree.dot"
 
+cp tree.png ../../paper/figures/tree_plfs.png 
+
 set +x
 if [ $? == 0 ]; then
   echo "SUCCESS"
