@@ -1,5 +1,13 @@
-\section{Related Work}
+\section{Motivating Examples}
 
+To motivate implied namespaces, we look at the namespaces of 3 applications.
+Each is from different domains and this list is not meant to be exhaustive, as
+similar organizations exist for many domains, even something as distant as the
+mail application on a Mac. For scalability reasons, we focus on large scale
+systems in high performance computing (HPC) and high energy physics (HEP).
+
+\subsection{PLFS (HPC)}
+\label{sec:plfs}
 % What is the problem the authors are trying to solve?
 Checkpointing performs small writes to a single shared file but because
 filesystems are optimized for large writes, performance is poor. To be
@@ -28,9 +36,6 @@ index by reading each process's local index. This process incurrs a
 \texttt{stat()} because metadata cannot be cached in the
 container~\cite{bent_plfs_2009}.
 
-
-\subsection{Motivating Example: PLFS}
-\label{sec:motivating-example-plfs}
 %@noah: there is an index because applications do not have regular IO
 PLFS~\cite{bent_plfs_2009} solved the checkpoint problem by mapping logical
 files to physical files on the underlying file system. The solution targets N-1
@@ -79,7 +84,7 @@ such as a failure to decouple concurrency, storage overhead, the behavior of
 HPC parallel applications (utilizing all memory), application modification, and
 availability of data.
 
-\subsection{Language: Pattern PLFS}
+\subsubsection{Language: Pattern PLFS}
 \label{sec:language-patterned-io}
 
 % What other approaches or solutions existed at the time that this work was done?
@@ -136,3 +141,7 @@ can successfully optimize I/O.
 
 \end{itemize}
 
+
+
+\subsection{ROOT (HEP)}
+\subsection{SIRIUS (HPC)}
