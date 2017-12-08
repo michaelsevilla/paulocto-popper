@@ -1,0 +1,13 @@
+2017-12-07 13:12:25  /entrypoint.sh: static: does not generate config
+HEALTH_WARN too few PGs per OSD (26 < min 30)
+2017-12-07 13:12:26  /entrypoint.sh: static: does not generate the admin key, so we can not get it.
+2017-12-07 13:12:26  /entrypoint.sh: static: make it available with the help of your configuration management system.
+2017-12-07 13:12:26  /entrypoint.sh: static: ceph-ansible is a good candidate to deploy a containerized version of Ceph.
+2017-12-07 13:12:26  /entrypoint.sh: static: ceph-ansible will help you fetching the keys and push them on the right nodes.
+2017-12-07 13:12:26  /entrypoint.sh: static: if you're interested, please visit: https://github.com/ceph/ceph-ansible
+2017-12-07 13:12:26  /entrypoint.sh: SUCCESS
+2017-12-07 13:12:26.977093 7f68a0bac300  0 set uid:gid to 64045:64045 (ceph:ceph)
+2017-12-07 13:12:26.977134 7f68a0bac300  0 ceph version 9.0.0-18993-gf916801 (f91680128ef51a85d28019c9afd29109bd178b1c), process ceph-mds, pid 108
+starting mds.issdm-15 at -
+2017-12-07 13:12:26.979320 7f68a0bac300  0 pidfile_write: ignore empty --pid-file
+2017-12-07 13:15:29.974948 7f6899daa700  0 asok(0x7f68ab1a8000) AdminSocket: request 'dump tree' args '' to 0x7f68ab17c340 failed

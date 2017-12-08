@@ -2,25 +2,25 @@
 vfile.txt
 
 /cephfs-plfs5/vfile.txt:
-hostdir.0
-hostdir.11
-hostdir.29
+hostdir.10
+hostdir.18
+hostdir.9
 meta
 version-tag.2.5.1-dat.1.0-chk.276057077
 
-/cephfs-plfs5/vfile.txt/hostdir.0:
-dropping.data.1512682245.487321.7c7b52743d20.27837
-dropping.index.1512682245.487321.7c7b52743d20.27837
+/cephfs-plfs5/vfile.txt/hostdir.10:
+dropping.data.1512687615.967718.cc6e939db679.18114
+dropping.index.1512687615.967718.cc6e939db679.18114
 
-/cephfs-plfs5/vfile.txt/hostdir.11:
-dropping.data.1512682245.693679.011b7c8f52bd.32608
-dropping.index.1512682245.693679.011b7c8f52bd.32608
+/cephfs-plfs5/vfile.txt/hostdir.18:
+dropping.data.1512687615.584281.2efeb12c5654.20477
+dropping.index.1512687615.584281.2efeb12c5654.20477
 
-/cephfs-plfs5/vfile.txt/hostdir.29:
-dropping.data.1512682245.561941.9f688177c206.742
-dropping.index.1512682245.561941.9f688177c206.742
+/cephfs-plfs5/vfile.txt/hostdir.9:
+dropping.data.1512687615.600745.8d1c7794103d.25779
+dropping.index.1512687615.600745.8d1c7794103d.25779
 
 /cephfs-plfs5/vfile.txt/meta:
-248.8.1512682245.701651.9f688177c206
-278.8.1512682249.41746.011b7c8f52bd
-7.7.1512682245.509401.7c7b52743d20
+248.8.1512687615.664203.2efeb12c5654
+278.8.1512687620.975110.cc6e939db679
+7.7.1512687615.773578.8d1c7794103d

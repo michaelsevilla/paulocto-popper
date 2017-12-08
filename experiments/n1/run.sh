@@ -18,16 +18,15 @@ cp -r site/group_vars site/roles/ceph-ansible/
 cp site/inventory/6 site/hosts
 cp site/hosts site/roles/ceph-ansible/hosts
 
-# setup
-$SRL_ANSIBLE cleanup.yml
-$CEPH_ANSIBLE ceph.yml cephfs.yml
-$SRL_ANSIBLE ceph_pgs.yml ceph_monitor.yml ceph_wait.yml
- 
 # benchmark
 for i in `ls site/inventory/`; do
   cp site/inventory/${i} site/hosts
   cp site/hosts site/roles/ceph-ansible/hosts
+
+  $SRL_ANSIBLE cleanup.yml
+  $CEPH_ANSIBLE ceph.yml cephfs.yml
+  $SRL_ANSIBLE ceph_pgs.yml ceph_monitor.yml ceph_wait.yml
   ./ansible-playbook.sh -e nclients=${i} ../workloads/plfs.yml
+  ./ansible-playbook.sh collect.yml
 done
 
-./ansible-playbook.sh collect.yml

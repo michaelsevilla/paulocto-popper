@@ -1,0 +1,14 @@
+/cephfs-plfs5:
+vfile.txt
+
+/cephfs-plfs5/vfile.txt:
+hostdir.22
+meta
+version-tag.2.5.1-dat.1.0-chk.276057077
+
+/cephfs-plfs5/vfile.txt/hostdir.22:
+dropping.data.1512681646.702130.fe8f565ca605.22985
+dropping.index.1512681646.702130.fe8f565ca605.22985
+
+/cephfs-plfs5/vfile.txt/meta:
+7.7.1512681649.36047.fe8f565ca605
