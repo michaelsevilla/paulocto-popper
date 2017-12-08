@@ -57,6 +57,7 @@ index by reading each process's local index. This process incurrs a
 \texttt{stat()} because metadata cannot be cached in the
 container~\cite{bent_plfs_2009}.
 
+\subsubsection{System Architecture}
 %@noah: there is an index because applications do not have regular IO
 PLFS~\cite{bent_plfs_2009} solved the checkpoint problem by mapping logical
 files to physical files on the underlying file system. The solution targets N-1
@@ -162,7 +163,95 @@ can successfully optimize I/O.
 
 \end{itemize}
 
-
+\subsubsection{Namespace Description}
 
 \subsection{ROOT (HEP)}
+
+% the data
+The High energy physics (HEP) community uses a framework called ROOT to
+manipulate, manage, and visualize data about proton-proton collisions
+collected at the large hydron collider. The data is used to re-simulate
+phenomena of interest for analysis and there are different types of
+reconstructions each with ifferent granularities. The data is organized as
+nested and object oriented event data and the length of the runs (and thus
+the number of events) are of arbitrary length and type ({\it e.g.},
+particle objects, records of low-level detector hit properties).
+Reconstruction takes detector conditions ({\it e.g.} alignment, position of
+the beam, etc.) as input, which is pulled from remote database.  Data is
+streamed from the LHC into large immutable datasets, stored publicly in
+data centers around the world.  Physicists search the dataset and download
+interesting events, which are stored as ROOT files. 
+
+\subsubsection{System Architecture}
+
+% WHat does ROOT have?
+The advantages of the ROOT framework is the ability to (1) read only parts
+of the data and (2) easily ingest remote data over the network. The
+disadvantage of the ROOT framework and ROOT files have no formal
+specification. Much of the development was done at CERN in parallel with
+other HPC ventures. As a result, the technology and strategies are similar
+to existing systems:
+
+\begin{itemize}
+  \item subdirectories within a file, for organization like HDF5
+  \item serialization of any type of C++ object, like Python's pickle, but for C++
+  \item embedded schema with schema evolution like Avro
+  \item columnar storage of large sets of events, like the Dremel/Parquet shredding algorithm (called "splitting" in ROOT)
+  \item selective reading, also like Dremel/Parquet (the "prune" feature of SparkSQL DataFrames)
+  \item mutable content; a ROOT file is effectively a single-user object database (but without ORM: the data are fundamentally not relational— maybe "document store" would be a better word for what it's doing). Not all operations are guaranteed to be atomic or thread-safe (hence "single-user").
+\end{itemize}
+
+% ROOT files
+A ROOT file is a list of objects, accessed by consulting metadata in the
+header and seeking to a location in the bytestream. Types of objects include: 
+
+\begin{itemize}
+
+  \item TDirectory: collection of TKeys
+
+  \item TKey: object metadata containing name, title, classname, and seek
+  position
+
+  \item TTree: table of a collection of events, listed sequentially and stored in a flat namespace
+
+  \item TBranch: data container representing column(s) of TTree
+
+  \item TLeaf: data type description, stored as a special TBranch memeber
+  that describes the TBranch's data type
+
+  \item TBasket: byte ranges partitioned by events and indexed by TKeys;
+  also the compression, parallelization, and tranfer unit
+
+\end{itemize}
+
+The \texttt{splitlevel} parameter controls the data layout, {\it i.e.}
+whether it is organized more closely to rowwise or columnar. Low values
+store columns values as tuples in entries ({\it i.e.} \texttt{splitlevel=0}
+stores all column values as tuples in each entry) while high values make
+the data more columnar-based. Other parameters control the size and shape
+of hierarchical structure of the ROOT file include events per file, target
+TBasket size, cluster size, compression algorithm and level, and alignment
+of objects with disk pages.
+
+\subsubsection{Future integrations with CephFS}
+
+ROOT uses a flat file to describe hierarchical data because there are too many
+branches to create a file for each and there is not enough metadata to
+reconstruct which branches belong to which events.
+
+Questions: 
+- what does MetaData and Events mean? What is the difference!?
+- this namespace looks like it only goes one deep... how do I find other TTrees? OR
+- is it only the TBranches/tuples/splitting that makes this hierarchical data? 
+  - how do we make it look like something a scientist would actually do?
+
+\subsubsection{Namespace Description}
+
+We run ROOT with the following commands to build up the namespace:
+
+TODO visualize the namespace
+root -b ./2AC36403-8E7E-E711-A599-02163E01366D.root
+.ls
+MetaData->Print()
+
 \subsection{SIRIUS (HPC)}

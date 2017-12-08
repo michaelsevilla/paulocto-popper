@@ -1,0 +1,17 @@
+digraph G {"(0) \nceph.\n" -> "(1) \nvfile.\ntxt.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(2) \nhost.\n16.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(3) \nhost.\n27.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(4) \nhost.\n30.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(5) \nhost.\n8.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(6) \nmeta.\n";
+"(1) \nvfile.\ntxt.\n..." -> "(7) \nvers.\n2.\n...";
+"(2) \nhost.\n16.\n..." -> "(8) \ndata.\n...";
+"(2) \nhost.\n16.\n..." -> "(9) \nindex.\n...";
+"(3) \nhost.\n27.\n..." -> "(10) \ndata.\n...";
+"(3) \nhost.\n27.\n..." -> "(11) \nindex.\n...";
+"(4) \nhost.\n30.\n..." -> "(12) \ndata.\n...";
+"(4) \nhost.\n30.\n..." -> "(13) \nindex.\n...";
+"(6) \nmeta.\n" -> "(14) \n128.\n8.\n...";
+"(6) \nmeta.\n" -> "(15) \n248.\n8.\n...";
+"(6) \nmeta.\n" -> "(16) \n278.\n8.\n...";
+}

@@ -1,0 +1,27 @@
+digraph G {"(0) \nceph.\n" -> "(1) \nvfile.\ntxt.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(2) \nhost.\n13.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(3) \nhost.\n16.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(4) \nhost.\n17.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(5) \nhost.\n18.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(6) \nhost.\n4.\n...";
+"(1) \nvfile.\ntxt.\n..." -> "(7) \nmeta.\n";
+"(1) \nvfile.\ntxt.\n..." -> "(8) \nvers.\n2.\n...";
+"(2) \nhost.\n13.\n..." -> "(9) \ndata.\n...";
+"(2) \nhost.\n13.\n..." -> "(10) \nindex.\n...";
+"(3) \nhost.\n16.\n..." -> "(11) \ndata.\n...";
+"(3) \nhost.\n16.\n..." -> "(12) \ndata.\n...";
+"(3) \nhost.\n16.\n..." -> "(13) \nindex.\n...";
+"(3) \nhost.\n16.\n..." -> "(14) \nindex.\n...";
+"(4) \nhost.\n17.\n..." -> "(15) \ndata.\n...";
+"(4) \nhost.\n17.\n..." -> "(16) \nindex.\n...";
+"(5) \nhost.\n18.\n..." -> "(17) \ndata.\n...";
+"(5) \nhost.\n18.\n..." -> "(18) \nindex.\n...";
+"(6) \nhost.\n4.\n..." -> "(19) \ndata.\n...";
+"(6) \nhost.\n4.\n..." -> "(20) \nindex.\n...";
+"(7) \nmeta.\n" -> "(21) \n128.\n8.\n...";
+"(7) \nmeta.\n" -> "(22) \n248.\n8.\n...";
+"(7) \nmeta.\n" -> "(23) \n278.\n8.\n...";
+"(7) \nmeta.\n" -> "(24) \n278.\n8.\n...";
+"(7) \nmeta.\n" -> "(25) \n278.\n8.\n...";
+"(7) \nmeta.\n" -> "(26) \n7.\n7.\n...";
+}

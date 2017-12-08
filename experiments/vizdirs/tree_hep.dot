@@ -1,0 +1,5 @@
+digraph G {
+  "TDirectory" -> "TKey0";
+  "TDirectory" -> "TKey1";
+  "TDirectory" -> "TKey2";
+}
