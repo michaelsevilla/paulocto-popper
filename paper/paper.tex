@@ -6,6 +6,16 @@
 \usepackage{arydshln}
 \usepackage{subcaption}
 \usepackage{caption}
+\usepackage{tikz}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
 
 % Copyright
 \setcopyright{none}

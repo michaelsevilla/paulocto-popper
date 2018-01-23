@@ -25,13 +25,15 @@ count those requests as work down by the metadata server.
 
 \subsection{Overhead of Metadata Writes}
 When PLFS maps a logical file to many physical files, it deterministically
-creates the file system namespace in the backend file system.  For \(n\)
-processes on \(m\) servers:
+creates the file system namespace in the backend file system.  
+
+For \(n\) processes on \(m\) servers:
 
 \begin{itemize}
-  \item create directories: \(m \times \texttt{mkdir()}\)
-  \item create files: \(2n \times \texttt{create()} [+ 2n \times \texttt{lookup()}]\)
-  \item files/directory: \(n/m\)
+  \item[] \texttt{\# of dirs =} \(m \times \texttt{mkdir()}\)
+  \item[] \texttt{\# of file =} \(2n \times \texttt{create()} [+ 2n \times \texttt{lookup()}]\)
+  \item[] \texttt{\# of file per dir =} \(n/m\)
+  \item[] \(F(x)\)
 \end{itemize}
 
 % How does PLFS create namespaces

@@ -19,3 +19,6 @@
 [submodule "experiments/nn-cudele/site/roles/srl-ansible"]
 	path = experiments/nn-cudele/site/roles/srl-ansible
 	url = https://github.com/systemslab/srl-roles.git
+[submodule "paper/biblio"]
+	path = paper/biblio
+	url = https://github.com/michaelsevilla/biblio.git

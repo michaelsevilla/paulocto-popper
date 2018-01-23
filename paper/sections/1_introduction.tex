@@ -4,10 +4,10 @@
 \begin{figure}
   \centering
   \includegraphics[width=90mm]{figures/intro.png}
-  \caption{Clients decouple the file system subtrees and interact with their
-  private copiese locally for high performance. They can specify the structure of
-  the metadata they intend to create (structured namespace) or they can create
-  ad-hoc metadata (unstructured namespace), which is merged later.\label{fig:intro}}
+  \caption{In step \circled{1}, clients decouple file system subtrees and
+interact with their copiese locally for high performance. In step \circled{2},
+clients and metadata servers generate subtrees for structured namespaces using
+``file types", thus reducing RPC amplification.  \label{fig:intro}}
 \end{figure}
 %\begin{figure}
 %  \centering
