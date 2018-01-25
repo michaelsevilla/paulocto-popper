@@ -54,6 +54,35 @@ similar organizations exist for many domains, even something as distant as the
 mail application on a Mac. For scalability reasons, we focus on large scale
 systems in high performance computing (HPC) and high energy physics (HEP).
 
+We benchmark over Ceph (Jewel version) with \(n\) object storage daemons
+(OSDs), 1 metadata server (MDS), 1 monitor server (MON), and 1 client.  We use
+CephFS, the POSIX-compliant file system that uses Ceph's RADOS object
+store~\cite{weil:osdi2006-ceph}, as the underlying file system.  This analysis
+focuses on the file system metadata RPCs between the client and metadata server
+and does not include the RPCs needed to write and read actual data.  We use two
+workloads: processes writing to variable offsets in a single PLFS file
+(microbenchmark) and processes replaying a PLFS trace\footnote{Traces found
+here:
+\href{https://web.archive.org/web/20140419194914/http://institutes.lanl.gov/plfs/maps/}{here}}
+(macrobenchmark). 
+
+CephFS uses a cluster of metadata servers to service file system metadata
+requests~\cite{weil:sc2004-dyn-metadata} and to characterize the workload, we
+instrumented the metadata server to track (1) the number of each request type
+\footnote{This code was merged into the Ceph project.} and (2) the heat of each
+directory.  We could have used the client with FUSE debugging turned on but
+that would show all issued requests regardless of whether they were sent to the
+metadata server. In CephFS the protocols for caching may reduce the number of
+\texttt{lookup} requests that hit the metadata server and we did not want to
+count those requests as work down by the metadata server.
+
+
+
+We use
+\(n\) OSDs because it sustains 16 concurrent writes of 4MB at \(y\)MB/s for 2
+minutes. \(y\)MB/s is the max speed of the SSDs.
+
+
 \subsection{PLFS (HPC)}
 \label{sec:plfs}
 % What is the problem the authors are trying to solve?
@@ -133,64 +162,72 @@ such as a failure to decouple concurrency, storage overhead, the behavior of
 HPC parallel applications (utilizing all memory), application modification, and
 availability of data.
 
-\subsubsection{Language: Pattern PLFS}
-\label{sec:language-patterned-io}
-
-% What other approaches or solutions existed at the time that this work was done?
-I/O access patterns are studied extensively and results are integrated into
-existing systems. The common checkpointing technique, employed by ADIOS and
-PLFS, transform the concurrently written file into exclusively written file
-fragments. 
-
-% What was wrong with the other approaches or solutions?
-Despite extensive studies on I/O access patterns, current systems do not
-dynamically recognize patterns at a fine granularity. Because the PLFS
-checkpoint technique makes many small writes, it is either slow (on disk) or
-consumes a large amount of space (memory).  
-
-% What is the authors' approach or solution?
-The authors present algorithms to discover and replace PLFS metadata. The
-system is composed of: 
-
-\begin{itemize}
-
-  \item local per-process metadata: split based on pattern discovering engine
-  (get tuples using sliding window)
-
-  \item merge local indices into a single global one per PLFS (check if local
-  neighbors abut each other)
-
-\end{itemize}
-
-% Why is it better than the other approaches or solutions?
-The authors' algorithms rediscover information as data moves through POSIX. By
-dynamically  pattern matching and compression, they are able to reduce latency
-and disk/memory usage on reads. 
-
-% How does it perform?
-They tested with FS-TEST, MapReplayer, and real applications. In their
-experiments, metadata is reduced by several orders of magnitude, write
-performance is increased (by 40\%), and reads are increased (by 480\%). 
-
-% Why is this work important?
-
-Discovering structure in unstructured IO is useful for other systems, like
-pre-fetching and pre-allocation of blocks in file system or SciHadoop
-(metadata/data). This work that these algorithms (applied to compress metadata)
-can successfully optimize I/O. 
-
-% 3+ comments/questions
-\begin{itemize}
-
-  \item What PLFS structures allow us to to this?
-
-  \item How dependent on workloads are these?
-
-  \item Can this be extended to other file systems?
-
-\end{itemize}
-
 \subsubsection{Namespace Description}
+
+\begin{figure}[tb]
+\centering
+  \includegraphics[width=90mm]{figures/tree_plfs.png} 
+  \caption{The PLFS file system namespace is structured and predictable; the
+  pattern (solid line) is repeated for each hosts. In this case, there are three
+  hosts so the pattern is repeated two more times. 
+  }\label{fig:tree_plfs}
+\end{figure}
+
+\subsubsection{Overhead: Processing RPCs}
+
+When PLFS maps a logical file to many physical files, it deterministically
+creates the file system namespace in the backend file system.  For \(n\)
+processes on \(m\) servers:
+
+\begin{itemize}
+  \item[] \texttt{\# of dirs =} \(m \times \texttt{mkdir()}\)
+  \item[] \texttt{\# of file =} \(2n \times \texttt{create()} [+ 2n \times \texttt{lookup()}]\)
+  \item[] \texttt{\# of file per dir =} \(n/m\)
+\end{itemize}
+
+% How does PLFS create namespaces
+
+\textbf{Metadata Writes}: the number of directories is dependent on the number
+of PLFS servers. When a file is created in a PLFS mount, a directory called a
+container is created in the underlying file system. Inside the container,
+directories are created per server resulting in \(m\) requests. The number of
+files is dependendent on the number of PLFS processes. Processes write data and
+index files to the directory assigned to their server. The number of requests,
+which can range from \(2n\) to \(4n\), is a function of files per directory.
+If each server only has one process, then the number of file create requests
+will be \(2n\) because each process can cache the directory inode and create
+files in one request. With multiple processes per server, clients write to the
+same directory and the number of requests doubles because processes cannot
+cache the directory inode.
+
+%TODO: multiple processes per node
+%TODO: verify path traversal
+\begin{figure}[tb]
+\centering
+  \includegraphics[width=90mm]{figures/prob_reqs.png} 
+  \caption{The requests scale linearly with the number of clients.
+  \texttt{lookup()} requests dominate because clients share the root and must do
+  path traversal.
+  }\label{fig:arch}
+\end{figure}
+
+% How does PLFS read the namespace
+\textbf{Metadata Reads}: transforming write IO in this way has space and read
+overheads. In PLFS, this is a problem because index files need to be coalesced
+on reads.  Patterned PLFS~\cite{he:hpdc13-plfs-patterns} reduces the space
+overheads by storing formulas, instead of index files, to represent write
+behavior. Diddlings ~\cite{grider:pc17-diddlings} transfers index files after
+each write to absorb the transfer overheads up front. While these approaches
+help alleviate read overheads, they do not reduce the file system metadata
+load, which is the real problem. Reading the index file still requires a file
+system metadata operation.
+
+\begin{itemize}
+  \item read file: \(2n \times \texttt{open()}\) 
+\end{itemize}
+
+\subsubsection{Microbenchmark}
+\subsubsection{Macrobenchmark}
 
 \subsection{ROOT (HEP)}
 
@@ -276,31 +313,7 @@ of objects with disk pages.
 The ROOT framework uses flat, self-describing files and events are
 encoded/de-encoded with three pieces of information: TStreamerInfo to
 deserialize bytes, the TBranches hierarchy which describes how columns were
-split, and the TLeaves which specify the data types of objects. Storing this
-metadata in a file system would overwhelm most file systems because there are
-too many branches to create a file for each and there is not enough metadata to
-reconstruct which branches belong to which events.
-
-\subsubsection{Future integrations with CephFS}
-
-The current effort is to integrate the ROOT framework into CephFS~\cite{weil:osdi2006-ceph}. TBaskets
-would be stored in Ceph objects and the TBranch hierarchy, TStreamInfo
-metadata, and TLeaf metadata would map onto the metadata server. Clients would
-contact the metadata server with a TBranch request, receive back the TBranch
-hierarchy necessary to name the Ceph object containing the TBasket as well as
-the TStreamInfo and TLeaf metadata necessary to read the object. 
-
-To address the size problem mentioned above (too many inodes), we use implied
-namespaces to generate metadata lazily. There is a threshold size, say the
-number of indoes available, and when we read that we throw away irrelevent
-inodes. Basically, we travers the ROOT file and build tne namespace until we
-find what we want.
-
-Questions: 
-- what does MetaData and Events mean? What is the difference!?
-- this namespace looks like it only goes one deep... how do I find other TTrees? OR
-- is it only the TBranches/tuples/splitting that makes this hierarchical data? 
-  - how do we make it look like something a scientist would actually do?
+split, and the TLeaves which specify the data types of objects. i
 
 \subsubsection{Namespace Description}
 
@@ -309,15 +322,44 @@ containing pointers to groups of TBranches. For example, ``MetaData" has data
 about the run and ``Events" has all the proton-proton activity. Logically,
 physicists ask for TBranch's so partitioning the ROOT file at this granularity
 would prevent read amplification, {\it i.e.} reading more than is necessary.
+
+Unfortunately, the high energy physics community is running into scalability
+problems.  The current effort is to integrate the ROOT framework into
+CephFS~\cite{weil:osdi2006-ceph}.  Storing ROOT files as objects in an object
+store has overhead when users pull the entire GB-sized blob to their laptop.
+This model is a mismatch to the workload, which reads metadata and branches
+a-la-cart. Partitioning the ROOT file into branches on the file system
+namespace allows users to request only the metadata and branches they need.
+Unfortunately, storing this metadata in a file system would overwhelm most file
+systems because there are too many branches to create a file for each and there
+is not enough metadata to reconstruct which branches belong to which events.
 Unfortunately, current file system do not have this many inodes and this setup
 would require extra metadata to combine TBranches into objects.
 
-We run ROOT with the following commands to build up the namespace:
+\subsubsection{Overheads}
 
-TODO visualize the namespace
-docker run --rm -v `pwd`:/root --entrypoint=root -w /root -it  rootproject/root-ubuntu16  -b /root/2AC36403-8E7E-E711-A599-02163E01366D.root
- .x root/src/dump_tree_structure.cpp("./2AC36403-8E7E-E711-A599-02163E01366D.root", "Events")
-.ls
-MetaData->Print()
+We benchmark the write and read overhead of storing a ROOT file as:
+
+\begin{enumerate}
+  \item a large object in Ceph's object store (RADOS)
+  \item a large object in RADOS with push-down logic (CLS)
+  \item files in Ceph's file system (CephFS)
+\end{enumerate}
+
+Setups 1 and 2 are deployed without any changes to the ROOT framework. For
+setup 3, TBaskets are stored in Ceph objects and the TBranch hierarchy,
+TStreamInfo metadata, and TLeaf metadata map onto the metadata server.
+Clients contact the metadata server with a TBranch request, receive back
+the TBranch hierarchy necessary to name the Ceph object containing the TBasket
+as well as the TStreamInfo and TLeaf metadata necessary to read the object. 
+
+The workload is a list of branch accesses from a trace of the NPTupleMaker high
+energy physics application. For setup 1, the ROOT file is pulled locally and
+the branch accesses are offset/length reads. For setup 2, the same
+offset/length reads are sent as filters to the OSDs; think of them as push-down
+predicates from the database world. Finally, for setup 3, the branch accesses
+are specified as full branch names (i.e. full path names), which are used to
+traverse the file system namespace. There was significant pre-processing to
+find full branch accesses but this runtime is not included in our benchmarking. 
 
 \subsection{SIRIUS (HPC)}

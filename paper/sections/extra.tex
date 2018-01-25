@@ -1,0 +1,58 @@
+\subsubsection{Language: Pattern PLFS}
+\label{sec:language-patterned-io}
+
+% What other approaches or solutions existed at the time that this work was done?
+I/O access patterns are studied extensively and results are integrated into
+existing systems. The common checkpointing technique, employed by ADIOS and
+PLFS, transform the concurrently written file into exclusively written file
+fragments. 
+
+% What was wrong with the other approaches or solutions?
+Despite extensive studies on I/O access patterns, current systems do not
+dynamically recognize patterns at a fine granularity. Because the PLFS
+checkpoint technique makes many small writes, it is either slow (on disk) or
+consumes a large amount of space (memory).  
+
+% What is the authors' approach or solution?
+The authors present algorithms to discover and replace PLFS metadata. The
+system is composed of: 
+
+\begin{itemize}
+
+  \item local per-process metadata: split based on pattern discovering engine
+  (get tuples using sliding window)
+
+  \item merge local indices into a single global one per PLFS (check if local
+  neighbors abut each other)
+
+\end{itemize}
+
+% Why is it better than the other approaches or solutions?
+The authors' algorithms rediscover information as data moves through POSIX. By
+dynamically  pattern matching and compression, they are able to reduce latency
+and disk/memory usage on reads. 
+
+% How does it perform?
+They tested with FS-TEST, MapReplayer, and real applications. In their
+experiments, metadata is reduced by several orders of magnitude, write
+performance is increased (by 40\%), and reads are increased (by 480\%). 
+
+% Why is this work important?
+
+Discovering structure in unstructured IO is useful for other systems, like
+pre-fetching and pre-allocation of blocks in file system or SciHadoop
+(metadata/data). This work that these algorithms (applied to compress metadata)
+can successfully optimize I/O. 
+
+% 3+ comments/questions
+\begin{itemize}
+
+  \item What PLFS structures allow us to to this?
+
+  \item How dependent on workloads are these?
+
+  \item Can this be extended to other file systems?
+
+\end{itemize}
+
+

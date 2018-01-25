@@ -1,5 +1,12 @@
 \section{Methodology}
 
+Implied namespaces lazily generate file system subtrees. This reduces overheads for:
+\begin{itemize}
+  \item namespaces overloaded with requests
+  \item namespaces that are too large
+  \item namespaces that ...
+\end{itemize}
+
 In this section, we show how clients and metadata servers communicate using the
 Pattern PLFS language and present our
 storage system that adapts to the wokload
