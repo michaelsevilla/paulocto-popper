@@ -354,12 +354,21 @@ the TBranch hierarchy necessary to name the Ceph object containing the TBasket
 as well as the TStreamInfo and TLeaf metadata necessary to read the object. 
 
 The workload is a list of branch accesses from a trace of the NPTupleMaker high
-energy physics application. For setup 1, the ROOT file is pulled locally and
-the branch accesses are offset/length reads. For setup 2, the same
-offset/length reads are sent as filters to the OSDs; think of them as push-down
-predicates from the database world. Finally, for setup 3, the branch accesses
-are specified as full branch names (i.e. full path names), which are used to
-traverse the file system namespace. There was significant pre-processing to
-find full branch accesses but this runtime is not included in our benchmarking. 
+energy physics application. Each branch access is:
+
+\noindent\texttt{branch0 branch1 ,3,1740718587,5847,97,136}
+
+Where the tuple is full branch name, basket number, offset into the ROOT file,
+size of the basket, start of entry of the basket, and end entry of the basket.
+For setups 1 and 2 we care about offset into the ROOT file and the size of the
+basket.  In setup 1, the ROOT file is pulled locally and the branches are read
+from the file. In setup 2, the offset and size of the read are sent as filters
+to the OSDs; think of them as push-down predicates from the database world.
+For setup 3, we care about the full branch name and basket number.  In setup 3,
+the branch accesses are specified as full branch names ({\it i.e.} full path
+names), which are used to traverse the file system namespace. The start and end
+entry of the basket are the logical records that bookend the basket ({\it
+e.g.}, for a start entry of 10 and end entry of 20 for a basket storing user
+ages, the start entry is user 10's age and the end entry is user 20's age).  
 
 \subsection{SIRIUS (HPC)}
