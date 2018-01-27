@@ -1,1 +1,2 @@
-.ipynb_checkpoints
+pipelines/*/popper_status
+pipelines/*/popper_logs
