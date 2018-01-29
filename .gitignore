@@ -1,2 +1,5 @@
 pipelines/*/popper_status
 pipelines/*/popper_logs
+.ipynb_checkpoints/
+.DS_Store
+tmp/

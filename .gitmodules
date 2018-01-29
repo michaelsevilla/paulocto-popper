@@ -22,3 +22,9 @@
 [submodule "paper/biblio"]
 	path = paper/biblio
 	url = https://github.com/michaelsevilla/biblio.git
+[submodule "ansible/ceph"]
+	path = ansible/ceph
+	url = https://github.com/michaelsevilla/ceph-ansible.git
+[submodule "ansible/srl"]
+	path = ansible/srl
+	url = https://github.com/systemslab/srl-roles.git
