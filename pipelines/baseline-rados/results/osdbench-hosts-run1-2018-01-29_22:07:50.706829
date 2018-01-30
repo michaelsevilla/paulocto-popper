@@ -1,17 +1,17 @@
 {
     "bytes_written": 1073741824,
     "blocksize": 4194304,
-    "bytes_per_sec": 249619394
+    "bytes_per_sec": 247000621
 }
 
 {
     "bytes_written": 1073741824,
     "blocksize": 4194304,
-    "bytes_per_sec": 249171327
+    "bytes_per_sec": 225469872
 }
 
 {
     "bytes_written": 1073741824,
     "blocksize": 4194304,
-    "bytes_per_sec": 246420545
+    "bytes_per_sec": 251092687
 }
