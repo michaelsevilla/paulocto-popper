@@ -34,6 +34,18 @@ if [ ! -z $1 ]; then
   exit
 fi
 
-$DOCKER ceph.yml
+for run in 0 1 2; do
+  ./teardown.sh
+  $DOCKER ceph.yml
+  ssh node-5 sudo chmod -R 777 /etc/ceph
+  for f in "2AC36403-8E7E-E711-A599-02163E01366D.root" "cmsdump.outerr" "branchListFile.txt"; do
+    scp /mnt/disk/root/$f node-5:/etc/ceph/$f
+  done
+  ssh node-5 sudo chmod -R 777 /etc/ceph
+  $DOCKER -e write_mount="/etc/ceph/" /workloads/hep.yml
+  mv results results-disk-run$run
+  $DOCKER -e write_mount="/cephfs-baseliner/" /workloads/hep.yml
+  mv results results-cephfs-run$run
+done
 
 exit 0

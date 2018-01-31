@@ -30,6 +30,7 @@
     with_nested:
       - "{{ ceph_pgs }}"
       - ["cephfs_metadata pg_num", "cephfs_data pg_num", "cephfs_metadata pgp_num", "cephfs_data pgp_num"]
+  - command:  docker exec {{ ansible_hostname }} ceph osd pool create hep 128
 
 - hosts: mons
   serial: 1

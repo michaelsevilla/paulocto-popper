@@ -1,0 +1,40 @@
+---
+- hosts: clients[0]
+  become: true
+  tasks:
+
+  - set_fact: output="/popper/results/summary.txt"
+  - set_fact: args="--rm -w /root -v {{ root_src }}:/root -v /etc/ceph:/etc/ceph --entrypoint=root --volumes-from cephfs rootproject/root-ubuntu16 -b -q"
+
+  - shell: docker exec cephfs chmod 777 -R {{ mount_point }}
+  - shell: docker exec cephfs rm -rf {{ mount_point }}/namespace
+    ignore_errors: true
+
+  - name: put the ROOT file into RADOS
+    shell: docker exec cephfs rados put -p hep {{ root_file }} /etc/ceph/{{ root_file }}
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="push,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+  - shell: chmod 777 /etc/ceph/{{ root_file }}
+
+  - name: setup 1 - pull the ROOT file out of RADOS
+    shell: docker exec cephfs rados get -p hep {{ root_file }} /etc/ceph/{{ root_file }}_tmp
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="get,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+
+  - name: setup 1 - read from the ROOT file
+    shell: docker run {{ args }} \
+             .x root/src/read_baskets_from_file_hep_method.cpp\(\"/etc/ceph/2AC36403-8E7E-E711-A599-02163E01366D.root\",\"/etc/ceph/branchListFile.txt\"\)
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="read_hep,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+
+  - name: setup 3 - write namespace from ROOT file
+    shell: docker run {{ args }} \
+             .x root/src/write_baskets_to_file.cpp\(\"/etc/ceph/2AC36403-8E7E-E711-A599-02163E01366D.root\",\"{{ write_mount }}/namespace\"\)
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="write_fpb,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+
+  - name: setup 3 - read branches from ROOT namespace
+    shell: docker run {{ args }} \
+             .x root/src/read_baskets_from_file_our_method.cpp\(\"/etc/ceph/branchListFile.txt\"\,\"{{ write_mount }}/namespace\"\)
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="read_fpb,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"

@@ -1,4 +1,3 @@
-#!/bin/bash
 SRC="/mnt/disk/root"
 RUN="docker run --rm -it \
       -w /root \
@@ -9,32 +8,28 @@ RUN="docker run --rm -it \
 INPUT="$SRC/2AC36403-8E7E-E711-A599-02163E01366D.root"
 TRACE="$SRC/cmsdump.outerr"
 
-if [[ ! -d $SRC ]]; then
-  echo "\$SRC directory does not exist"
+if [ -z $1 ]; then
+  echo "Please give git username in \$1"
   exit 1
 fi
 
-if [[ ! -f $INPUT ]]; then
-  echo "\$INPUT (ROOT file) does not exist"
-  exit 1
-fi
-
-if [[ ! -f $TRACE ]]; then
-  echo "\$TRACE (CMS Dump file) does not exist"
+if [ -z $2 ]; then
+  echo "Please give git password in \$2"
   exit 1
 fi
 
 set -ex
-sudo chmod 777 -R $SRC
+
+$SSH sudo chmod 777 -R $SRC
+$SSH sudo chmod 777 -R /etc/ceph
+
 echo "==> Cloning repository..."
-git clone --recursive https://github.com/reza-nasirigerdeh/root.git $SRC/root
+$SSH git clone --recursive https://$1:$2@github.com/reza-nasirigerdeh/root.git $SRC/root
 
 echo "==> Generating input file..."
-$RUN -b -q .x \
+$SSH $RUN -b -q .x \
   root/src/translate_offsets_to_baskets.cpp\(\"2AC36403-8E7E-E711-A599-02163E01366D.root\",\"\",\"full-path\",\"cmsdump.outerr\"\)
 
 echo "==> Cleaning input file..."
-grep  -v "READ" $SRC/translated_baskets.txt > $SRC/branchListFile.txt
-sed -i '1,2d' $SRC/branchListFile.txt
-
-echo "==> DONE!"
+$SSH grep -v "READ" $SRC/translated_baskets.txt > $SRC/branchListFile.txt
+$SSH sed -i '1,2d' $SRC/branchListFile.txt
