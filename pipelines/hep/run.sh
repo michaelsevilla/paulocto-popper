@@ -34,7 +34,7 @@ if [ ! -z $1 ]; then
   exit
 fi
 
-for run in 0 1 2; do
+for run in 3 4 5 6 7 8; do
   ./teardown.sh
   $DOCKER ceph.yml
   ssh node-5 sudo chmod -R 777 /etc/ceph
