@@ -48,6 +48,7 @@ kraken: false
 monitor_interface: eth1
 ceph_mon_docker_interface: eth1
 ceph_mon_docker_subnet: 10.10.1.1
+public_network: 10.10.1.1/24
 
 ################
 # OSD          #
@@ -99,3 +100,6 @@ ceph_radosbench_cmd: "rados -p cephfs_metadata bench --show-time 120 write"
 repetitions: 3
 root_file: "2AC36403-8E7E-E711-A599-02163E01366D.root"
 root_src:  "/mnt/disk/root"
+write_ext4: "/etc/ceph"
+
+

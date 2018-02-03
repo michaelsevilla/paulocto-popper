@@ -20,16 +20,15 @@ fi
 
 set -ex
 
-$SSH sudo chmod 777 -R $SRC
-$SSH sudo chmod 777 -R /etc/ceph
+sudo chmod 777 -R /etc/ceph
 
 echo "==> Cloning repository..."
-$SSH git clone --recursive https://$1:$2@github.com/reza-nasirigerdeh/root.git $SRC/root
+git clone --recursive https://$1:$2@github.com/reza-nasirigerdeh/root.git $SRC/root || true
 
 echo "==> Generating input file..."
-$SSH $RUN -b -q .x \
+$RUN -b -q .x \
   root/src/translate_offsets_to_baskets.cpp\(\"2AC36403-8E7E-E711-A599-02163E01366D.root\",\"\",\"full-path\",\"cmsdump.outerr\"\)
 
 echo "==> Cleaning input file..."
-$SSH grep -v "READ" $SRC/translated_baskets.txt > $SRC/branchListFile.txt
-$SSH sed -i '1,2d' $SRC/branchListFile.txt
+grep -v "READ" $SRC/translated_baskets.txt > $SRC/branchListFile.txt
+sed -i '1,2d' $SRC/branchListFile.txt

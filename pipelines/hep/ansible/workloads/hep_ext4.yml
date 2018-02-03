@@ -1,0 +1,38 @@
+---
+- hosts: clients[0]
+  become: true
+  tasks:
+
+  - set_fact: output="/popper/results/summary.txt"
+  - set_fact: args="--rm -w /root -v {{ root_src }}:/root -v /etc/ceph:/etc/ceph --entrypoint=root --volumes-from cephfs rootproject/root-ubuntu16 -b -q"
+
+  - file:
+     path: "/etc/ceph"
+     mode: 0777
+     state: "directory"
+
+  - copy:
+      src:  "{{ root_src }}/{{ item }}"
+      dest: "/etc/ceph/{{ item }}" 
+      mode: 0777
+    with_items:
+    - ["{{ root_file }}", "cmsdump.outerr", "branchListFile.txt"]
+
+
+  - name: setup 1 - read from the ROOT file
+    shell: docker run {{ args }} \
+             .x root/src/read_baskets_from_file_hep_method.cpp\(\"/etc/ceph/{{ root_file }}\",\"/etc/ceph/branchListFile.txt\"\)
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="read_hep,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+
+  - name: setup 3 - write namespace from ROOT file
+    shell: docker run {{ args }} \
+             .x root/src/write_baskets_to_file.cpp\(\"/etc/ceph/{{ root_file }}\",\"{{ write_ext4 }}/namespace\"\)
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="write_fpb,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+
+  - name: setup 3 - read branches from ROOT namespace
+    shell: docker run {{ args }} \
+             .x root/src/read_baskets_from_file_our_method.cpp\(\"/etc/ceph/branchListFile.txt\"\,\"{{ write_ext4 }}/namespace\"\)
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="read_fpb,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"

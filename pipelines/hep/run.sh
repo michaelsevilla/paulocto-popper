@@ -18,6 +18,7 @@ DIRS="-v `pwd`:/popper \
 ANSB="-v `pwd`/ansible/group_vars/:/root/group_vars \
       -v `pwd`/hosts:/etc/ansible/hosts \
       -v `pwd`/ansible/ansible.cfg:/etc/ansible/ansible.cfg \
+      -v /mnt/disk:/mnt/disk \
       -e ANSIBLE_CONFIG=/etc/ansible/ansible.cfg"
 CODE="-v `pwd`/ansible/ceph.yml:/root/ceph.yml \
       -v `pwd`/ansible/monitor.yml:/root/monitor.yml"
@@ -34,18 +35,12 @@ if [ ! -z $1 ]; then
   exit
 fi
 
-for run in 3 4 5 6 7 8; do
-  ./teardown.sh
-  $DOCKER ceph.yml
-  ssh node-5 sudo chmod -R 777 /etc/ceph
-  for f in "2AC36403-8E7E-E711-A599-02163E01366D.root" "cmsdump.outerr" "branchListFile.txt"; do
-    scp /mnt/disk/root/$f node-5:/etc/ceph/$f
-  done
-  ssh node-5 sudo chmod -R 777 /etc/ceph
-  $DOCKER -e write_mount="/etc/ceph/" /workloads/hep.yml
-  mv results results-disk-run$run
-  $DOCKER -e write_mount="/cephfs-baseliner/" /workloads/hep.yml
-  mv results results-cephfs-run$run
+for run in `seq 0 2`; do
+  #./teardown.sh
+  #$DOCKER ceph.yml
+  $DOCKER /workloads/hep_ext4.yml
+  exit
+  mv results results-run$run
 done
 
 exit 0
