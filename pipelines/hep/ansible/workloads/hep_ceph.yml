@@ -1,0 +1,29 @@
+---
+- hosts: clients[0]
+  tasks:
+
+  - set_fact: output="/popper/results/summary.txt"
+  - set_fact: args="--rm -w /root -v {{ root_src }}:/root -v /etc/ceph:/etc/ceph --entrypoint=root --volumes-from cephfs rootproject/root-ubuntu16 -b -q"
+
+  - file:
+     path: "/etc/ceph"
+     mode: 0777
+     state: "directory"
+
+  - copy:
+      src:  "{{ root_src }}/{{ item }}"
+      dest: "/etc/ceph/{{ item }}" 
+      mode: 0777
+    with_items:
+    - ["{{ root_file }}", "cmsdump.outerr", "branchListFile.txt"]
+
+  - name: put the ROOT file into RADOS
+    shell: docker exec cephfs rados put -p hep {{ root_file }} /etc/ceph/{{ root_file }}
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="put,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+  - shell: chmod 777 -R {{ mount_point }}
+
+  - name: setup 1 - pull the ROOT file out of RADOS
+    shell: docker exec cephfs rados get -p hep {{ root_file }} /etc/ceph/{{ root_file }}_tmp
+    register: r
+  - local_action: lineinfile dest="{{ output }}" line="get,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"

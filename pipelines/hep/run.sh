@@ -4,9 +4,6 @@
 # by the 'popper check' command.
 set -ex
 
-rm -fr results || true
-mkdir results
-
 # if you know Ansible and Docker, the below should make sense
 # - we attach ceph-ansible to root because they expect us to be in that dir
 ROOT=`dirname $PWD | xargs dirname`
@@ -35,11 +32,14 @@ if [ ! -z $1 ]; then
   exit
 fi
 
-for run in `seq 0 2`; do
-  #./teardown.sh
-  #$DOCKER ceph.yml
-  $DOCKER /workloads/hep_ext4.yml
-  exit
+rm -fr results || true
+mkdir results
+
+for run in `seq 0 5`; do
+  ./teardown.sh
+  $DOCKER ceph.yml \
+    /workloads/hep_ext4.yml \
+    /workloads/hep_cephfs.yml
   mv results results-run$run
 done
 
