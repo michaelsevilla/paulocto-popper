@@ -27,7 +27,7 @@
     shell: docker exec cephfs cp /etc/ceph/{{ root_file }} {{ mount_point }}/{{ root_file }}
     register: r
   - local_action: lineinfile dest="{{ output }}" line="write_cephfs,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
-  - shell: docker exec cephfs chmod 777 -R {{ mount_point }}/{{ root_file }}
+  - shell: docker exec cephfs chmod 777 -R {{ mount_point }}
 
   - name: setup 3 - read the ROOT file from CephFS
     shell: docker run {{ args }} \
