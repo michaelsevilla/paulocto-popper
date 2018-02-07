@@ -46,6 +46,9 @@
     ignore_errors: True
     with_items:
     - "{{ ceph_osd_docker_devices }}"
+
+- hosts: osds, mdss, clients
+  tasks:
   - shell: docker stop collectl
     ignore_errors: True
   - shell: docker rm collectl

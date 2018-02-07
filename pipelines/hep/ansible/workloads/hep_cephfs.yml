@@ -23,6 +23,14 @@
     with_items:
     - ["namespace", "{{ root_file }}"]
 
+- hosts: graphite[0]
+  tasks:
+  - shell: docker exec graphite echo "job.cephfs 1 `date +%s`" | nc `hostname` 2003
+
+- hosts: clients[0]
+  become: true
+  tasks:
+
   - name: setup 3 - write the ROOT file into CephFS
     shell: docker exec cephfs cp /etc/ceph/{{ root_file }} {{ mount_point }}/{{ root_file }}
     register: r
@@ -34,6 +42,15 @@
              .x root/src/read_baskets_from_file_hep_method.cpp\(\"{{ mount_point }}/{{ root_file }}\",\"/etc/ceph/branchListFile.txt\"\)
     register: r
   - local_action: lineinfile dest="{{ output }}" line="read_cephfs,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+  - pause: minutes=1
+
+- hosts: graphite[0]
+  tasks:
+  - shell: docker exec graphite echo "job.fpb_cephfs 1 `date +%s`" | nc `hostname` 2003
+
+- hosts: clients[0]
+  become: true
+  tasks:
 
   - name: setup 4 - write namespace from ROOT file
     shell: docker run {{ args }} \
@@ -46,3 +63,4 @@
              .x root/src/read_baskets_from_file_our_method.cpp\(\"/etc/ceph/branchListFile.txt\"\,\"{{ mount_point }}/namespace\"\)
     register: r
   - local_action: lineinfile dest="{{ output }}" line="read_fpb_cephfs,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+  - pause: minutes=1

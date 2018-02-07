@@ -17,6 +17,14 @@
     with_items:
     - ["{{ root_file }}", "cmsdump.outerr", "branchListFile.txt"]
 
+- hosts: graphite[0]
+  tasks:
+  - shell: docker exec graphite echo "job.rados 1 `date +%s`" | nc `hostname` 2003
+
+- hosts: clients[0]
+  become: true
+  tasks:
+
   - name: put the ROOT file into RADOS
     shell: docker exec cephfs rados put -p hep {{ root_file }} /etc/ceph/{{ root_file }}
     register: r
@@ -27,3 +35,4 @@
     shell: docker exec cephfs rados get -p hep {{ root_file }} /etc/ceph/{{ root_file }}_tmp
     register: r
   - local_action: lineinfile dest="{{ output }}" line="get,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+  - pause: minutes=5

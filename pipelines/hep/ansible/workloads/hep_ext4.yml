@@ -21,20 +21,31 @@
   - shell: docker exec cephfs rm -rf {{ mount_point }}/namespace
     ignore_errors: true
 
+- hosts: graphite[0]
+  tasks:
+  - shell: docker exec graphite echo "job.ext4 1 `date +%s`" | nc `hostname` 2003
+
+- hosts: clients[0]
+  become: true
+  tasks:
+
   - name: setup 1 - read from the ROOT file
     shell: docker run {{ args }} \
              .x root/src/read_baskets_from_file_hep_method.cpp\(\"/etc/ceph/{{ root_file }}\",\"/etc/ceph/branchListFile.txt\"\)
     register: r
   - local_action: lineinfile dest="{{ output }}" line="read_hep_ext4,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+  - pause: minutes=1
 
   - name: setup 4 - write namespace from ROOT file
     shell: docker run {{ args }} \
              .x root/src/write_baskets_to_file.cpp\(\"/etc/ceph/{{ root_file }}\",\"{{ write_ext4 }}/namespace\"\)
     register: r
   - local_action: lineinfile dest="{{ output }}" line="write_fpb_ext4,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+  - pause: minutes=1
 
   - name: setup 4 - read branches from ROOT namespace
     shell: docker run {{ args }} \
              .x root/src/read_baskets_from_file_our_method.cpp\(\"/etc/ceph/branchListFile.txt\"\,\"{{ write_ext4 }}/namespace\"\)
     register: r
   - local_action: lineinfile dest="{{ output }}" line="read_fpb_ext4,{{ r.delta }},{{ ansible_date_time.time }}" create="yes"
+  - pause: minutes=1

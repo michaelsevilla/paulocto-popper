@@ -18,6 +18,7 @@ ANSB="-v `pwd`/ansible/group_vars/:/root/group_vars \
       -v /mnt/disk:/mnt/disk \
       -e ANSIBLE_CONFIG=/etc/ansible/ansible.cfg"
 CODE="-v `pwd`/ansible/ceph.yml:/root/ceph.yml \
+      -v `pwd`/ansible/collect.yml:/root/collect.yml \
       -v `pwd`/ansible/monitor.yml:/root/monitor.yml"
 WORK="-v `pwd`/ansible/workloads:/workloads"
 ARGS="--forks 50 --skip-tags package-install,with_pkg"
@@ -37,10 +38,11 @@ mkdir results
 
 for run in `seq 0 5`; do
   ./teardown.sh
-  $DOCKER ceph.yml \
+  $DOCKER ceph.yml monitor.yml \
     /workloads/hep_ext4.yml \
-    /workloads/hep_cephfs.yml
-  mv results results-run$run
+    /workloads/hep_cephfs.yml \
+    /popper/ansible/collect.yml
+  mv results results-monitor-run$run
 done
 
 exit 0
