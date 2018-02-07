@@ -1,0 +1,27 @@
+2018-02-07 15:18:19  /entrypoint.sh: static: does not generate config
+HEALTH_WARN too few PGs per OSD (21 < min 30)
+2018-02-07 15:18:19  /entrypoint.sh: static: does not generate the admin key, so we can not get it.
+2018-02-07 15:18:19  /entrypoint.sh: static: make it available with the help of your configuration management system.
+2018-02-07 15:18:19  /entrypoint.sh: static: ceph-ansible is a good candidate to deploy a containerized version of Ceph.
+2018-02-07 15:18:19  /entrypoint.sh: static: ceph-ansible will help you fetching the keys and push them on the right nodes.
+2018-02-07 15:18:19  /entrypoint.sh: static: if you're interested, please visit: https://github.com/ceph/ceph-ansible
+pool 'cephfs_data' created
+pool 'cephfs_metadata' created
+new fs with metadata pool 2 and data pool 1
+2018-02-07 15:18:22  /entrypoint.sh: SUCCESS
+2018-02-07 15:18:22.279678 7fa4a950d300  0 set uid:gid to 64045:64045 (ceph:ceph)
+2018-02-07 15:18:22.279698 7fa4a950d300  0 ceph version 9.0.0-19001-ga241c6f (a241c6fda16253476dbd9ed44e3cc180b7425955), process ceph-mds, pid 236
+starting mds.node-4 at -
+2018-02-07 15:18:22.281005 7fa4a950d300  0 pidfile_write: ignore empty --pid-file
+2018-02-07 15:18:26.434303 7fa4a1f09700  0 mds.0.cache creating system inode with ino:1
+2018-02-07 15:18:26.434608 7fa4a1f09700  0 mds.0.cache creating system inode with ino:100
+2018-02-07 15:18:26.434620 7fa4a1f09700  0 mds.0.cache creating system inode with ino:600
+2018-02-07 15:18:26.434809 7fa4a1f09700  0 mds.0.cache creating system inode with ino:601
+2018-02-07 15:18:26.434906 7fa4a1f09700  0 mds.0.cache creating system inode with ino:602
+2018-02-07 15:18:26.435153 7fa4a1f09700  0 mds.0.cache creating system inode with ino:603
+2018-02-07 15:18:26.435289 7fa4a1f09700  0 mds.0.cache creating system inode with ino:604
+2018-02-07 15:18:26.435412 7fa4a1f09700  0 mds.0.cache creating system inode with ino:605
+2018-02-07 15:18:26.435502 7fa4a1f09700  0 mds.0.cache creating system inode with ino:606
+2018-02-07 15:18:26.435596 7fa4a1f09700  0 mds.0.cache creating system inode with ino:607
+2018-02-07 15:18:26.435690 7fa4a1f09700  0 mds.0.cache creating system inode with ino:608
+2018-02-07 15:18:26.435812 7fa4a1f09700  0 mds.0.cache creating system inode with ino:609
