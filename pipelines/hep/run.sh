@@ -36,13 +36,13 @@ fi
 rm -fr results || true
 mkdir results
 
-for run in `seq 0 5`; do
+for run in `seq 0 2`; do
   ./teardown.sh
   $DOCKER ceph.yml monitor.yml \
-    /workloads/hep_ext4.yml \
     /workloads/hep_cephfs.yml \
+    /workloads/hep_ext4.yml \
     /popper/ansible/collect.yml
-  mv results results-monitor-run$run
+  mv results results-monitor-nonetwork-run$run
 done
 
 exit 0

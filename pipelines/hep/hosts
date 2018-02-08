@@ -7,7 +7,7 @@ node-3 ansible_ssh_user=msevilla
 node-0 ansible_ssh_user=msevilla
 
 [clients]
-node-5 ansible_ssh_user=msevilla
+node-0 ansible_ssh_user=msevilla
 
 [mdss]
 node-4 ansible_ssh_user=msevilla

@@ -48,7 +48,9 @@ kraken: false
 monitor_interface: eth1
 ceph_mon_docker_interface: eth1
 ceph_mon_docker_subnet: 10.10.1.1
-public_network: 10.10.1.1/24
+cluster_network: 10.10.1.0/24
+#public_network: 128.104.222.0/22
+public_network: 10.10.1.0/24
 
 ################
 # OSD          #
