@@ -5,9 +5,9 @@
   \centering
   \includegraphics[width=90mm]{figures/intro.png}
   \caption{In step \circled{1}, clients decouple file system subtrees and
-interact with their copiese locally for high performance. In step \circled{2},
-clients and metadata servers generate subtrees for structured namespaces using
-``file types", thus reducing RPC amplification.  \label{fig:intro}}
+interact with their copies locally for high performance. In step \circled{2},
+clients and metadata servers generate subtrees using
+``namespace schemas", thus reducing RPC load.  \label{fig:intro}}
 \end{figure}
 %\begin{figure}
 %  \centering
@@ -40,10 +40,10 @@ clients and metadata servers generate subtrees for structured namespaces using
 %    be parallelized and must replay metadata one by one onto the global namespace}
  
 % What is our solution
-We propose PaulOctoFS, a file system that allows users to succinctly express
+We propose Tintenfisch, a file system that allows users to succinctly express
 the structure and patterns of the metadata they intend to create.  They can
 also merge new metadata (that they did not explicitly state up front) into the
-global namespace.  Using this semantic knowledge, PaulOctoFS can optimize
+global namespace.  Using this semantic knowledge, Tintenfisch can optimize
 performance by reducing the number of RPCs needed for:
 
 \begin{itemize}
@@ -64,7 +64,7 @@ build a scalable global namespace. Less work is done on the metadata servers
 and clients pick up some of the metadata load.  This approach is similar to
 predicate push down in databases, where structure is described using XML or
 JSON and pushed as predicates to the lower storage
-layers~\cite{shel:pc17-pushdown}. It is our hope the PaulOctoFS will also be
+layers~\cite{shel:pc17-pushdown}. It is our hope that Tintenfisch will also be
 able to change the representation or structure of the file system metadata
 according to the file type or workload.  We have the following contributions:
 
