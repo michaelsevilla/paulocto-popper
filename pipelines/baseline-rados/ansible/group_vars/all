@@ -6,6 +6,7 @@
 fsid: "e9570dd8-03ad-45f0-8a74-ec9b3bb7095f"
 docker: true
 install_docker: false
+ceph_mon_docker_interface: "{{ monitor_interface }}"
 
 #############
 # ceph.conf #

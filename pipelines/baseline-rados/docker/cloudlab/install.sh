@@ -29,11 +29,11 @@ sudo add-apt-repository \
 sudo apt-get update -y
 sudo apt-get install -y docker-ce
 
-# setup an alias (for MPI related jobs)
-sudo ifconfig eth2 up || true
-ip=`ifconfig | grep 10.10.1. | awk '{print $2}' | sed 's/addr://g'`
-sudo ifconfig eth2:0 $ip up
-echo $HOSTNAME | sed "s/\./ /g" | awk '{print $1}' | xargs sudo hostname
+# enable passwordless login
+sudo sed -i "s/#   StrictHostKeyChecking ask/StrictHostKeyChecking no/g" /etc/ssh/ssh_config 
 
-# pull the code
-git clone --recursive https://github.com/michaelsevilla/paulocto-popper.git /tmp/paulocto-popper
+# setup an alias (for MPI related jobs)
+#sudo ifconfig eth2 up || true
+#ip=`ifconfig | grep 10.10.1. | awk '{print $2}' | sed 's/addr://g'`
+#sudo ifconfig eth2:0 $ip up
+#echo $HOSTNAME | sed "s/\./ /g" | awk '{print $1}' | xargs sudo hostname
