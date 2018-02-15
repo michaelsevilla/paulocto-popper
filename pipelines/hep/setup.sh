@@ -20,10 +20,10 @@ fi
 
 set -ex
 
-sudo chmod 777 -R /etc/ceph
-
-#echo "==> Cloning repository..."
-##git clone --recursive https://$1:$2@github.com/reza-nasirigerdeh/root.git $SRC/root || true
+echo "==> Cloning repository..."
+git clone --recursive https://$1:$2@github.com/reza-nasirigerdeh/root.git $SRC/root || true
+sudo chmod 777 $SRC/*
+cd $SRC/root; git checkout 3b52abb; cd -
 
 echo "==> Generating input file..."
 $RUN -b -q .x \

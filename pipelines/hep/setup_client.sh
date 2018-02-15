@@ -18,6 +18,7 @@ fi
 set -ex
 
 echo "==> Cloning repository..."
-ssh $3 sudo mkdir -p $SRC || true
+ssh $3 sudo mkdir -p $SRC
+ssh $3 sudo chmod 777 $SRC
 ssh $3 git clone --recursive https://$1:$2@github.com/reza-nasirigerdeh/root.git $SRC/root
-ssh $3 "cd $SRC; git checkout -b c7449a70ad65d4150fdaec80bf70c68d06511776 c7449a70ad65d4150fdaec80bf70c68d06511776;"
+ssh $3 "cd $SRC/root; git checkout 3b52abb"
