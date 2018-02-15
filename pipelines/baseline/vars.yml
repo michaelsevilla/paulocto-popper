@@ -23,7 +23,7 @@
 #ceph_wait_status: "HEALTH_WARN"
 #cloudlab: false
 
-# uncomment for cloudlab
+## uncomment for cloudlab
 ceph_repository: https://github.com/michaelsevilla/ceph.git
 ceph_docker_version: a241c6f
 ceph_docker_username: michaelsevilla
@@ -44,13 +44,11 @@ kraken: false
 #ceph_mon_docker_interface: eth1
 #ceph_mon_docker_subnet: 192.168.140.0/24
 
-# uncomment for cloudlab
+## uncomment for cloudlab
 monitor_interface: eth3
 ceph_mon_docker_interface: eth3
 ceph_mon_docker_subnet: 10.10.1.1
-cluster_network: 10.10.1.0/24
-#public_network: 128.104.222.0/22
-public_network: 10.10.1.0/24
+public_network: 10.10.1.1/24
 
 ################
 # OSD          #
@@ -68,7 +66,7 @@ ceph_pgs: [64, 128]
 
 #<CHANGE ME> # select one of the below scenarios
 
-# uncomment to use a real disk (for msevilla's cluster/cloudlab)
+## uncomment to use a real disk (for msevilla's cluster/cloudlab)
 ceph_osd_docker_extra_env: "CEPH_DAEMON=OSD_CEPH_DISK_ACTIVATE"
 ceph_osd_docker_prepare_env: "CEPH_DAEMON=OSD_CEPH_DISK_PREPARE,OSD_FORCE_ZAP=1"
 ceph_osd_docker_devices:
@@ -84,7 +82,7 @@ osd_data_size: 400
 ##############
 #mount_point: <CHANGE ME> # where CephFS should mount
 
-# uncomment for all clusters
+## uncomment for all clusters
 mount_point: "/cephfs-baseliner"
 
 ####################
@@ -97,11 +95,6 @@ mount_point: "/cephfs-baseliner"
 #ceph_radosbench_cmd: "rados -p cephfs_metadata bench --show-time 5 write"
 #repetitions: 1
 
-## uncomment for multinode
+## uncomment for multinode (cluster/cloudlab)
 ceph_radosbench_cmd: "rados -p cephfs_metadata bench --show-time 120 write"
 repetitions: 3
-root_file: "2AC36403-8E7E-E711-A599-02163E01366D.root"
-root_src:  "/mnt/disk/root"
-write_ext4: "/etc/ceph"
-
-

@@ -4,7 +4,7 @@ RUN="docker run --rm -it \
       -v `pwd`:/scripts \
       -v $SRC:/root \
       --entrypoint=root \
-      rootproject/root-ubuntu16 -b -q"
+      rootproject/root-ubuntu16:snapshot -b -q"
 INPUT="$SRC/2AC36403-8E7E-E711-A599-02163E01366D.root"
 TRACE="$SRC/cmsdump.outerr"
 
@@ -22,8 +22,8 @@ set -ex
 
 sudo chmod 777 -R /etc/ceph
 
-echo "==> Cloning repository..."
-git clone --recursive https://$1:$2@github.com/reza-nasirigerdeh/root.git $SRC/root || true
+#echo "==> Cloning repository..."
+##git clone --recursive https://$1:$2@github.com/reza-nasirigerdeh/root.git $SRC/root || true
 
 echo "==> Generating input file..."
 $RUN -b -q .x \
