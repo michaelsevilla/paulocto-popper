@@ -42,7 +42,7 @@ for run in `seq 0 2`; do
     /workloads/hep_cephfs.yml \
     /workloads/hep_ext4.yml \
     /popper/ansible/collect.yml
-  mv results results-run0
+  mv results results-run$run
 done
 
 exit 0

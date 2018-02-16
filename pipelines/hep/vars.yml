@@ -45,8 +45,8 @@ kraken: false
 #ceph_mon_docker_subnet: 192.168.140.0/24
 
 # uncomment for cloudlab
-monitor_interface: eth3
-ceph_mon_docker_interface: eth3
+monitor_interface: eth2
+ceph_mon_docker_interface: eth2
 ceph_mon_docker_subnet: 10.10.1.1
 cluster_network: 10.10.1.0/24
 #public_network: 128.104.222.0/22

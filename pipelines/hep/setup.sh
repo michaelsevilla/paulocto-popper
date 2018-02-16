@@ -1,10 +1,8 @@
 SRC="/mnt/disk/root"
 RUN="docker run --rm -it \
-      -w /root \
-      -v `pwd`:/scripts \
-      -v $SRC:/root \
+      -w /root -v $SRC:/root \
       --entrypoint=root \
-      rootproject/root-ubuntu16:snapshot -b -q"
+      rootproject/root-ubuntu16:snapshot"
 INPUT="$SRC/2AC36403-8E7E-E711-A599-02163E01366D.root"
 TRACE="$SRC/cmsdump.outerr"
 
@@ -27,8 +25,17 @@ cd $SRC/root; git checkout 3b52abb; cd -
 
 echo "==> Generating input file..."
 $RUN -b -q .x \
-  root/src/translate_offsets_to_baskets.cpp\(\"2AC36403-8E7E-E711-A599-02163E01366D.root\",\"\",\"full-path\",\"cmsdump.outerr\"\)
+  root/src/translate_accesses_to_baskets.cpp\(\"cmsdump.outerr\",\"CmsRun\",\"2AC36403-8E7E-E711-A599-02163E01366D.root\"\)
 
 echo "==> Cleaning input file..."
-grep -v "READ" $SRC/translated_baskets.txt > $SRC/branchListFile.txt
-sed -i '1,2d' $SRC/branchListFile.txt
+grep "Basket" $SRC/basket_list.txt | awk -F ':' '{print $2}' > $SRC/basket_list_file.txt
+
+# original
+#$RUN -b -q .x root/src/read_baskets_from_file_hep_method.cpp\(\"/root/2AC36403-8E7E-E711-A599-02163E01366D.root\",\"/root/basket_list_file.txt\"\)
+#$RUN -b -q .x root/src/write_baskets_to_files.cpp\(\"/root/2AC36403-8E7E-E711-A599-02163E01366D.root\",\"/root/namespace\"\)
+#$RUN -b -q .x root/src/read_baskets_from_file_our_method.cpp\(\"/root/basket_list_file.txt\"\,\"/root/namespace\"\)
+#
+# new
+#$RUN -b -q .x root/src/read_baskets_from_file_hep_method.cpp\(\"/root/20BE89F5-9F37-E711-8575-008CFAFC04AC.root\",\"/root/branchListFile_20.txt\"\)
+#$RUN -b -q .x root/src/write_baskets_to_files.cpp\(\"/root/20BE89F5-9F37-E711-8575-008CFAFC04AC.root\",\"/root/namespace\"\)
+#$RUN -b -q .x root/src/read_baskets_from_file_our_method.cpp\(\"/root/branchListFile_20.txt\"\,\"/root/namespace\"\)
