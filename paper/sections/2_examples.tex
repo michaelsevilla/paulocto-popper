@@ -247,6 +247,20 @@ to existing systems:
 
 \end{itemize}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=90mm]{figures/hep_problem.png}
+  \caption{Reading and writing high-energy physics (HEP) data as many files
+allows physicists to read just the data they care about. But using ``Many HEP
+Files" sends many RPCs (a) to the metadata server, resulting in worse
+performance and lower CPU utilization at the client (b). Alternatively, using
+``1 HEP File" has IO amplification because all data moves over the network but
+less RPCs (c), better performance, and higher client CPU utilization (d).}
+  \label{fig:hep_problem}
+\end{figure}
+
+
+
 % ROOT files
 A ROOT file is a list of objects, accessed by consulting metadata in the
 header and seeking to a location in the bytestream. Types of objects include: 
@@ -286,6 +300,18 @@ split, and the TLeaves which specify the data types of objects. i
 
 \subsubsection{Namespace Description}
 
+\begin{figure}[tb]
+\centering
+  \includegraphics[width=90mm]{figures/tree_hep.png} 
+  \caption{The traditional approach for handling HEP data is to store
+everything in a single ROOT file, where the client reads the header and seeks
+to data. For ROOT files stored in distributed file systems reads will have
+amplification because striping strategies are not aligned to baskets. The new
+approach stores the data as files in the file system namespace, where each file
+is a basket. This means clients read only the data they need.
+  }\label{fig:tree_hep}
+\end{figure}
+
 At the top of the namespace of a typical ROOT file there are TKeys, each
 containing pointers to groups of TBranches. For example, ``MetaData" has data
 about the run and ``Events" has all the proton-proton activity. Logically,
@@ -306,6 +332,18 @@ Unfortunately, current file system do not have this many inodes and this setup
 would require extra metadata to combine TBranches into objects.
 
 \subsubsection{Overheads}
+
+\begin{figure}[tb]
+\centering
+  \includegraphics[width=90mm]{figures/hep_runtime.png} 
+  \caption{The ``File" bars show the runtime of storing HEP data as a single
+  ROOT file and the ``Namespace" bars show the runtime of storing HEP data as a
+  namespace, where each file is a basket. The baseline is the runtime of ``ext4"
+  on a single node, ``RADOS" is reading HEP data as a Ceph object, and ``CephFS"
+  is reading HEP data as files in a CephFS mount. ``CephFS" is far slower because
+  of the file system metadata load.}
+  \label{fig:hep_runtime}
+\end{figure}
 
 We benchmark the write and read overhead of storing a ROOT file as:
 
@@ -341,3 +379,19 @@ e.g.}, for a start entry of 10 and end entry of 20 for a basket storing user
 ages, the start entry is user 10's age and the end entry is user 20's age).  
 
 \subsection{SIRIUS (HPC)}
+
+SIRIUS~\cite{klasky:journal16-sirius} is the exascale storage system being
+designed for the Storage System and I/O (SSIO) initiative. The core tenant of
+the SIRIUS project is application hints that allow the storage to reconfigure
+itself for higher performance. Techniques include tiering, management policies,
+data layout, quality of service, and load balancing. The architectural design
+of SIRIUS includes a metadata service called
+Empress~\cite{lawson:pdsw17-empress}, which is a query-able SQLite instance
+that takes as input a 3-dimensional coordinate space and returns a list of
+object names.
+
+Empress generates too many object names to list when running queries
+characterized by the "Six Patterns in HPC"~\cite{lofstead:hpdc11-6degrees}. The
+solution would be to use Carlos' object naming function for the objecter. I
+*think* that we want to take your six read patterns and feed them into Empress
+to show how large the resulting object list is.

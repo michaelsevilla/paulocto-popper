@@ -1,14 +1,6 @@
 \section{Introduction}
 \label{sec:introduction}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=90mm]{figures/intro.png}
-  \caption{In step \circled{1}, clients decouple file system subtrees and
-interact with their copies locally for high performance. In step \circled{2},
-clients and metadata servers generate subtrees using
-``namespace schemas", thus reducing RPC load.  \label{fig:intro}}
-\end{figure}
 %\begin{figure}
 %  \centering
 %  \begin{subfigure}[b]{0.25\textwidth}
@@ -55,6 +47,17 @@ performance by reducing the number of RPCs needed for:
   directly from the object store
 
 \end{itemize}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=90mm]{figures/intro.png}
+  \caption{In step \circled{1}, clients decouple file system subtrees and
+interact with their copies locally for high performance. In step \circled{2},
+clients and metadata servers generate subtrees using
+``namespace schemas", thus reducing RPC load.  \label{fig:intro}}
+\end{figure}
+
+
 
 The fundamental insight is that the client and server both understand the final
 structure of the file system metadata so there is no need to communicate.  The
