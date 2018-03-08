@@ -1,31 +1,15 @@
 # paulocto-popper
 Experiments for PaulOcto.
 
-## Experiments
+## Helping Write the Paper
 
-1. Edit your hosts:
+The first time you build, it will pull the LaTeX Docker container.  Building
+the paper:
 
-    ```
-    cd experiments
-    vim conf/hosts/*
-    ```
+```bash
+cd paper
+./build.sh
+open paper.pdf
+```
 
-    Add files for client scaling experiments.
-
-2. Edit your OSD disk:
-
-   ```
-   vim conf/osds.conf
-   ```
-
-3. Change the run script for each experiment:
-
-   ```
-   vim */run*.sh
-   ```
-
-3. Run your job:
-
-   ```
-   ./run.sh
-   ```
+It would be helpful if you submit pull requests for changes to the paper.
