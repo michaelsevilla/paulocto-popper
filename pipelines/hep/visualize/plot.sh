@@ -5,10 +5,6 @@ cd ../results-monitor-nonetwork-run0
 for i in `ls *.tar.gz`; do
   tar xzf $i
 done
-#   "tmp/graphite/whisper/node-4/mds_server/handle_client_request.wsp" \
-#   "tmp/graphite/whisper/node-4/mds_server/req_create.wsp" \
-#   "tmp/graphite/whisper/node-4/mds_server/req_mkdir.wsp" \
-#   "tmp/graphite/whisper/node-4/mds_server/req_open.wsp" \
 #   "tmp/graphite/whisper/node-4/nettotals/kbout.wsp" \
 #   "tmp/graphite/whisper/node-4/nettotals/kbin.wsp" \
 #   "tmp/graphite/whisper/job/cephfs.wsp" \
@@ -16,10 +12,15 @@ done
 #   "tmp/graphite/whisper/job/fpb_cephfs.wsp" \
 #"tmp/graphite/whisper/node-4/cpuload/avg1.wsp" \
    #"tmp/graphite/whisper/node-4/nettotals/kbout.wsp" \
+   #"tmp/graphite/whisper/node-4/nettotals/kbin.wsp" \
  
 # prepare as a csv
 for m in \
-   "tmp/graphite/whisper/node-4/nettotals/kbin.wsp" \
+   "tmp/graphite/whisper/node-4/mds_server/handle_client_request.wsp" \
+   "tmp/graphite/whisper/node-4/mds_server/req_create.wsp" \
+   "tmp/graphite/whisper/node-4/mds_server/req_mkdir.wsp" \
+   "tmp/graphite/whisper/node-4/mds_server/req_open.wsp" \
+   "tmp/graphite/whisper/node-4/cpuload/avg1.wsp" \
  ; do
   # dump trace
   docker run \
