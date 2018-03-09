@@ -2,26 +2,24 @@
 
 We look at the namespaces of 3 applications.  Each is from different domains
 and this list is not meant to be exhaustive, as similar organizations exist for
-many domains, even something as distant as the mail application on a Mac. For
-scalability reasons, we focus on large scale systems in high performance
-computing (HPC) and high energy physics (HEP).
-
-\subsection*{Experimental Setup}
+many domains, even something as distant as the mail application on a Mac. To
+highlight the scalability challenges for file system metadata management, we
+focus on large scale systems in high performance computing, and high energy
+physics, and large scale simulations.
 
 We benchmark over Ceph (Jewel version) with \(n\) object storage daemons
 (OSDs), 1 metadata server (MDS), 1 monitor server (MON), and 1 client.  We use
 3 OSDs because it sustains 16 concurrent writes of 4MB at 600MB/s for 2
 minutes. 250MB/s is the max speed of the SSDs, so the setup achieves 80\% of
-the cluster SSD bandwidth.
-
-We use CephFS, the POSIX-compliant file system that uses Ceph's RADOS object
-store~\cite{weil:osdi2006-ceph}, as the underlying file system.  This analysis
-focuses on the file system metadata RPCs between the client and metadata server
-and does not include the RPCs needed to write and read actual data.  CephFS
-uses a cluster of metadata servers to service file system metadata
-requests~\cite{weil:sc2004-dyn-metadata} and to characterize the workload, we
-instrumented the metadata server to track the number of each request
-type\footnote{This code was merged into the Ceph project.}.
+the cluster SSD bandwidth.  We use CephFS, the POSIX-compliant file system that
+uses Ceph's RADOS object store~\cite{weil:osdi2006-ceph}, as the underlying
+file system.  This analysis focuses on the file system metadata RPCs between
+the client and metadata server and does not include the RPCs needed to write
+and read actual data.  CephFS uses a cluster of metadata servers to service
+file system metadata requests~\cite{weil:sc2004-dyn-metadata} and to
+characterize the workload, we instrumented the metadata server to track the
+number of each request type\footnote{This code was merged into the Ceph
+project.}.
 
 \subsection{High Performance Computing: PLFS}
 \label{sec:plfs}

@@ -1,20 +1,22 @@
 \section{Namespace Schemas}
+\label{sec:namespace-schemas}
 
-\begin{figure*}[tbh]
+\begin{figure}[tb]
   \centering
-  \begin{subfigure}[b]{.3\linewidth}
-    \centering
+  \begin{subfigure}[b]{1\linewidth}
     For \(n\) processes on \(m\) servers:
     \begin{itemize}
       \item[] \texttt{\# of dirs =} \(m \times \texttt{mkdir()}\)
       \item[] \texttt{\# of file =} \(2 \times n \times m\)
       \item[] \texttt{\# of file per dir =} \(n/m\)
     \end{itemize}
-    \caption{Function for PLFS} \label{fig:plfs}
+    \caption{Function schema for PLFS\\} \label{fig:plfs}
   \end{subfigure}
-  \begin{subfigure}[b]{.3\linewidth}
+
+  \begin{subfigure}[b]{1\linewidth}
       \footnotesize
       \begin{minted}[xleftmargin=1em]{lua}
+
 local box require 'box2d'
 o = {}; i = 1   -- o: object list
 for _x=x,x+size do for _y=y,y+size do 
@@ -27,9 +29,11 @@ for _x=x,x+size do for _y=y,y+size do
 end end
 return o
       \end{minted}
-      \caption{Code for SIRIUS} \label{fig:sirius}
+      \caption{Code schema for SIRIUS\\} \label{fig:sirius}
   \end{subfigure}
-  \begin{subfigure}[b]{.3\linewidth}
+
+  \begin{subfigure}[b]{1\linewidth}
+
 \noindent\texttt{pointer\_schema}: \texttt{(o0, o2, o9)}
 
 \noindent\texttt{code\_schema}:
@@ -45,10 +49,10 @@ void recurseBranch(TObjArray *o) {
   }
 }
       \end{minted}
-      \caption{Pointer/Code for HEP} \label{fig:hep}
+      \caption{Pointer and Code schemas for HEP} \label{fig:hep}
   \end{subfigure}
 \caption{Namespace schemas that generate subtrees for 3 motivating examples.\label{fig:use-cases}}
-\end{figure*}
+\end{figure}
 
 %char *tn = getTreeName().c_str();
 %TTree* t = (TTree*) root->Get(tn);
@@ -59,7 +63,7 @@ void recurseBranch(TObjArray *o) {
 %  recurseBranch(b->GetListOfBranches());
 
 For three domain-specific applications and use-cases, we have identified
-different scalability bottlenecks:
+different scalability challenges:
 
 \begin{enumerate}
   \item namespaces with many requests
@@ -67,36 +71,42 @@ different scalability bottlenecks:
   \item namespaces that are too large
 \end{enumerate}
 
-We propose namespace schemas to support lazy generation of metadata at
-different nodes in the storage system.  A centralized, globally consistent
-metadata service (either a single metadata server or a cluster of active-active
-metadata servers) provides clients with (1) the root of the subtree of interest
-and (2) a namespace schema. Using the namespace schema, clients and servers do
-not need to materialize the namespace up front, thus avoiding the costs of
-making the tree with metadata RPCs.
+Tintensfisch addresses all three challenges by having clients/servers store
+namespace schemas, which generate file system metadata. This approach reduces
+RPC load (addresses challenges 1 and 2) and facilitates lazy file system
+metadata generation when the metadata is needed (addresses challenge 3).
+Tintenfisch relies on the user to design effective namespace schemas that
+leverage domain-specific knowledge to get the highest performance. This
+programmable storage approach~\cite{sevilla:eurosys18-malacology} helps
+application developers tailor the storage system to the use case without having
+to design a new storage system from scratch.
 
-The namespace schema is stored in the directory inode of the root of the
+Tintenfisch is built on Cudele~\cite{sevilla:ipdps18-cudele} so a
+centralized, globally consistent metadata service (either a single metadata
+server or a cluster of active-active metadata servers) provides clients with
+the root inode of the subtree of interest and clients can do metadata IO
+locally with the consistency/durability semantics they require. In Tintenfisch, 
+the namespace schema is stored in the directory inode of the root of the
 subtree that the client cares about. We use the ``file type" interface from the
 Malacology~\cite{sevilla:eurosys17-malacology} project to facilitate this
 domain-specific functionality. This is similar to push-down predicates in
 databases, where the application is providing domain-specific knowledge that
 the storage system knows how to leverage.  We have defined three types of
-namespace schemas: a formula, a code, and a pointer.
+namespace schemas: formula, code, and pointers.
 
 \subsection{Formula Schema} 
 
 For this schema, a formula that generates the file system namespace is stored
 in the inode. This formula takes domain-specific information as input and
-produces a list of files and directories.
-
-For example, because PLFS deterministically creates files and directories based
-on the number of clients, Tintenfisch can use a formula schema like the one in
-Figure~\ref{fig:plfs}. Specifically, the function takes as input the number of
-processes and hosts in the cluster and outputs the number of directories, the
-number of files, and the number of files per directory. For the example
-namespace drawn in Figure~\ref{fig:tree_plfs} the input to the formula is 3
-hosts each with 1 process and the output is 3 directories and 6 files, with 2
-files per directory.
+produces a list of files and directories.  For example, because PLFS
+deterministically creates files and directories based on the number of clients,
+Tintenfisch can use a formula schema like the one in Figure~\ref{fig:plfs}. The
+function takes as input the number of processes and hosts in the cluster and
+outputs the number of directories, the number of files, and the number of files
+per directory. For the example, the namespace drawn in
+Figure~\ref{fig:tree_plfs} can be generated with the formula in
+Figure~\ref{fig:plfs} using an input of 3 hosts each with 1 process. The output
+is 3 directories and 6 files, with 2 files per directory.
 
 %For \(n\) processes on \(m\) servers:
 %\begin{itemize}
@@ -108,28 +118,29 @@ files per directory.
 \subsection{Code Schema}
 
 Sometimes the namespace schema logic is too complex to store as a single
-function or requires external libraries are needed to interpret metadata. For
-example, the SIRIUS use-case constructs the file system namespace using Lua
-(for sandboxing purposes) and complicated partitioning logic. To facilitate the
-partitioning function as is, we provide a code schema that allows users to
-write programs that generate the namespace.
+function or requires external libraries to interpret metadata. For example, the
+SIRIUS use case constructs the namespace using Lua (for sandboxing purposes) and
+complicated partitioning logic. Tintenfisch provides a code schema that gives
+users the flexiblity to write programs that generate the namespace.
 
-A sample code schema for the SIRIUS project is shown in
-Figure~\ref{fig:sirius}.  Although the partitioning function itself is not
-constructed by iterating through the bounding box coordinates and checking if a
-threshold temperature is eclipsed. If it is, then extra objects are generated
-using the \texttt{box2d} Lua package.  realistic, it shows how code schemas can
-accomodate domain-specific data layout policies that are complex and/or require
-external libraries.  An object list is
+A code schema for the SIRIUS project is shown in Figure~\ref{fig:sirius}.  A
+namespace is constructed by iterating through the bounding box coordinates and
+checking if a threshold temperature is eclipsed. If it is, then extra names
+are generated using the \texttt{box2d} Lua package.  Although the partitioning
+function itself is not realistic, it shows how code schemas can accomodate
+domain-specific data layout policies that are complex and/or require external
+libraries.  
 
 \subsection{Pointer Schema} 
 
 Sometimes there is no formal specification for the namespace. For example, the
 ROOT framework uses self-describing files so headers and metadata need to be
-read for each ROOT file. In these scenarios, a code stored in the inode is
-insufficient for generating the file system namespace because all necessary
-metadata is in large objects. Pointer schemas reference a large object in
-scalable storage and support function shipping to read parts of the object.
+read for each ROOT file. In these scenarios, a code schema is insufficient for
+generating the file system namespace because all necessary metadata is in
+objects scattered in the object store. Pointer schemas reference data in
+scalable storage and avoids storing large amounts of metadata in inodes, which
+is a frowned upon in distributed file systems like
+CephFS~\cite{docs:cephinternals}.
 
 For example, a code schema containing library code for the ROOT framework
 \emph{and} a pointer schema for referencing the input to the code can be used
@@ -137,9 +148,7 @@ to describe a ROOT file system namespace. The pointer schema would point to
 objects in the object store that contain the necessary metadata for
 constructing the file system namespace. This is shown in Figure~\ref{fig:hep};
 clients requesting Branches would follow the pointer schema to the objects
-containing metadata and would read them using the code schema. This avoids
-storing all metadata in inodes, which is a concern for distributed file systems
-like CephFS.
+containing metadata and would read them to locate Baskets using the code schema.
 
 \subsection*{A Fresh, Unorthodox, Unexpected, Controversial, and Counterintuitive Idea}
 
