@@ -257,7 +257,7 @@ reading more than is necessary).
 
 \begin{figure}[tb]
 \centering
-  \includegraphics[width=90mm]{figures/hep_runtime.png}
+  \includegraphics[width=1\linewidth]{figures/hep_runtime.png}
   \caption{The ``File" bars show the runtime of storing HEP data as a single
 ROOT file and the ``Namespace" bars show the runtime of storing a file per
 Basket. The baseline is the runtime of ``ext4" on a single node, ``RADOS" is
@@ -350,19 +350,19 @@ space, represented as a 3D torus, is partitioned into bounding boxes, whose
 coordinates are stored in SQLite for each variable ({\it e.g.}, temperature,
 pressure, etc.).  The objecter function, \(F(x)\), translates the bounding box
 coordinates into a list of object names, which are used to write/read data
-to/from the scalable object store.
+to/from the scalable object store. SIRIUS aims to satisfy queries structured
+like the ``Six Patterns in HPC"~\cite{lofstead:hpdc11-6degrees}. 
 
-SIRIUS aims to satisfy queries structured like the ``Six Patterns in
-HPC"~\cite{lofstead:hpdc11-6degrees}. So clients reading from SIRIUS will first
-contact Empress with the queries for all data, all of 1 variable, all of a few
-variables, a plane in each dimension, an arbitrary rectangular subset, or an
-arbitrary area on an orthogonal plane, and Empress will return a list of
-objects. Armed with this list, the client contacts the object storage system
-(in our case this is RADOS, Ceph's object store) and reads relevant data.
+%So clients reading from SIRIUS will first
+%contact Empress with the queries for all data, all of 1 variable, all of a few
+%variables, a plane in each dimension, an arbitrary rectangular subset, or an
+%arbitrary area on an orthogonal plane, and Empress will return a list of
+%objects. Armed with this list, the client contacts the object storage system
+%(in our case this is RADOS, Ceph's object store) and reads relevant data.
 
 \begin{figure}[tb]
 \centering
-  \includegraphics[width=90mm]{figures/empress.png}
+  \includegraphics[width=1\linewidth]{figures/empress.png}
   \caption{The SIRIUS project uses Empress to store metadata for bounding boxes
 in a 3D torus. Bounding box coordinates and a list of object names are stored
 in SQLite. The object names are calculated using an objecter function, labeled
@@ -373,23 +373,25 @@ reading from the object store.}
 
 \subsubsection{Namespace Description}
 
-The seven columns in the database are six integers representing coordinates and
-offsets a string representing the object name.  Each row in the database is
-duplicated for each variable in the simulation.  Variables are domain-specific
-values that scientists care about, such as temperature and pressure.
-Figure~\ref{fig:empress} only has three variables, represented by the rows of
-coordinates/object list values, but most simulations will have a minimum of 10
-variables.
+The seven columns in the database are six coordinates, which are integers
+representing the contents at a location in the global space, and a string
+representing the object name. The global space is partitioned into
+non-overlapping, regular shaped cells.  Each row in the database is duplicated
+for each variable in the simulation because variables may have a different
+partitioning of the global space; for example temperature is computed for every
+cell while pressure is computed for ever \(n\) cells.  Figure~\ref{fig:empress}
+only has three variables, represented by the rows of boxes but most simulations
+will have a minimum of 10 variables.
 
 \subsubsection{Overheads}
 
-Empress lists all objects names for a bounding box and clients filter the list
-for data of interest. This is a problem because of the size of the object name
-list.  Listing large numbers of items in file systems is notoriously slow and
-studies on \texttt{ls} have shown the operation to be especially
+Empress lists all objects names for a bounding box and clients filter for data
+of interest. This is a problem because of the size of the object name list.
+Listing large numbers of items in file systems is notoriously slow and studies
+on \texttt{ls} have shown the operation to be especially
 heavy-weight~\cite{carns:ipdps09-pvfs, eshel:fast10-panache}.  As currently
-designed, Empress would store too many object names and the queries only use a
-subset of the resulting list.
+designed, Empress would store too many object names while the target query
+types only request subsets of the resulting list.
 
 \emph{\# of object names}: a back-of-the-envelope calculation for the number of
 object names in the system is:
@@ -401,12 +403,12 @@ object names in the system is:
   {(\text{object size})}
 \]
 
-where reasonable values would be one million processes, writing 8GB of data
-for 100 timesteps for 10 variables. Using an 8MB stripe size (the optimal object size in RADOS), 
-the object name list size is:
-\[=\frac{(1*10^6)\times(8*10^{9})\times(100)\times(10)}{(8*10^6)}
-  = 1*10^{12} \text{ objects}
-\]
+where reasonable values would be one million processes, each writing 8GB of
+data for 100 timesteps and 10 variables. This represents a simulation space of
+\(10\text{K}\times10\text{K}\times10\text{K}\) cells containing 8 byte floats.
+Using an 8MB stripe size (the optimal object size in RADOS), the object name
+list size is: \[=\frac{(1*10^6)\times(8*10^{9})\times(100)\times(10)}{(8*10^6)}
+= 1*10^{12} \text{ objects} \]
 
 \emph{Queries use a subset of object names}. When running queries characterized
 by the ``Six Patterns in HPC", Empress must exhaustively list objects and

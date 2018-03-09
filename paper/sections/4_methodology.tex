@@ -134,9 +134,10 @@ is 3 directories and 6 files, with 2 files per directory.
 
 Sometimes the namespace schema logic is too complex to store as a single
 function or requires external libraries to interpret metadata. For example, the
-SIRIUS use case constructs the namespace using Lua (for sandboxing purposes) and
-complicated partitioning logic. Tintenfisch provides a code schema that gives
-users the flexiblity to write programs that generate the namespace.
+SIRIUS use case constructs the namespace using domain-specific partitioning
+logic written in Lua (for sandboxing purposes).  Tintenfisch provides a code
+schema that gives users the flexiblity to write programs that generate the
+namespace.
 
 A code schema for the SIRIUS project is shown in Figure~\ref{fig:sirius}.  A
 namespace is constructed by iterating through the bounding box coordinates and
