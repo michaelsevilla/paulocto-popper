@@ -42,14 +42,14 @@ reads because clients can construct metadata and pull data directly from the
 object store. Figure~\ref{fig:intro} provides an architectural overview;
 clients first decouple the file system subtree they want to operate
 on\footnote{This is not a contribution as it was presented
-in~\cite{sevilla:ipdps18-cudele}} then clients and metadata servers lazily
+in~\cite{sevilla:ipdps18-cudele}.} then clients and metadata servers lazily
 generate subtrees as needed using a namespace schema (described
 in~\S\ref{sec:namespace-schemas}). The namespace schema is stored in the root
 inode of the decoupled subtree.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=90mm]{figures/intro.png}
+  \includegraphics[width=0.9\linewidth]{figures/intro.png}
   \caption{In (1), clients decouple file system subtrees and interact
 with their copies locally for high performance. In (2), clients and
 metadata servers generate subtrees using ``namespace schemas", thus reducing
@@ -69,8 +69,9 @@ file system metadata according to the file type or workload.  We have the
 following contributions:
 
 \begin{itemize}
+  \setlength\itemsep{-0.5em}
 
-  \item namespace descriptions and overheads for examples in three different
+  \item namespace descriptions and overheads for examples from different
 domains (high performance computing, high energy physics, and large scale
 simulations)
 
@@ -79,6 +80,6 @@ amplification and facilitating lazy metadata generation when needed
 
   \item a programmable storage approach that pushes user-defined functionality
 into the storage system, facilitating application-specific storage stacks using
-a `dirty-slate` approach
+a `dirty-slate' approach
 
 \end{itemize}

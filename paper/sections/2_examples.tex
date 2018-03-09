@@ -84,7 +84,7 @@ the dashed blue line) in the Figure, representing 2 additional hosts.
 
 \begin{figure}[tb]
 \centering
-  \includegraphics[width=90mm]{figures/tree_plfs.png} 
+  \includegraphics[width=1\linewidth]{figures/tree_plfs.png} 
   \caption{The PLFS file system namespace is structured and predictable; the
   pattern (solid line) is repeated for each hosts. In this case, there are three
   hosts so the pattern is repeated two more times. 
@@ -106,7 +106,7 @@ requests doubles because processes cannot cache the directory inode.
 %TODO: verify path traversal
 \begin{figure}[tb]
 \centering
-  \includegraphics[width=90mm]{figures/prob_reqs.png} 
+  \includegraphics[width=1\linewidth]{figures/prob_reqs.png} 
   \caption{The requests scale linearly with the number of clients.
   \texttt{lookup()} requests dominate because clients share the root and must do
   path traversal.
@@ -122,13 +122,13 @@ behavior. Diddlings ~\cite{grider:pc17-diddlings} transfers index files after
 each write to absorb the transfer overheads up front. While these approaches
 help alleviate read overheads, they do not reduce the file system metadata
 load, which is the real problem. Reading the index file still requires a file
-system metadata operation.
+system metadata operation.\\
 
-\begin{itemize}
-  \item read file: \(2n \times \texttt{open()}\) 
-\end{itemize}
+%\begin{itemize}
+%  \item read file: \(2n \times \texttt{open()}\) 
+%\end{itemize}
 
-\subsubsection*{Takeaway} The scalability of PLFS is limited by the request
+\noindent\textbf{Takeaway}: the scalability of PLFS is limited by the request
 throughput of the metadata server in the underlying distributed file system. At
 large scale, the metadata server will need to service many requests.
 
@@ -209,14 +209,13 @@ strategies are similar to techniques used in HDF5, Parquet, and Avro.
 
 \begin{figure}[t!]
     \centering
-    \begin{subfigure}[b]{.5\linewidth}
+    \begin{subfigure}[b]{.45\linewidth}
       \centering
       \includegraphics[width=1.0\linewidth]{figures/tree_hep_a.png} 
       \caption{file approach}
       \label{fig:tree_hep_a}
     \end{subfigure}
-    ~ 
-    \begin{subfigure}[b]{.5\linewidth}
+    \begin{subfigure}[b]{.45\linewidth}
       \centering
       \includegraphics[width=1.0\linewidth]{figures/tree_hep_b.png} 
       \caption{namespace approach}
@@ -326,9 +325,9 @@ performance and lower client CPU utilization compared to reading a single ROOT
 file.  So the cost of read amplification in the file approach is offset by the
 cost of doing namespace operations. For this experiment, the ROOT file is 1.7GB
 and 65\% of the file is accessed so the namespace approach might be more
-scalable for different workloads.
+scalable for different workloads.\\
 
-\subsubsection*{Takeaway} The scalability of the ROOT framework is limited by the
+\noindent\textbf{Takeaway}: the scalability of the ROOT framework is limited by the
 overhead of contacting the remote metadata server in the underlying distributed
 file system. At large scale, the metadata server will need to have a network
 with high bandwidth and capacity.
@@ -348,9 +347,9 @@ which is a query-able SQLite instance that stores metadata for bounding boxes
 ({\it i.e.} a 3-dimensional coordinate space).  Figure~\ref{fig:empress} shows
 how metadata is stored in and retrieved from Empress; the entire simulation
 space, represented as a 3D torus, is partitioned into bounding boxes, whose
-coordinates are stored in SQLite and passed into a objecter function, \(F(x)\).
-The objecter function translates the bounding box coordinates into a list of
-object IDs, which are stored in the database and used to write/read data
+coordinates are stored in SQLite for each variable ({\it e.g.}, temperature,
+pressure, etc.).  The objecter function, \(F(x)\), translates the bounding box
+coordinates into a list of object names, which are used to write/read data
 to/from the scalable object store.
 
 SIRIUS aims to satisfy queries structured like the ``Six Patterns in
@@ -374,18 +373,13 @@ reading from the object store.}
 
 \subsubsection{Namespace Description}
 
-The seven columns in the database are:
-
-\begin{itemize}
-  \item six integers representing coordinates and offsets
-  \item 1 string representing object IDs
-\end{itemize}
-
-Each row in the database is duplicated for each variable in the simulation.
-Variables are domain-specific values that scientists care about, such as
-temperature and pressure. Figure~\ref{fig:empress} only has three variables,
-represented by the rows of coordinates/object list values, but most simulations
-will have a minimum of 10 variables.
+The seven columns in the database are six integers representing coordinates and
+offsets a string representing the object name.  Each row in the database is
+duplicated for each variable in the simulation.  Variables are domain-specific
+values that scientists care about, such as temperature and pressure.
+Figure~\ref{fig:empress} only has three variables, represented by the rows of
+coordinates/object list values, but most simulations will have a minimum of 10
+variables.
 
 \subsubsection{Overheads}
 
@@ -418,8 +412,8 @@ the object name list size is:
 by the ``Six Patterns in HPC", Empress must exhaustively list objects and
 filter the coordinates of interest.  In addition to the time it would take to
 search 1 trillion objects in SQLite, another problem is the actual storage
-footprint of storing this many items. 
+footprint of storing this many items.\\
 
-\subsubsection*{Takeaway} The scalability of the SIRIUS storage system is
+ \noindent\textbf{Takeaway}: the scalability of the SIRIUS storage system is
 limited by the performance of scanning lists. At large scale, the metadata
 server will need to service many requests to a large namespace.

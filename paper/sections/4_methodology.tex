@@ -6,30 +6,32 @@
   \begin{subfigure}[b]{1\linewidth}
     For \(n\) processes on \(m\) servers:
     \begin{itemize}
+      \setlength\itemsep{-0.5em}
       \item[] \texttt{\# of dirs =} \(m \times \texttt{mkdir()}\)
       \item[] \texttt{\# of file =} \(2 \times n \times m\)
       \item[] \texttt{\# of file per dir =} \(n/m\)
     \end{itemize}
-    \caption{Function schema for PLFS\\} \label{fig:plfs}
+    \caption{Function schema for PLFS\vspace{1em}} \label{fig:plfs}
   \end{subfigure}
 
   \begin{subfigure}[b]{1\linewidth}
       \footnotesize
       \begin{minted}[xleftmargin=1em]{lua}
-
 local box require 'box2d'
-o = {}; i = 1   -- o: object list
-for _x=x,x+size do for _y=y,y+size do 
-  if temperature>30 then
-    box0=box.nsplit(0,2,h,x,y,z,size)
-    box1=box.nsplit(1,2,h,x,y,z,size)
-    o[i]=box0(); i=i+1
-    o[i]=box1(); i=i+1
-  else o[i] = _x.._y..z.."_0"; i=i+1 end
-end end
-return o
-      \end{minted}
-      \caption{Code schema for SIRIUS\\} \label{fig:sirius}
+for i=_x,_x+x do     -- iterate over the
+  for j=_y,_y+y do   -- given bounding
+    for k=_z,_z+z do -- box coordinates
+      if temperature>30 then
+        -- partition object list one way, e.g.,
+        b0, b1 = box.nsplit(2)
+      else
+        -- partition a different way, e.g.,
+        b0, b1, b2, b3 = box.nsplit(4)
+      end
+end end end
+return obj_list
+     \end{minted}
+      \caption{Code schema for SIRIUS\vspace{1em}} \label{fig:sirius}
   \end{subfigure}
 
   \begin{subfigure}[b]{1\linewidth}
@@ -49,10 +51,23 @@ void recurseBranch(TObjArray *o) {
   }
 }
       \end{minted}
-      \caption{Pointer and Code schemas for HEP} \label{fig:hep}
+      \caption{Pointer and Code schemas for HEP\vspace{1em}} \label{fig:hep}
   \end{subfigure}
 \caption{Namespace schemas that generate subtrees for 3 motivating examples.\label{fig:use-cases}}
 \end{figure}
+
+%local box require 'box2d'
+%o = {}; i = 1   -- o: object list
+%for _x=x,x+size do for _y=y,y+size do 
+%  if temperature>30 then
+%    box0=box.nsplit(0,2,h,x,y,z,size)
+%    box1=box.nsplit(1,2,h,x,y,z,size)
+%    o[i]=box0(); i=i+1
+%    o[i]=box1(); i=i+1
+%  else o[i] = _x.._y..z.."_0"; i=i+1 end
+%end end
+%return o
+ 
 
 %char *tn = getTreeName().c_str();
 %TTree* t = (TTree*) root->Get(tn);
@@ -156,6 +171,7 @@ Global file systems can be scalable if programmed correctly. For example, the
 following notions are out-dated:
 
 \begin{itemize}
+  \setlength\itemsep{-0.5em}
 
   \item robust so they are fast... but we show that today's apps are so large
   that we need to specialized storage systems

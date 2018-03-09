@@ -27,7 +27,7 @@ if [ $ERR != "0" ] ; then
   exit 1
 fi
 
-rm -r _minted-paper paper.aux paper.bbl paper.blg paper.log paper.out paper.synctex.gz build.log >> /dev/null 2>&1
+rm -r _minted-paper paper.aux paper.bbl paper.blg paper.log paper.out paper.synctex.gz build.log sections/*.aux >> /dev/null 2>&1
 
 echo "SUCCESS"
 
