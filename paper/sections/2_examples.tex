@@ -70,21 +70,13 @@ which it uses as lookup table for logical file.
 
 \subsubsection{Namespace Description}
 
-When PLFS maps a logical file to many physical files, it deterministically
-creates the file system namespace in the backend file system.  For \(n\)
-processes on \(m\) servers:
-
-\begin{itemize}
-  \item[] \texttt{\# of dirs =} \(m \times \texttt{mkdir()}\)
-  \item[] \texttt{\# of file =} \(2n \times \texttt{create()} [+ 2n \times \texttt{lookup()}]\)
-  \item[] \texttt{\# of file per dir =} \(n/m\)
-\end{itemize}
-
 % How does PLFS create namespaces
-For metadata writes, the number of directories is dependent on the number
-of PLFS servers. When a file is created in a PLFS mount, a directory called a
-container is created in the underlying file system. Inside the container,
-directories are created per server resulting in \(m\) requests. 
+When PLFS maps a logical file to many physical files, it deterministically
+creates the file system namespace in the backend file system.  For metadata
+writes, the number of directories is dependent on the number of PLFS servers.
+When a file is created in a PLFS mount, a directory called a container is
+created in the underlying file system. Inside the container, directories are
+created per server resulting in \(m\) requests. 
 
 The namespace structure for 3 processes writing to variable offsets in a single
 PLFS file is shown in Figure~\ref{fig:tree_plfs}. The \texttt{host*} directory
