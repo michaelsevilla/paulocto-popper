@@ -113,15 +113,18 @@ namespace schemas: formula, code, and pointers.
 
 For this schema, a formula that generates the file system namespace is stored
 in the inode. This formula takes domain-specific information as input and
-produces a list of files and directories.  For example, because PLFS
-deterministically creates files and directories based on the number of clients,
+produces a list of files and directories.  For example, because PLFS clients
+deterministically create files and directories based on the number of clients,
 Tintenfisch can use a formula schema like the one in Figure~\ref{fig:plfs}. The
 function takes as input the number of processes and hosts in the cluster and
 outputs the number of directories, the number of files, and the number of files
-per directory. For the example, the namespace drawn in
+per directory.  For the example, the namespace drawn in
 Figure~\ref{fig:tree_plfs} can be generated with the formula in
 Figure~\ref{fig:plfs} using an input of 3 hosts each with 1 process. The output
-is 3 directories and 6 files, with 2 files per directory.
+is 3 directories and 6 files, with 2 files per directory.  With this namespace
+schema, clients can open just the container inode and then compute and access
+its contents without \texttt{lookup()} and \texttt{open()} RPCs to a
+centralized metadata service.
 
 %For \(n\) processes on \(m\) servers:
 %\begin{itemize}

@@ -23,58 +23,61 @@ project.}.
 
 \subsection{High Performance Computing: PLFS}
 \label{sec:plfs}
+
 % What is the problem the authors are trying to solve?
-Checkpointing performs small writes to a single shared file but because
-file systems are optimized for large writes, performance is poor. To be
-specific, it easier for applications to write checkpoints to a single file with
-small, unaligned, writes of varying length varying write (N-1) but
-general-purpose distributed file systems are designed for writes to different
-files (N-N).
+Checkpointing performs small writes to a single shared file but because file
+systems are optimized for large writes, performance is poor.  It easier for
+applications to write checkpoints to a single file with unaligned writes of
+varying length (N-1) but general-purpose distributed file systems are designed
+for writes to different files (N-N).  The general problem is that the
+application understands the workload but cannot communicate a solution to the
+storages system. The common solution is for the file system to expose
+configurations that describe alignment requirements but this forces application
+developers specify ``magic numbers", which are hard to find and may not even
+exist.  Another solution is to add middleware ({\it i.e.} software that sits
+between the application and the storage system) to translate the data into a
+format the storage system performs well at. 
 
-% What is the general problem
-The general problem is that the application understands the workload but it cannot
-communicate a solution to the storages system. The common solution is to add
-middleware (i.e. software that sits between the application and the storage
-system) to translate the data into a format the storage system performs well
-at. 
+%% What is the problem?
+%The problem is that the underyling file system cannot keep up with the metadata
+%load imposed by PLFS. PLFS creates an index entry for every write, which
+%results in large per-processes tables~\cite{grider:pc17-diddlings}. This makes
+%reading or scanning a logical file slow because PLFS must construct a global
+%index by reading each process's local index. This process incurs a
+%\texttt{readdir} and, if the file is open by another process, an additional
+%\texttt{stat()} because metadata cannot be cached in the
+%container~\cite{bent_plfs_2009}.
 
-% What is the problem?
-The problem is that the underyling file system cannot keep up with the metadata
-load imposed by PLFS. PLFS creates an index entry for every write, which
-results in large per-processes tables~\cite{grider:pc17-diddlings}. This makes
-reading or scanning a logical file slow because PLFS must construct a global
-index by reading each process's local index. This process incurs a
-\texttt{readdir} and, if the file is open by another process, an additional
-\texttt{stat()} because metadata cannot be cached in the
-container~\cite{bent_plfs_2009}.
-
-\subsubsection{System Architecture}
+%\subsubsection{System Architecture}
 %@noah: there is an index because applications do not have regular IO
-PLFS~\cite{bent_plfs_2009} solved the checkpoint-restart problem by mapping logical
-files to physical files on the underlying file system. The solution targets N-1
-strided checkpoints, where many processes write small IOs to offsets in the
-same logical file. The key insight of PLFS is that general purpose file systems
-perform well for applications that use N-N checkpoints and that the N-1 strided
-checkpoint style can be transformed with a thin interposition layer. To map
-offsets in the logical file to physical files each process maintains an index
-of \{logical offset, physical offset, length, physical block id\}. 
+
+PLFS~\cite{bent_plfs_2009} solved the checkpoint-restart problem by mapping
+logical files to physical files on the underlying file system. The solution
+targets N-1 strided checkpoints, where many processes write small IOs to
+offsets in the same logical file. The key insight of PLFS is that general
+purpose file systems perform well for applications that use N-N checkpoints and
+that the N-1 strided checkpoint style can be transformed with a thin
+interposition layer. To map offsets in the logical file to physical files each
+process maintains an index of \{logical offset, physical offset, length,
+physical block id\}.  Each process sequentially writes to its own, unshared
+data file in the hierarchical file system and records an offset and length in
+an an index file. Reads aggregate per-process index files into a global index
+file, which it uses as lookup table for logical file. 
 
 % What is the authors' approach or solution?
-PLFS maps an application's preferred data layout into one that the file system
-performs well on. Each process appends writes to a different data file in the
-hierarchical file system and records an offset and length are recorded in an
-index file. Reads aggregate per-process index files into a global index file,
-which it uses as lookup table for logical file. 
-
+%PLFS maps an application's preferred data layout into one that the file system
+%performs well on. 
 \subsubsection{Namespace Description}
 
 % How does PLFS create namespaces
-When PLFS maps a logical file to many physical files, it deterministically
-creates the file system namespace in the backend file system.  For metadata
-writes, the number of directories is dependent on the number of PLFS servers.
-When a file is created in a PLFS mount, a directory called a container is
-created in the underlying file system. Inside the container, directories are
-created per server resulting in \(m\) requests. 
+When PLFS maps a single logical file to many physical files, it
+deterministically creates the namespace in the backend file system.  For
+metadata writes, the number of directories is dependent on the number of
+clients nodes and the number of files is a function of the number of client
+processes.  A directory called a container is created per node and processes
+write data and index files to the container assigned to their host.  So for a
+write workload ({\it i.e.} a checkpoint) the underlying file system creates a
+deep and wide directory hierarchy.
 
 The namespace structure for 3 processes writing to variable offsets in a single
 PLFS file is shown in Figure~\ref{fig:tree_plfs}. The \texttt{host*} directory
@@ -93,42 +96,40 @@ the dashed blue line) in the Figure, representing 2 additional hosts.
 
 \subsubsection{Overhead: Processing RPCs}
 
-For writing, the number of files is dependendent on the number of PLFS
-processes. Processes write data and index files to the directory assigned to
-their server. The number of requests, which can range from \(2n\) to \(4n\), is
-a function of files per directory.  If each server only has one process, then
-the number of file create requests will be \(2n\) because each process can
-cache the directory inode and create files in one request. With multiple
-processes per server, clients write to the same directory and the number of
-requests doubles because processes cannot cache the directory inode.
+For writing a checkpoint, the number of file system metadata requests for \(n\)
+client processes is at least \(2n\).  If each client node has one process, the
+\texttt{host} directory inodes can be cached and the number of metadata
+requests will be \(2n\): one \texttt{lookup()} request to the root of the
+subtree (the \texttt{vfile.txt} directory container in
+Figure~\ref{fig:tree_plfs}) and one \texttt{create()} request for the file. If
+caching is turned off or if multiple processes are on each client node, an
+extra \texttt{lookup} to the \texttt{host} directory is required (totaling
+\(3n\)).  Figure~\ref{fig:prob_reqs} shows the number of metadata requests
+serviced by the file system (\(y\)-axis) over time (\(x\)-axis) with inode
+caching turned off for three client processes.  Each time the number of
+requests increases, clients are writing to a new PLFS file and the number of
+\texttt{lookup()}s is \(2\times\) the number of creates.  
 
 %TODO: multiple processes per node
 %TODO: verify path traversal
 \begin{figure}[tb]
 \centering
   \includegraphics[width=1\linewidth]{figures/prob_reqs.png} 
-  \caption{The requests scale linearly with the number of clients.
-  \texttt{lookup()} requests dominate because clients share the root and must do
-  path traversal.
-  }\label{fig:arch}
+  \caption{TODO: Change this GRAPH!. The requests scale linearly with the
+number of clients.  \texttt{lookup()} requests dominate because clients share
+the root and must do path traversal.  }\label{fig:prob_reqs}
 \end{figure}
 
 % How does PLFS read the namespace
-For metadata reads, transforming write IO in this way has space and read
-overheads. In PLFS, this is a problem because index files need to be coalesced
-on reads.  Patterned PLFS~\cite{he:hpdc13-plfs-patterns} reduces the space
-overheads by storing formulas, instead of index files, to represent write
-behavior. Diddlings ~\cite{grider:pc17-diddlings} transfers index files after
-each write to absorb the transfer overheads up front. While these approaches
-help alleviate read overheads, they do not reduce the file system metadata
-load, which is the real problem. Reading the index file still requires a file
-system metadata operation.\\
+For reading a checkpoint, clients must coalesce index files to reconstruct the
+logical PLFS file. So for every physical file, the metadata server services a
+\texttt{lookup()} and \texttt{open()} request. Current efforts improve read
+scalability by reducing the space overhead of index
+files~\cite{he:hpdc13-plfs-patterns} and transferring index files after each
+write~\cite{grider:pc17-diddlings} but these approaches do not reduce the file
+system metadata load and reading the index files still requires multiple RPCs.
 
-%\begin{itemize}
-%  \item read file: \(2n \times \texttt{open()}\) 
-%\end{itemize}
-
-\noindent\textbf{Takeaway}: PLFS has namespaces with many requests, so the
+\textbf{Takeaway}: PLFS has namespaces with many requests, so the
 scalability is limited by the throughput of the metadata server in the
 underlying distributed file system. 
 
