@@ -128,9 +128,9 @@ system metadata operation.\\
 %  \item read file: \(2n \times \texttt{open()}\) 
 %\end{itemize}
 
-\noindent\textbf{Takeaway}: the scalability of PLFS is limited by the request
-throughput of the metadata server in the underlying distributed file system. At
-large scale, the metadata server will need to service many requests.
+\noindent\textbf{Takeaway}: PLFS has namespaces with many requests, so the
+scalability is limited by the throughput of the metadata server in the
+underlying distributed file system. 
 
 \subsection{High Energy Physics: ROOT}
 
@@ -139,7 +139,7 @@ The High Energy Physics (HEP) community uses a framework called ROOT to
 manipulate, manage, and visualize data about proton-proton collisions collected
 at the large hadron collider (LHC). The data is used to re-simulate phenomena
 of interest for analysis and there are different types of reconstructions each
-with various granularities. The data is organized as nested and object oriented
+with various granularities. The data is organized as nested, object oriented
 event data and the length of the runs (and thus the number of events) are of
 arbitrary length and type ({\it e.g.}, particle objects, records of low-level
 detector hit properties, etc.).  Reconstruction takes detector conditions ({\it
@@ -164,14 +164,20 @@ Clients request Branches and data is transferred as Baskets; so Branches are
 the logical view of the data for users and Baskets are the compression,
 parallelization, and tranfer unit. In summary, ROOT files are self-describing
 files containing data located with metadata and serialized/de-serialized with
-the ROOT framework.
+the ROOT framework.  Much of the development was done at CERN in parallel with
+other HPC ventures. As a result, the strategies are similar to techniques used
+in HDF5, Parquet, and Avro.
 
 % WHat does ROOT have?
 The advantages of the ROOT framework is the ability to (1) read only parts of
-the data and (2) easily ingest remote data over the network. The disadvantage
-is that the ROOT framework has no formal specification. Much of the development
-was done at CERN in parallel with other HPC ventures. As a result, the
-strategies are similar to techniques used in HDF5, Parquet, and Avro.
+the data and (2) easily ingest remote data over the network.  Unfortunately,
+the HEP community is running into scalability problems.  The current effort is
+to integrate the ROOT framework with Ceph. But naive approaches such as storing
+ROOT files as objects in an object store or files in a file system have read
+amplification ({\it i.e.} read more than is necessary). Users would pull the
+entire GB-sized blob to their laptop instead of reading metadata and Branches
+a-la-cart. An alternative strategy that attempts to reduce read amplification
+is the ``namespace approach"~\cite{pivarski:indico17-root}.
 
 %\begin{itemize}
 %
@@ -206,6 +212,7 @@ strategies are similar to techniques used in HDF5, Parquet, and Avro.
 %pages.
 
 \subsubsection{Namespace Description}
+\label{sec:hep_namespace-description}
 
 \begin{figure}[t!]
     \centering
@@ -223,34 +230,30 @@ strategies are similar to techniques used in HDF5, Parquet, and Avro.
     \end{subfigure}
     \caption{(a) shows how the file approach for handling HEP data stores
 everything in a single ROOT file, where the client reads the header and seeks
-to metadata (LRH). For ROOT files stored in distributed file systems reads will
+to metadata (LRH) and data. For ROOT files stored in distributed file systems reads will
 have amplification because the system's striping strategies are not aligned to
 Baskets. (b) shows how the namespace approach stores Baskets as files in the
 file system namespace so clients read only the data they need.}
 \end{figure}
 
-Currently, the ROOT file can be viewed as a namespace of data. At the top of
+The namespace approach views a ROOT file as a namespace of data. At the top of
 the namespace are Keys, each containing pointers to groups of Branches. For
 example, ``MetaData" has data about the run and ``Events" has all the
 proton-proton activity. Physicists ask for Branches, where each Branch can be
 made up of multiple subBranches ({\it i.e.} \texttt{Events/Branch0/Branch1}),
-similar to pathname components in a file system file name. 
+similar to pathname components in a file system file name.  To accomodate this
+model, the namespace approach partitions the ROOT file onto a file system
+namespace.  As shown in Figure~\ref{fig:tree_hep_b}, file system directories
+hold Branch metadata and files contain Baskets. Clients only pull baskets
+they care about, which prevents read amplification.  Unfortunately, storing
+this metadata in a file system would overwhelm most file systems in two ways:
+(1) too many inodes and (2) per-file overhead.  To quantify (1), consider the
+Analysis Oject Dataset which has a petabyte of data sets made up of a million
+ROOT files. If these ROOT files are split by Branches, there would be a billion
+files. To quantify (2), we benchmark a simple ROOT workload over CephFS.
 
-Unfortunately, the HEP community is running into scalability problems.  The
-current effort is to integrate the ROOT framework with Ceph.  Storing ROOT
-files as objects in an object store has overhead when users pull the entire
-GB-sized blob to their laptop.  This model is a mismatch to the workload, which
-reads metadata and Branches a-la-cart. A new effort, which we call the
-namespace approach, is attempting to partition the ROOT file onto a file system
-namespace. As shown in Figure~\ref{fig:tree_hep_b}, file system directories
-hold Branch metadata and files contain Baskets. With this approach clients only
-pull baskets they care about, which prevents read amplification ({\it i.e.}
-reading more than is necessary).
-
-%Unfortunately, storing this metadata in a file system would overwhelm most file
-%systems because there are too many Branches to create a file for each and there
 %is not enough metadata to reconstruct which Branches belong to which events.
-%Unfortunately, current file system do not have this many inodes and this setup
+%tely, current file system do not have this many inodes and this setup
 %would require extra metadata to combine TBranches into objects.
 
 \subsubsection{Overheads}
@@ -280,24 +283,18 @@ utilization (d).}
   \label{fig:hep_problem}
 \end{figure}
 
-We benchmark the write and read overhead of storing HEP data with the following
-approaches:
-
-\begin{enumerate}
-  \item file approach: one object in an object store
-  \item file approach: one file
-  \item namespace approach: many files
-\end{enumerate}
-
-The file approaches are deployed without any changes to the ROOT framework. For
-the namespace approach, HEP-specific metadata is mapped onto the file system
-namespace. In CephFS, Baskets are stored in Ceph objects and the Branch
-hierarchy is managed by the metadata server.  Clients contact the metadata
-server with a Branch request, receive back the Branch hierarchy necessary to
-name the Ceph object containing the Basket as well as the deserialization
-metadata necessary to read the object.  The workload is a list of Branch
-accesses from a trace of the NPTupleMaker high energy physics application. Each
-Branch access is:
+We benchmark the write and read overhead of storing HEP data with the file
+approach stored as one object in an object store, with the file approach stored
+as one file in a file system, and with the namespace approach stored as many
+files in a file system.  The file approaches are deployed without any changes
+to the ROOT framework. For the namespace approach, HEP-specific metadata is
+mapped onto the file system namespace. In CephFS, Baskets are stored in Ceph
+objects and the Branch hierarchy is managed by the metadata server.  Clients
+contact the metadata server with a Branch request, receive back the Branch
+hierarchy necessary to name the Ceph object containing the Basket as well as
+the deserialization metadata necessary to read the object.  The workload is a
+list of Branch accesses from a trace of the NPTupleMaker high energy physics
+application. Each Branch access is:
 
 \texttt{Branch0/Branch1,3,1740718587,5847,97,136}
 
@@ -317,8 +314,8 @@ Basket number are used to traverse the file system namespace.
 The read and write performance for the different approaches are shown in
 Figure~\ref{fig:hep_runtime}, where the \(x\)-axis is different storage
 backends, the \(y\)-axis is runtime, and the error bars are the standard
-deviations for three runs. We compare against ext4 on a single node as a
-baseline. The reason that the namespace approach on CephFS is slow is shown in
+deviations for six runs. Compared to the single node baseline (ext4), the
+namespace approach on CephFS is \(16.8\times\) slower. The reason is shown in
 Figure~\ref{fig:hep_problem}. The file system metadata accesses, characterized
 by many \texttt{open()} requests, incur many RPCs. This causes worse
 performance and lower client CPU utilization compared to reading a single ROOT
@@ -327,10 +324,10 @@ cost of doing namespace operations. For this experiment, the ROOT file is 1.7GB
 and 65\% of the file is accessed so the namespace approach might be more
 scalable for different workloads.\\
 
-\noindent\textbf{Takeaway}: the scalability of the ROOT framework is limited by the
-overhead of contacting the remote metadata server in the underlying distributed
-file system. At large scale, the metadata server will need to have a network
-with high bandwidth and capacity.
+\noindent\textbf{Takeaway}: The ROOT framework has large namespaces and
+namespaces with many requests, so the scalability is limited by the capacity
+and request throughput of the metadata server in the underlying distributed
+file system. 
 
 \subsection{Large Scale Simulations: SIRIUS}
 
@@ -416,6 +413,7 @@ filter the coordinates of interest.  In addition to the time it would take to
 search 1 trillion objects in SQLite, another problem is the actual storage
 footprint of storing this many items.\\
 
- \noindent\textbf{Takeaway}: the scalability of the SIRIUS storage system is
-limited by the performance of scanning lists. At large scale, the metadata
-server will need to service many requests to a large namespace.
+ \noindent\textbf{Takeaway}: the SIRIUS storage system has large namespaces so
+the scalability is limited by the capacity of the metadate server in the
+underlying distributed file system; namely by the performance of scanning
+lists.

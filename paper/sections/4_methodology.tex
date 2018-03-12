@@ -164,7 +164,10 @@ to describe a ROOT file system namespace. The pointer schema would point to
 objects in the object store that contain the necessary metadata for
 constructing the file system namespace. This is shown in Figure~\ref{fig:hep};
 clients requesting Branches would follow the pointer schema to the objects
-containing metadata and would read them to locate Baskets using the code schema.
+containing metadata and would read them to locate Baskets using the code
+schema. An added benefit to this solution is that Tintenfisch can lazily
+construct parts of the namespace as needed, which avoids the problem of running
+out of inodes discussed in Section~\ref{sec:hep_namespace-description}.
 
 \subsection*{A Fresh, Unorthodox, Unexpected, Controversial, and Counterintuitive Idea}
 
