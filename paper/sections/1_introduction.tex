@@ -31,22 +31,24 @@
 %    understand (and can construct) the namespace.  Unstructured namespaces cannot
 %    be parallelized and must replay metadata one by one onto the global namespace}
 
-The file system metadata service is the scalability bottleneck for many of today's
-workloads~\cite{roselli:atec2000-FS-workloads, abad:techreport2012-fstrace,
-abad:ucc2012-mimesis, alam:pdsw2011-metadata-scaling, weil:osdi2006-ceph}.
-Common approaches for attacking this ``metadata scaling wall" include: caching
-inodes on clients and servers~\cite{depardon:tech13-survey,
-sinnamohideen:atc2010-ursa, hildebrand:msst2005-pnfs,
-devulapalli:ipdps07-pvfs2, welch:fast2008-panasas}, caching parent inodes for
-path traversal~\cite{patil:fast2011-giga+, ren:sc2014-indexfs,
-brandt:msst2003-lh, weil:sc2004-dyn-metadata, ren:sc2014-indexfs}, and dynamic
-caching policies that exploit workload locality~\cite{xing:sc2009-skyfs,
-zhu:pds2008-hba, li:msst2006-dynamic}.  These caches reduce the number of
-remote procedure calls (RPCs) but the effectiveness is dependent on the
-overhead of maintaining cache coherence and the administrator's ability to
-select the best cache size for the given workloads.  We present an approach
-that reduces RPCs from O(\(n\)) to O(\(1\)) for certain workloads without using
-a cache, so we do not encounter the same pain points of maintaining a cache.
+The file system metadata service is the scalability bottleneck for many of
+today's workloads~\cite{roselli:atec2000-FS-workloads,
+abad:techreport2012-fstrace, abad:ucc2012-mimesis,
+alam:pdsw2011-metadata-scaling, weil:osdi2006-ceph}.  Common approaches for
+attacking this ``metadata scaling wall" include: caching inodes on clients and
+servers~\cite{depardon:tech13-survey, sinnamohideen:atc2010-ursa,
+hildebrand:msst2005-pnfs, devulapalli:ipdps07-pvfs2, welch:fast2008-panasas},
+caching parent inodes for path traversal~\cite{patil:fast2011-giga+,
+ren:sc2014-indexfs, brandt:msst2003-lh, weil:sc2004-dyn-metadata,
+ren:sc2014-indexfs}, and dynamic caching policies that exploit workload
+locality~\cite{xing:sc2009-skyfs, zhu:pds2008-hba, li:msst2006-dynamic}.  These
+caches reduce the number of remote procedure calls (RPCs) but the effectiveness
+is dependent on the overhead of maintaining cache coherence and the
+administrator's ability to select the best cache size for the given workloads.
+We present an approach that, for certain workloads, reduces the number of RPCs
+from O(\(n\)) to O(\(1\)), where \(n\) is the number of metadata accesses. Our
+approach does not use a cache, so we do not encounter the same pain points of
+maintaining a cache.
 
 % What is our solution
 We propose Tintenfisch, a file system that allows users to succinctly express
