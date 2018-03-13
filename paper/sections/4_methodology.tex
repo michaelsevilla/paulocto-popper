@@ -1,5 +1,4 @@
-\section{Namespace Schemas}
-\label{sec:namespace-schemas}
+\section{Methodology: Tintenfisch}
 
 \begin{figure}[tb]
   \centering
@@ -11,7 +10,7 @@
       \item[] \texttt{\# of file =} \(2 \times n \times m\)
       \item[] \texttt{\# of file per dir =} \(n/m\)
     \end{itemize}
-    \caption{Function schema for PLFS\vspace{1em}} \label{fig:plfs}
+    \caption{Function generator for PLFS\vspace{1em}} \label{fig:plfs}
   \end{subfigure}
 
   \begin{subfigure}[b]{1\linewidth}
@@ -31,14 +30,14 @@ for i=_x,_x+x do     -- iterate over the
 end end end
 return obj_list
      \end{minted}
-      \caption{Code schema for SIRIUS\vspace{1em}} \label{fig:sirius}
+      \caption{Code generator for SIRIUS\vspace{1em}} \label{fig:sirius}
   \end{subfigure}
 
   \begin{subfigure}[b]{1\linewidth}
 
-\noindent\texttt{pointer\_schema}: \texttt{(o0, o2, o9)}
+\noindent\texttt{pointer\_generator}: \texttt{(o0, o2, o9)}
 
-\noindent\texttt{code\_schema}:
+\noindent\texttt{code\_generator}:
 
       \centering
       \footnotesize
@@ -51,9 +50,9 @@ void recurseBranch(TObjArray *o) {
   }
 }
       \end{minted}
-      \caption{Pointer and Code schemas for HEP\vspace{1em}} \label{fig:hep}
+      \caption{Pointer and Code generators for HEP\vspace{1em}} \label{fig:hep}
   \end{subfigure}
-\caption{Namespace schemas that generate subtrees for 3 motivating examples.\label{fig:use-cases}}
+\caption{Namespace generators subtrees for 3 motivating examples.\label{fig:use-cases}}
 \end{figure}
 
 %local box require 'box2d'
@@ -78,21 +77,45 @@ void recurseBranch(TObjArray *o) {
 %  recurseBranch(b->GetListOfBranches());
 
 For three domain-specific applications and use-cases, we have identified
-different scalability challenges:
+scalability challenges for (1) namespaces with many requests and (2) namespaces
+that are too large. Tintensfisch addresses these challenges by defining
+namespace schemas and proposing namespace generators.
 
-\begin{enumerate}
-  \item namespaces with many requests
-  \item namespaces managed by remote servers
-  \item namespaces that are too large
-\end{enumerate}
+\subsection{Namespace Schemas}
+\label{sec:namespace-schemas}
 
-Tintensfisch addresses all three challenges by having clients/servers store
-namespace schemas, which generate file system metadata. This approach reduces
-RPC load (addresses challenges 1 and 2) and facilitates lazy file system
-metadata generation when the metadata is needed (addresses challenge 3).
-Tintenfisch relies on the user to design effective namespace schemas that
+Namespace schemas describe the structure of the namespace. A ``balanced"
+namespace means that subtree patterns ({\it i.e.} files per directory) are
+repeated and a ``bounded" namespace means that the range of file/directory
+names can be defined {\it a-priori}\footnote{By {\it a-priori} we mean before
+the job has run but after metadata has been read.}.  In the previous section,
+we observe three types of namespace schemas (1) unbalanced and unbounded, (2)
+balanced and bounded, and (3) unbalanced and bounded.
+
+General file system workloads, like user home directories, have an unbalanced
+and unbounded namespace schema because users can create any combination of
+files per directory and the range of file/directory names is unknown {\it
+a-priori}. Traditional shared file systems are designed to handle these types
+of workloads. PLFS is an example of a balanced and bounded namespace because
+the distribution of files per directory is fixed (and repeated) and any subtree
+can be generated just using the client hostname and number of processes.  The
+ROOT and SIRIUS use cases are examples of the unbalanced and bounded namespace
+schema. The file per directory shape is not repeated (it is determined by
+application-specific metadata, LRH metadata for ROOT and variable names like
+temperature or pressure for SIRIUS) but the range of file/directory names can
+be determined before the job starts.
+
+\subsection{Namespace Generators}
+\label{sec:namespace-generators}
+
+A namespace generator compacts the metadata and allows clients/servers to
+generate file system metadata.  Namespace generators can only be used for
+balanced or bounded namespace schemas (not mutually exlusive) and the approach
+reduces RPC load (addresses challenges 1 and 2) and facilitates lazy file
+system metadata generation when the metadata is needed (addresses challenge 3).
+Tintenfisch relies on the user to design effective namespace generators that
 leverage domain-specific knowledge to get the highest performance. This
-programmable storage approach~\cite{sevilla:eurosys18-malacology} helps
+programmable storage approach~\cite{sevilla:eurosys17-malacology} helps
 application developers tailor the storage system to the use case without having
 to design a new storage system from scratch.
 
@@ -101,28 +124,28 @@ centralized, globally consistent metadata service (either a single metadata
 server or a cluster of active-active metadata servers) provides clients with
 the root inode of the subtree of interest and clients can do metadata IO
 locally with the consistency/durability semantics they require. In Tintenfisch, 
-the namespace schema is stored in the directory inode of the root of the
+the namespace generators are stored in the directory inode of the root of the
 subtree that the client cares about. We use the ``file type" interface from the
 Malacology~\cite{sevilla:eurosys17-malacology} project to facilitate this
 domain-specific functionality. This is similar to push-down predicates in
 databases, where the application is providing domain-specific knowledge that
 the storage system knows how to leverage.  We have defined three types of
-namespace schemas: formula, code, and pointers.
+namespace generators: formula, code, and pointers.
 
-\subsection{Formula Schema} 
+\subsubsection{Formula Schema} 
 
-For this schema, a formula that generates the file system namespace is stored
+For this generator, a formula that generates the file system namespace is stored
 in the inode. This formula takes domain-specific information as input and
 produces a list of files and directories.  For example, because PLFS clients
 deterministically create files and directories based on the number of clients,
-Tintenfisch can use a formula schema like the one in Figure~\ref{fig:plfs}. The
+Tintenfisch can use a formula generator like the one in Figure~\ref{fig:plfs}. The
 function takes as input the number of processes and hosts in the cluster and
 outputs the number of directories, the number of files, and the number of files
 per directory.  For the example, the namespace drawn in
 Figure~\ref{fig:tree_plfs} can be generated with the formula in
 Figure~\ref{fig:plfs} using an input of 3 hosts each with 1 process. The output
 is 3 directories and 6 files, with 2 files per directory.  With this namespace
-schema, clients can open just the container inode and then compute and access
+generator, clients can open just the container inode and then compute and access
 its contents without \texttt{lookup()} and \texttt{open()} RPCs to a
 centralized metadata service.
 
@@ -133,42 +156,42 @@ centralized metadata service.
 %  \item[] \texttt{\# of file per dir =} \(n/m\)
 %\end{itemize}
 
-\subsection{Code Schema}
+\subsubsection{Code Schema}
 
-Sometimes the namespace schema logic is too complex to store as a single
+Sometimes the namespace generator logic is too complex to store as a single
 function or requires external libraries to interpret metadata. For example, the
 SIRIUS use case constructs the namespace using domain-specific partitioning
 logic written in Lua (for sandboxing purposes).  Tintenfisch provides a code
-schema that gives users the flexiblity to write programs that generate the
+generator that gives users the flexiblity to write programs that generate the
 namespace.
 
-A code schema for the SIRIUS project is shown in Figure~\ref{fig:sirius}.  A
+A code generator for the SIRIUS project is shown in Figure~\ref{fig:sirius}.  A
 namespace is constructed by iterating through the bounding box coordinates and
 checking if a threshold temperature is eclipsed. If it is, then extra names
 are generated using the \texttt{box2d} Lua package.  Although the partitioning
-function itself is not realistic, it shows how code schemas can accomodate
+function itself is not realistic, it shows how code generators can accomodate
 domain-specific data layout policies that are complex and/or require external
 libraries.  
 
-\subsection{Pointer Schema} 
+\subsubsection{Pointer Schema} 
 
 Sometimes there is no formal specification for the namespace. For example, the
 ROOT framework uses self-describing files so headers and metadata need to be
-read for each ROOT file. In these scenarios, a code schema is insufficient for
+read for each ROOT file. In these scenarios, a code generator is insufficient for
 generating the file system namespace because all necessary metadata is in
-objects scattered in the object store. Pointer schemas reference data in
+objects scattered in the object store. Pointer generators reference data in
 scalable storage and avoids storing large amounts of metadata in inodes, which
 is a frowned upon in distributed file systems like
 CephFS~\cite{docs:cephinternals}.
 
-For example, a code schema containing library code for the ROOT framework
-\emph{and} a pointer schema for referencing the input to the code can be used
-to describe a ROOT file system namespace. The pointer schema would point to
-objects in the object store that contain the necessary metadata for
+For example, a code generator containing library code for the ROOT framework
+\emph{and} a pointer generator for referencing the input to the code can be
+used to describe a ROOT file system namespace. The pointer generator would
+point to objects in the object store that contain the necessary metadata for
 constructing the file system namespace. This is shown in Figure~\ref{fig:hep};
-clients requesting Branches would follow the pointer schema to the objects
+clients requesting Branches would follow the pointer generator to the objects
 containing metadata and would read them to locate Baskets using the code
-schema. An added benefit to this solution is that Tintenfisch can lazily
+generator. An added benefit to this solution is that Tintenfisch can lazily
 construct parts of the namespace as needed, which avoids the problem of running
 out of inodes discussed in Section~\ref{sec:hep_namespace-description}.
 
