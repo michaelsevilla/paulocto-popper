@@ -2,25 +2,26 @@
 \label{sec:motivating-examples}
 
 We look at the namespaces of 3 applications.  Each is from different domains
-and this list is not meant to be exhaustive, as similar organizations exist for
+and this list is not meant to be exhaustive. Similar organizations exist for
 many domains, even something as distant as the mail application on a Mac. To
 highlight the scalability challenges for file system metadata management, we
-focus on large scale systems in high performance computing, and high energy
+focus on large scale systems in high performance computing, high energy
 physics, and large scale simulations.
 
-We benchmark over Ceph (Jewel version) with \(n\) object storage daemons
-(OSDs), 1 metadata server (MDS), 1 monitor server (MON), and 1 client.  We use
-3 OSDs because it sustains 16 concurrent writes of 4MB at 600MB/s for 2
-minutes. 250MB/s is the max speed of the SSDs, so the setup achieves 80\% of
-the cluster SSD bandwidth.  We use CephFS, the POSIX-compliant file system that
-uses Ceph's RADOS object store~\cite{weil:osdi2006-ceph}, as the underlying
-file system.  This analysis focuses on the file system metadata RPCs between
-the client and metadata server and does not include the RPCs needed to write
-and read actual data.  CephFS uses a cluster of metadata servers to service
-file system metadata requests~\cite{weil:sc2004-dyn-metadata} and to
-characterize the workload, we instrumented the metadata server to track the
-number of each request type\footnote{This code was merged into the Ceph
-project.}.
+% This discussion is irrelevant since we are focusing on namespace size/overhead
+%We benchmark over Ceph (Jewel version) with \(n\) object storage daemons
+%(OSDs), 1 metadata server (MDS), 1 monitor server (MON), and 1 client.  We use
+%3 OSDs because it sustains 16 concurrent writes of 4MB at 600MB/s for 2
+%minutes. 250MB/s is the max speed of the SSDs, so the setup achieves 80\% of
+%the cluster SSD bandwidth.  We use CephFS, the POSIX-compliant file system that
+%uses Ceph's RADOS object store~\cite{weil:osdi2006-ceph}, as the underlying
+%file system.  This analysis focuses on the file system metadata RPCs between
+%the client and metadata server and does not include the RPCs needed to write
+%and read actual data.  CephFS uses a cluster of metadata servers to service
+%file system metadata requests~\cite{weil:sc2004-dyn-metadata} and to
+%characterize the workload, we instrumented the metadata server to track the
+%number of each request type\footnote{This code was merged into the Ceph
+%project.}.
 
 \subsection{High Performance Computing: PLFS}
 \label{sec:plfs}
@@ -32,9 +33,9 @@ applications to write checkpoints to a single file with unaligned writes of
 varying length (N-1) but general-purpose distributed file systems are designed
 for writes to different files (N-N).  The general problem is that the
 application understands the workload but cannot communicate a solution to the
-storages system. The common solution is for the file system to expose
+storage system. The common solution is for the file system to expose
 configurations that describe alignment requirements but this forces application
-developers specify ``magic numbers", which are hard to find and may not even
+developers to specify ``magic numbers" for parameters like write size~\cite{bent_plfs_2009} or stripe size~\cite{behzad:sc2013-autotuning}, which are hard to find and may not even
 exist.  Another solution is to add middleware ({\it i.e.} software that sits
 between the application and the storage system) to translate the data into a
 format the storage system performs well at. 
@@ -95,21 +96,16 @@ the dashed blue line) in the Figure, representing 2 additional hosts.
   }\label{fig:tree_plfs}
 \end{figure}
 
-\subsubsection{Overhead: Processing RPCs}
+\subsubsection{Namespace Size}
 
-For writing a checkpoint, the number of file system metadata requests for \(n\)
-client processes is at least \(2n\).  If each client node has one process, the
-\texttt{host} directory inodes can be cached and the number of metadata
-requests will be \(2n\): one \texttt{lookup()} request to the root of the
-subtree (the \texttt{vfile.txt} directory container in
-Figure~\ref{fig:tree_plfs}) and one \texttt{create()} request for the file. If
-caching is turned off or if multiple processes are on each client node, an
-extra \texttt{lookup} to the \texttt{host} directory is required (totaling
-\(3n\)).  Figure~\ref{fig:prob_reqs} shows the number of metadata requests
-serviced by the file system (\(y\)-axis) over time (\(x\)-axis) with inode
-caching turned off for three client processes.  Each time the number of
-requests increases, clients are writing to a new PLFS file and the number of
-\texttt{lookup()}s is \(2\times\) the number of creates.  
+For writing a checkpoint, the number of file system metadata operations for
+\(n\) client processes is at least \(2n\).   Figure~\ref{fig:prob_reqs} shows
+the number of metadata requests serviced by the file system (\(y\)-axis) over
+time (\(x\)-axis) with inode caching turned off for three client processes.
+Each time the number of requests increases, clients are writing to a new PLFS
+file and the number of \texttt{lookup()}s is \(2\times\) the number of creates.
+For a million processes checkpointing a portion of a 3D simulation for 1000
+timestamps, the size of the namespace will be 2 billion files.
 
 %TODO: multiple processes per node
 %TODO: verify path traversal
@@ -128,11 +124,14 @@ logical PLFS file. So for every physical file, the metadata server services a
 scalability by reducing the space overhead of index
 files~\cite{he:hpdc13-plfs-patterns} and transferring index files after each
 write~\cite{grider:pc17-diddlings} but these approaches do not reduce the file
-system metadata load and reading the index files still requires multiple RPCs.
+system metadata load and reading the index files still requires multiple RPCs.\\
 
-\textbf{Takeaway}: PLFS has namespaces with many requests, so the
-scalability is limited by the throughput of the metadata server in the
-underlying distributed file system. 
+\textbf{Takeaway}: the PLFS namespace scales with the number of client
+processes. Decoupling the namespace helps parallelize metadata operations
+across clients when writing checkpoints but the size of the namespace is a
+problem when restarting checkpoints; index files need to be coalesced and
+performance will be bottlenecked by the speed of transferring metadata updates
+across the network.
 
 \subsection{High Energy Physics: ROOT}
 
@@ -258,7 +257,7 @@ files. To quantify (2), we benchmark a simple ROOT workload over CephFS.
 %tely, current file system do not have this many inodes and this setup
 %would require extra metadata to combine TBranches into objects.
 
-\subsubsection{Overheads}
+\subsubsection{Namespace Size}
 
 \begin{figure}[tb]
 \centering
@@ -317,19 +316,22 @@ The read and write performance for the different approaches are shown in
 Figure~\ref{fig:hep_runtime}, where the \(x\)-axis is different storage
 backends, the \(y\)-axis is runtime, and the error bars are the standard
 deviations for six runs. Compared to the single node baseline (ext4), the
-namespace approach on CephFS is \(16.8\times\) slower. The reason is shown in
-Figure~\ref{fig:hep_problem}. The file system metadata accesses, characterized
-by many \texttt{open()} requests, incur many RPCs. This causes worse
-performance and lower client CPU utilization compared to reading a single ROOT
-file.  So the cost of read amplification in the file approach is offset by the
-cost of doing namespace operations. For this experiment, the ROOT file is 1.7GB
-and 65\% of the file is accessed so the namespace approach might be more
-scalable for different workloads.\\
+namespace approach on CephFS is \(16.8\times\) slower. 
+%The reason is shown in
+%Figure~\ref{fig:hep_problem}. The file system metadata accesses, characterized
+%by many \texttt{open()} requests, incur many RPCs. This causes worse
+%performance and lower client CPU utilization compared to reading a single ROOT
+%file.  So the cost of read amplification in the file approach is offset by the
+%cost of doing namespace operations. For this experiment, the ROOT file is 1.7GB
+%and 65\% of the file is accessed so the namespace approach might be more
+%scalable for different workloads.\\
 
-\noindent\textbf{Takeaway}: The ROOT framework has large namespaces and
-namespaces with many requests, so the scalability is limited by the capacity
-and request throughput of the metadata server in the underlying distributed
-file system. 
+\noindent\textbf{Takeaway}: the ROOT namespace would store up to a billion
+files. Decoupling the namespace helps parallelize metadata operations across
+clients when writing Baskets into the ROOT namespaces but the size of the
+namespace is a problem when reading branches; only a fraction of the Baskets
+need to be read and performance will be bottlenecked by the performance of
+reading subtrees that are not relevant to the workload.
 
 \subsection{Large Scale Simulations: SIRIUS}
 
@@ -382,7 +384,7 @@ cell while pressure is computed for ever \(n\) cells.  Figure~\ref{fig:empress}
 only has three variables, represented by the rows of boxes but most simulations
 will have a minimum of 10 variables.
 
-\subsubsection{Overheads}
+\subsubsection{Namespace Size}
 
 Empress lists all objects names for a bounding box and clients filter for data
 of interest. This is a problem because of the size of the object name list.
@@ -413,9 +415,11 @@ list size is: \[=\frac{(1*10^6)\times(8*10^{9})\times(100)\times(10)}{(8*10^6)}
 by the ``Six Patterns in HPC", Empress must exhaustively list objects and
 filter the coordinates of interest.  In addition to the time it would take to
 search 1 trillion objects in SQLite, another problem is the actual storage
-footprint of storing this many items.\\
+footprint of storing this many items.
 
- \noindent\textbf{Takeaway}: the SIRIUS storage system has large namespaces so
-the scalability is limited by the capacity of the metadate server in the
-underlying distributed file system; namely by the performance of scanning
-lists.
+\noindent\textbf{Takeaway}: the SIRIUS storage system would store up to a
+billion names. Decoupling the namespace helps parallelize metadata operations
+across clients when writing out objects but the size of the namespace is
+problem a problem when reading bounding box metadata; filtering for relevant
+coordinates would be bottlenecked by the performance of building the namespace
+and scanning lists.

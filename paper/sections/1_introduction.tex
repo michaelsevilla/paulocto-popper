@@ -45,37 +45,40 @@ locality~\cite{xing:sc2009-skyfs, zhu:pds2008-hba, li:msst2006-dynamic}.  These
 caches reduce the number of remote procedure calls (RPCs) but the effectiveness
 is dependent on the overhead of maintaining cache coherence and the
 administrator's ability to select the best cache size for the given workloads.
-We present an approach that, for certain workloads, reduces the number of RPCs
-from O(\(n\)) to O(\(1\)), where \(n\) is the number of metadata accesses. Our
-approach does not use a cache, so we do not encounter the same pain points of
-maintaining a cache.
+Recent work reduces the number of RPCs to 1 without using a cache at all, by
+letting clients ``decouple" the subtrees from the global namespace so that they
+can do metadata operations locally~\cite{zheng:pdsw2015-deltafs,
+sevilla:ipdps18-cudele}. Unfortunately, {\it even with} this technique, we show
+that file system metadata workloads for can still be a bottleneck because large
+scale applications have (1) namespaces with many requests and (2) namespaces
+that are very large.
 
 % What is our solution
 We propose Tintenfisch, a file system that allows users to succinctly express
 the structure and patterns of the metadata they intend to create.  Using this
 semantic knowledge, Tintenfisch can optimize performance by reducing the number
-of RPCs needed for (1) metadata writes because clients/servers can create
-metadata independently and (2) metadata reads because clients can construct
-metadata and pull data directly from the object store. Figure~\ref{fig:intro}
+of metadata operations needed to complete a job and the metadata storage
+footprint. Figure~\ref{fig:intro}
 provides an architectural overview: clients first decouple the file system
 subtree they want to operate on\footnote{This is not a contribution as it was
 presented in~\cite{sevilla:ipdps18-cudele}.} then clients and metadata servers
 lazily generate subtrees as needed using a ``namespace generator". The
 namespace generator is stored in the root inode of the decoupled subtree and
 can be used later to efficiently merge new metadata (that was not explicitly
-state up front) into the global namespace. This workflow is essentially a
-contract between clients and servers that relaxes durability and consistency
-requirements.
-
+stated up front) into the global namespace. %This workflow is essentially a
+%contract between clients and servers that relaxes durability and consistency
+%requirements.
 The fundamental insight is that the client and server both understand the final
 structure of the file system metadata so there is no need to communicate.  As a
 consequence, less work is done on the metadata servers and clients help process
 some of the metadata load.  The idea uses concepts from decoupled
 namespaces~\cite{zheng:pdsw2014-batchfs, zheng:pdsw2015-deltafs} and patterned
-IO~\cite{he:hpdc13-plfs-patterns} to build a scalable global namespace. The
-actual implementation is similar to predicate push downs in databases, where
-structure is described to lower storage layers using XML or
-JSON~\cite{shel:pc17-pushdown}. Our contributions are as follows:
+IO~\cite{he:hpdc13-plfs-patterns} to build a scalable global namespace. 
+%The
+%actual implementation is similar to predicate push downs in databases, where
+%structure is described to lower storage layers using XML or
+%JSON~\cite{shel:pc17-pushdown}. 
+Our contributions are as follows:
 
 \begin{figure}[t]
   \centering

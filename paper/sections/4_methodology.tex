@@ -77,9 +77,11 @@ void recurseBranch(TObjArray *o) {
 %  recurseBranch(b->GetListOfBranches());
 
 For three domain-specific applications and use-cases, we have identified
-scalability challenges for (1) namespaces with many requests and (2) namespaces
-that are too large. Tintensfisch addresses these challenges by defining
-namespace schemas and proposing namespace generators.
+scalability challenges because of the size of the namespace.  Tintensfisch
+compacts metadata by defining namespace schemas and proposing namespace
+generators. Namespace schemas and generators help clients and servers establish
+an understanding of the final file system metadata shape and size ({\it i.e.} a
+a ``generation" contract) that eliminates metadata overheads.
 
 \subsection{Namespace Schemas}
 \label{sec:namespace-schemas}
@@ -108,16 +110,17 @@ be determined before the job starts.
 \subsection{Namespace Generators}
 \label{sec:namespace-generators}
 
-A namespace generator compacts the metadata and allows clients/servers to
-generate file system metadata.  Namespace generators can only be used for
-balanced or bounded namespace schemas (not mutually exlusive) and the approach
-reduces RPC load (addresses challenges 1 and 2) and facilitates lazy file
-system metadata generation when the metadata is needed (addresses challenge 3).
-Tintenfisch relies on the user to design effective namespace generators that
-leverage domain-specific knowledge to get the highest performance. This
-programmable storage approach~\cite{sevilla:eurosys17-malacology} helps
-application developers tailor the storage system to the use case without having
-to design a new storage system from scratch.
+A namespace generator is a compact representation of a namespace that allows
+clients and servers to generate file system metadata.  Namespace generators can
+be used for a namespace schema that is balanced or bounded (not mutually exlusive)
+This approach reduces the size of the namespace (helps PLFS and ROOT use cases)
+facilitates lazy file system metadata generation when the metadata is needed
+(helps ROOT and SIRIUS use cases).  Tintenfisch relies on the user to design effective
+namespace generators that leverage domain-specific knowledge to get the highest
+performance. This programmable storage
+approach~\cite{sevilla:eurosys17-malacology} helps application developers
+tailor the storage system to the use case without having to design a new
+storage system from scratch.
 
 Tintenfisch is built on Cudele~\cite{sevilla:ipdps18-cudele} so a
 centralized, globally consistent metadata service (either a single metadata
@@ -127,10 +130,12 @@ locally with the consistency/durability semantics they require. In Tintenfisch,
 the namespace generators are stored in the directory inode of the root of the
 subtree that the client cares about. We use the ``file type" interface from the
 Malacology~\cite{sevilla:eurosys17-malacology} project to facilitate this
-domain-specific functionality. This is similar to push-down predicates in
-databases, where the application is providing domain-specific knowledge that
-the storage system knows how to leverage.  We have defined three types of
+domain-specific functionality. 
+Next we discuss three example 
 namespace generators: formula, code, and pointers.
+%This is similar to push-down predicates in
+%databases, where the application is providing domain-specific knowledge that
+%the storage system knows how to leverage.  
 
 \subsubsection{Formula Schema} 
 
