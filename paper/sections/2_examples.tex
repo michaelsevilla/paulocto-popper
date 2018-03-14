@@ -336,7 +336,7 @@ parts of the namespace that are not relevant to the workload.
 \subsection{Large Scale Simulations: SIRIUS}
 
 SIRIUS~\cite{klasky:journal16-sirius} is the Exascale storage system being
-designed for the Storage System and I/O (SSIO) initiative. The core tenant of
+designed for the Storage System and I/O (SSIO) initiative~\cite{ross:report14-ssio}. The core tenant of
 the SIRIUS project is application hints that allow the storage to reconfigure
 itself for higher performance. Techniques include tiering, management policies,
 data layout, quality of service, and load balancing. 
@@ -351,8 +351,20 @@ space, represented as a 3D torus, is partitioned into bounding boxes, whose
 coordinates are stored in SQLite for each variable ({\it e.g.}, temperature,
 pressure, etc.).  The objecter function, \(F(x)\), translates the bounding box
 coordinates into a list of object names, which are used to write/read data
-to/from the scalable object store. SIRIUS aims to satisfy queries structured
+to/from the scalable object store. The use of the objecter avoids the need to
+explicitly store object names; instead Empress only needs to store global
+offsets for interesting features. SIRIUS aims to satisfy queries structured
 like the ``Six Patterns in HPC"~\cite{lofstead:hpdc11-6degrees}. 
+
+Empress is designed to be used at any granularity, which is especially
+important for a simulation space represented as a 3D mesh. By granularity, we
+mean that metadata access can be optimized per variable, per timestamp, per
+run, or even per set of runs (which is possible but may require multiple
+queries).  Empress is also designed to scale-out via additional independent
+instances. In this distributed case, one client per server queries the entire
+space of interest and shares results with other processes that may want the
+same metadata. This process queries servers, coalesces results, and distributes
+them using MPI messages.
 
 %So clients reading from SIRIUS will first
 %contact Empress with the queries for all data, all of 1 variable, all of a few
@@ -386,7 +398,14 @@ will have a minimum of 10 variables.
 
 \subsubsection{Namespace Size}
 
-Empress lists all objects names for a bounding box and clients filter for data
+To satisfy bounding box queries, Empress lists and filters relevant coordinates
+before returning a list of (possibly overlapping) object names. The user
+usually knows which bounding boxes are of interest by tagging features at write
+time. So while the client does minimal filtering, aside from slicing objects at
+the ``edge" of the bounding box, the internal Empress implementation is
+bottlenecked by listing and filtering for coordinates \textcolor{red}{UGH is
+this true? If so the objecter fxn doesn't solve this... I think the bottleneck
+should be the cost of sending all those object names over the network!!!}
 of interest. This is a problem because of the size of the object name list.
 Listing large numbers of items in file systems is notoriously slow and studies
 on \texttt{ls} have shown the operation to be especially
@@ -399,28 +418,41 @@ object names in the system is:
 \[=\frac
   {(\text{\# processes})\times
    (\text{data/process})\times
-   (\text{timesteps})\times
-   (\text{variables})}
+   (\text{variables})\times
+   (\text{timesteps})}
   {(\text{object size})}
 \]
+\[=\frac
+  {(1*10^6)\times
+   (8*10^{9})\times
+   (10)\times
+   (100)}
+   {(8*10^6)}
+  = 1*10^{12}
+\text{ objects} \]
 
-where reasonable values would be one million processes, each writing 8GB of
-data for 100 timesteps and 10 variables. This represents a simulation space of
-\(10\text{K}\times10\text{K}\times10\text{K}\) cells containing 8 byte floats.
-Using an 8MB stripe size (the optimal object size in RADOS), the object name
-list size is: \[=\frac{(1*10^6)\times(8*10^{9})\times(100)\times(10)}{(8*10^6)}
-= 1*10^{12} \text{ objects} \]
+These values are 1 million processes, each writing 8GB of data for 10
+variables; the data per process and number of variables are scaled to be about
+1/10 of each processes local storage space, so about 80GB. 100 timesteps is
+close to 1 timestep every 15 minutes for 24 hours. This represents a simulation
+space of \(1\text{K}\times1\text{K}\times1\text{K}\) cells containing 8 byte
+floats.  The 8MB object size is the optimal object size in RADOS.  Empirically,
+multiple application runs will increase the number of objects by a factor of
+10.
 
 \emph{Queries use a subset of object names}. When running queries characterized
-by the ``Six Patterns in HPC", Empress must exhaustively list objects and
+by the ``Six Patterns in HPC", Empress must exhaustively list items and
 filter the coordinates of interest.  In addition to the time it would take to
 search 1 trillion objects in SQLite, another problem is the actual storage
-footprint of storing this many items.
+footprint of storing this many items. For distributed Empress, the storage
+footprint may not be as much of an issue but the cost is network transfer as
+reads must be centralized at the designated read process on each client.
 
 \textbf{Takeaway}: the SIRIUS storage system stores billions of names.
 Decoupling the namespace helps parallelize writing bounding boxes of the 3D
 torus but the size of the namespace makes reads problematic. When constructing
-the metadata for a bounding box, clients need to pull metadata so performance
+the metadata for a bounding box, the distributed version of Empress coalesces
+metadata from many servers so performance
 will be bottlenecked by the speed of transferring metadata. Also, only a
 fraction of the domain-specific metadata needs to be read so performance will
 be bottlenecked by the cost of materializing and scanning parts of the

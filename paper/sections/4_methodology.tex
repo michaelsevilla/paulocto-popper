@@ -129,7 +129,10 @@ exlusive).  Tintenfisch is built on Cudele~\cite{sevilla:ipdps18-cudele} so a
 centralized, globally consistent metadata service (either a single metadata
 server or a cluster of active-active metadata servers) provides clients with
 the root inode of the subtree of interest and clients can do metadata IO
-locally with the consistency/durability semantics they require. In Tintenfisch,
+locally with the consistency/durability semantics they require. This concept is
+similar to LWFS~\cite{oldfield:cc06-lwfs}, which supplied a core set of
+functionality needed by all applications needing to do IO with the assumption
+that applications would bolt-on any functionality they needed later.  In Tintenfisch,
 the namespace generators are stored in the directory inode of the root of the
 subtree that the client cares about. We use the ``file type" interface from the
 Malacology~\cite{sevilla:eurosys17-malacology} project to facilitate this
