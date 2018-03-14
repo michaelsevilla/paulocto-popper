@@ -124,14 +124,13 @@ logical PLFS file. So for every physical file, the metadata server services a
 scalability by reducing the space overhead of index
 files~\cite{he:hpdc13-plfs-patterns} and transferring index files after each
 write~\cite{grider:pc17-diddlings} but these approaches do not reduce the file
-system metadata load and reading the index files still requires multiple RPCs.\\
+system metadata load and reading the index files still requires multiple RPCs.
 
 \textbf{Takeaway}: the PLFS namespace scales with the number of client
-processes. Decoupling the namespace helps parallelize metadata operations
-across clients when writing checkpoints but the size of the namespace is a
-problem when restarting checkpoints; index files need to be coalesced and
-performance will be bottlenecked by the speed of transferring metadata updates
-across the network.
+processes. Decoupling the namespace helps parallelize writing checkpoints but
+the size of the namespace makes reads problematic. When restarting checkpoints,
+index files need to be coalesced so performance will be bottlenecked by the
+speed of transferring metadata updates across the network.
 
 \subsection{High Energy Physics: ROOT}
 
@@ -326,12 +325,13 @@ namespace approach on CephFS is \(16.8\times\) slower.
 %and 65\% of the file is accessed so the namespace approach might be more
 %scalable for different workloads.\\
 
-\noindent\textbf{Takeaway}: the ROOT namespace would store up to a billion
-files. Decoupling the namespace helps parallelize metadata operations across
-clients when writing Baskets into the ROOT namespaces but the size of the
-namespace is a problem when reading branches; only a fraction of the Baskets
-need to be read and performance will be bottlenecked by the performance of
-reading subtrees that are not relevant to the workload.
+\textbf{Takeaway}: the ROOT namespace stores billions of files. Decoupling the
+namespace helps parallelize writing Baskets into the ROOT namespace but the
+size of the namespace makes reads problematic. When reading Banches, clients
+need to pull metadata so performance will be bottlenecked by the speed of
+transferring metadata. Also, only a fraction of the Baskets need to be read so
+performance will be bottlenecked by the cost of materializing and scanning
+parts of the namespace that are not relevant to the workload.
 
 \subsection{Large Scale Simulations: SIRIUS}
 
@@ -417,9 +417,11 @@ filter the coordinates of interest.  In addition to the time it would take to
 search 1 trillion objects in SQLite, another problem is the actual storage
 footprint of storing this many items.
 
-\noindent\textbf{Takeaway}: the SIRIUS storage system would store up to a
-billion names. Decoupling the namespace helps parallelize metadata operations
-across clients when writing out objects but the size of the namespace is
-problem a problem when reading bounding box metadata; filtering for relevant
-coordinates would be bottlenecked by the performance of building the namespace
-and scanning lists.
+\textbf{Takeaway}: the SIRIUS storage system stores billions of names.
+Decoupling the namespace helps parallelize writing bounding boxes of the 3D
+torus but the size of the namespace makes reads problematic. When constructing
+the metadata for a bounding box, clients need to pull metadata so performance
+will be bottlenecked by the speed of transferring metadata. Also, only a
+fraction of the domain-specific metadata needs to be read so performance will
+be bottlenecked by the cost of materializing and scanning parts of the
+namespace that are not relevant to the workload.

@@ -1,5 +1,17 @@
 \section{Methodology: Tintenfisch}
 
+%\begin{figure}
+%  \begin{tabular}{ r | c | c | c }
+%              & metadata   & metadata   & metadata \\
+%              & transfer   & generation & modification \\\hline
+%     PLFS     & \cmark     &            & \cmark \\
+%     ROOT     &            & \cmark     & \cmark \\
+%     SIRIUS   &            & \cmark     & \cmark \\
+%  \end{tabular}
+%  \caption{}
+%  \label{table:intro}
+%\end{figure}
+
 \begin{figure}[tb]
   \centering
   \begin{subfigure}[b]{1\linewidth}
@@ -76,12 +88,12 @@ void recurseBranch(TObjArray *o) {
 %    b = (TBranch*) i.Next())
 %  recurseBranch(b->GetListOfBranches());
 
-For three domain-specific applications and use-cases, we have identified
+For three domain-specific applications and use cases, we have identified
 scalability challenges because of the size of the namespace.  Tintensfisch
 compacts metadata by defining namespace schemas and proposing namespace
-generators. Namespace schemas and generators help clients and servers establish
-an understanding of the final file system metadata shape and size ({\it i.e.} a
-a ``generation" contract) that eliminates metadata overheads.
+generators.  Namespace schemas and generators help clients and servers
+establish an understanding of the final file system metadata shape and size
+({\it i.e.} a a ``generation" contract) that eliminates metadata overheads.
 
 \subsection{Namespace Schemas}
 \label{sec:namespace-schemas}
@@ -112,30 +124,27 @@ be determined before the job starts.
 
 A namespace generator is a compact representation of a namespace that allows
 clients and servers to generate file system metadata.  Namespace generators can
-be used for a namespace schema that is balanced or bounded (not mutually exlusive)
-This approach reduces the size of the namespace (helps PLFS and ROOT use cases)
-facilitates lazy file system metadata generation when the metadata is needed
-(helps ROOT and SIRIUS use cases).  Tintenfisch relies on the user to design effective
-namespace generators that leverage domain-specific knowledge to get the highest
-performance. This programmable storage
-approach~\cite{sevilla:eurosys17-malacology} helps application developers
-tailor the storage system to the use case without having to design a new
-storage system from scratch.
-
-Tintenfisch is built on Cudele~\cite{sevilla:ipdps18-cudele} so a
+be used for a namespace schema that is balanced or bounded (not mutually
+exlusive).  Tintenfisch is built on Cudele~\cite{sevilla:ipdps18-cudele} so a
 centralized, globally consistent metadata service (either a single metadata
 server or a cluster of active-active metadata servers) provides clients with
 the root inode of the subtree of interest and clients can do metadata IO
-locally with the consistency/durability semantics they require. In Tintenfisch, 
+locally with the consistency/durability semantics they require. In Tintenfisch,
 the namespace generators are stored in the directory inode of the root of the
 subtree that the client cares about. We use the ``file type" interface from the
 Malacology~\cite{sevilla:eurosys17-malacology} project to facilitate this
-domain-specific functionality. 
-Next we discuss three example 
-namespace generators: formula, code, and pointers.
-%This is similar to push-down predicates in
-%databases, where the application is providing domain-specific knowledge that
-%the storage system knows how to leverage.  
+domain-specific functionality.  Next we discuss three example namespace
+generators: formula, code, and pointers.
+%This is similar to push-down predicates in databases, where the application is
+%providing domain-specific knowledge that the storage system knows how to
+%leverage.  
+
+% Tintenfisch relies on the user to design effective
+%namespace generators that leverage domain-specific knowledge to get the highest
+%performance. This programmable storage
+%approach~\cite{sevilla:eurosys17-malacology} helps application developers
+%tailor the storage system to the use case without having to design a new
+%storage system from scratch.
 
 \subsubsection{Formula Schema} 
 
@@ -199,6 +208,28 @@ containing metadata and would read them to locate Baskets using the code
 generator. An added benefit to this solution is that Tintenfisch can lazily
 construct parts of the namespace as needed, which avoids the problem of running
 out of inodes discussed in Section~\ref{sec:hep_namespace-description}.
+
+\subsection*{Does this solve the problem?}
+
+This solves the read problems identified in the \textbf{Takeaways} in
+Section~\S\ref{sec:motivating-examples} because clients and servers exchange
+namespace generators instead of the file system metadata in its entirety. This
+means clients and servers can speed up (1) metadata transfer, (2) generate only
+relevant parts of the namespace, and (3) modify large namespaces more quickly.
+The PLFS problem is addressed by (1) and the ROOT and SIRIUS problems are
+addressed by (1) and (2). 
+
+All use cases benefit from (3). For PLFS, client processes can be dynamically
+added or removed by changing the input to the formula.  For example, if the
+original PLFS namespace was constructed with 1 million processes, scaling the
+namespace to use 2 million processes is only a matter of sending a new input to
+the formula instead of transferring the metadata for 1 million additional
+files. For ROOT, Branches can be added to the namespace by changing the
+metadata referenced by the pointer. For SIRIUS, object naming can be altered by
+changing the logic in the code schema.  For example, if the objects need to be
+partitioned into different sized blobs, only the new code schema with updated
+stripe size logic needs to be sent to clients and servers instead of a list of
+billions of new object names.
 
 \subsection*{A Fresh, Unorthodox, Unexpected, Controversial, and Counterintuitive Idea}
 
