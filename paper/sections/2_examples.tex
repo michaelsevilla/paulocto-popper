@@ -6,7 +6,8 @@ and this list is not meant to be exhaustive. Similar organizations exist for
 many domains, even something as distant as the mail application on a Mac. To
 highlight the scalability challenges for file system metadata management, we
 focus on large scale systems in high performance computing, high energy
-physics, and large scale simulations.
+physics, and large scale simulations. Large lists represent common problems in
+each of these domains.
 
 % This discussion is irrelevant since we are focusing on namespace size/overhead
 %We benchmark over Ceph (Jewel version) with \(n\) object storage daemons
@@ -127,8 +128,9 @@ write~\cite{grider:pc17-diddlings} but these approaches do not reduce the file
 system metadata load and reading the index files still requires multiple RPCs.
 
 \textbf{Takeaway}: the PLFS namespace scales with the number of client
-processes. Decoupling the namespace helps parallelize writing checkpoints but
-the size of the namespace makes reads problematic. When restarting checkpoints,
+processes so RPCs would overwhelm the metadata server with metadata requests. 
+Decoupling the namespace helps parallelize writing checkpoints but
+the size of the namespace makes reads problematic; when restarting checkpoints,
 index files need to be coalesced so performance will be bottlenecked by the
 speed of transferring metadata updates across the network.
 
@@ -270,18 +272,18 @@ load.}
   \label{fig:hep_runtime}
 \end{figure}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=90mm]{figures/hep_problem.png}
-  \caption{Reading and writing high-energy physics (HEP) data as many files
-allows physicists to read just the data they care about. But using this
-namespace approach sends many RPCs to the metadata server (a), resulting in
-worse performance and lower CPU utilization at the client (b). Alternatively,
-using the traditional file approach has IO amplification because all data moves
-over the network but less RPCs (c), better performance, and higher client CPU
-utilization (d).}
-  \label{fig:hep_problem}
-\end{figure}
+%%\begin{figure}[t]
+%%  \centering
+%%  \includegraphics[width=90mm]{figures/hep_problem.png}
+%%  \caption{Reading and writing high-energy physics (HEP) data as many files
+%%allows physicists to read just the data they care about. But using this
+%%namespace approach sends many RPCs to the metadata server (a), resulting in
+%%worse performance and lower CPU utilization at the client (b). Alternatively,
+%%using the traditional file approach has IO amplification because all data moves
+%%over the network but less RPCs (c), better performance, and higher client CPU
+%%utilization (d).}
+%%  \label{fig:hep_problem}
+%%\end{figure}
 
 We benchmark the write and read overhead of storing HEP data with the file
 approach stored as one object in an object store, with the file approach stored
@@ -325,13 +327,14 @@ namespace approach on CephFS is \(16.8\times\) slower.
 %and 65\% of the file is accessed so the namespace approach might be more
 %scalable for different workloads.\\
 
-\textbf{Takeaway}: the ROOT namespace stores billions of files. Decoupling the
-namespace helps parallelize writing Baskets into the ROOT namespace but the
-size of the namespace makes reads problematic. When reading Banches, clients
-need to pull metadata so performance will be bottlenecked by the speed of
-transferring metadata. Also, only a fraction of the Baskets need to be read so
-performance will be bottlenecked by the cost of materializing and scanning
-parts of the namespace that are not relevant to the workload.
+\textbf{Takeaway}: the ROOT namespace stores billions of files so RPCs would
+overwhelm the metadata server with metadata requests. Decoupling the namespace
+helps parallelize writing Baskets into the ROOT namespace but the size of the
+namespace makes reads problematic; when reading Branches, clients need to pull
+metadata so performance will be bottlenecked by the speed of transferring
+metadata. Also, only a fraction of the Baskets need to be read so performance
+will be bottlenecked by the cost of materializing and scanning parts of the
+namespace that are not relevant to the workload.
 
 \subsection{Large Scale Simulations: SIRIUS}
 
@@ -448,12 +451,12 @@ footprint of storing this many items. For distributed Empress, the storage
 footprint may not be as much of an issue but the cost is network transfer as
 reads must be centralized at the designated read process on each client.
 
-\textbf{Takeaway}: the SIRIUS storage system stores billions of names.
-Decoupling the namespace helps parallelize writing bounding boxes of the 3D
-torus but the size of the namespace makes reads problematic. When constructing
-the metadata for a bounding box, the distributed version of Empress coalesces
-metadata from many servers so performance
-will be bottlenecked by the speed of transferring metadata. Also, only a
-fraction of the domain-specific metadata needs to be read so performance will
-be bottlenecked by the cost of materializing and scanning parts of the
-namespace that are not relevant to the workload.
+\textbf{Takeaway}: the SIRIUS storage system stores billions of names so RPCs
+would overwhelm the metadata service.  Decoupling the namespace helps
+parallelize writing bounding boxes of the 3D torus but the size of the
+namespace makes reads problematic. When constructing the metadata for a
+bounding box, the distributed version of Empress coalesces metadata from many
+servers so performance will be bottlenecked by the speed of transferring
+metadata. Also, only a fraction of the domain-specific metadata needs to be
+read so performance will be bottlenecked by the cost of materializing and
+scanning parts of the namespace that are not relevant to the workload.
