@@ -222,7 +222,7 @@ ingest remote data over the network.
     \end{subfigure}
     \caption{(a) file approach: stores data in a single ROOT file, where
 clients read the header and seek to data/metadata (LRH); a ROOT file stored in
-a distributed file system will have read amplification because the striping
+a distributed file system will have IO read amplification because the striping
 strategies are not aligned to Baskets. (b) namespace approach: stores Baskets
 as files in the file system namespace so clients read only the data they need.}
 \end{figure}
@@ -230,10 +230,10 @@ as files in the file system namespace so clients read only the data they need.}
 \textbf{Namespace Description}: the HEP community is running into scalability
 problems.  The current effort is to integrate the ROOT framework with Ceph. But
 naive approaches such as storing ROOT files as objects in an object store or
-files in a file system have read amplification ({\it i.e.} read more than is
+files in a file system have IO read amplification ({\it i.e.} read more than is
 necessary); storing as an object would pull the entire GB-sized blob and
 storing as a file would pull more data than necessary because the file stripe
-size is not aligned to Baskets.  To reduce read amplification the namespace
+size is not aligned to Baskets.  To reduce IO read amplification the namespace
 approach~\cite{pivarski:indico17-root} views a ROOT file as a namespace of
 data.  Physicists ask for Branches, where each Branch can be made up of
 multiple subBranches ({\it i.e.} \texttt{Events/Branch0/Branch1}), similar to
@@ -241,7 +241,7 @@ pathname components in a file system file name. The namespace approach
 partitions the ROOT file onto a file system namespace.  As shown in
 Figure~\ref{fig:tree_hep_b}, file system directories hold Branch metadata and
 files contain Baskets. Clients only pull Baskets they care about, which
-prevents read amplification.  
+prevents IO read amplification.  
 %At the top of the namespace are Keys, each containing pointers to groups of
 %Branches. For example, ``MetaData" has data about the run and ``Events" has
 %all the proton-proton activity.  is not enough metadata to reconstruct which
