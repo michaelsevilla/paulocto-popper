@@ -10,7 +10,7 @@
     \begin{itemize}
       \setlength\itemsep{-0.5em}
       \item[] \texttt{\# of dirs =} \(m \times \texttt{mkdir()}\)
-      \item[] \texttt{\# of file =} \(2 \times n \times m\)
+      \item[] \texttt{\# of file =} \(2 \times n\)
       \item[] \texttt{\# of file per dir =} \(n/m\)
     \end{itemize}
     \caption{Function generator for PLFS\vspace{1em}} \label{fig:plfs}
@@ -74,9 +74,9 @@ void recurseBranch(TObjArray *o){
 %scalability challenges because of the size of the namespace.  Tintensfisch
 %compacts metadata by defining namespace schemas and proposing namespace
 %generators.  
-Namespace schemas and generators help clients and servers
-establish an understanding of the final file system metadata shape and size
-({\it i.e.} a ``generation" contract) that eliminates metadata overheads.
+Namespace schemas and generators help clients and servers establish an
+understanding of the final file system metadata shape and size that eliminates
+the metadata overheads highlighted above.
 
 \vspace{-0.5em}
 \subsection{Namespace Schemas}
@@ -111,7 +111,7 @@ metadata service can decouple subtrees and clients can do metadata IO locally
 with the consistency/durability semantics they require. This concept is similar
 to LWFS~\cite{oldfield:cc06-lwfs}, which supplied a core set of functionality
 and applications add additional functionality.  In Tintenfisch, namespace
-generators are stored in the directory inode of the decoupled subtree using the
+generators are stored in the directory inode of the decoupled subtree using
 the ``file type" interface from Malacology~\cite{sevilla:eurosys17-malacology}.
 Next we discuss 3 example namespace generators.
 
