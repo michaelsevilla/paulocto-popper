@@ -459,9 +459,13 @@ footprint of storing this many items. For distributed Empress, the storage
 footprint may not be as much of an issue but the cost is network transfer as
 reads must be centralized at the designated read process on each client.
 
-\textbf{Takeaway}: the SIRIUS storage system stores billions of names so RPCs
-would overwhelm the metadata service.  Decoupling the namespace helps writes
-but then the read performance is limited by the speed of transferring file
-system metadata over the network as clients coalesce metadata. Read performance
-is also limited by materializing and scanning parts of the namespace that are
-not relevant to the workload.
+\textbf{Takeaway}: SIRIUS stores trillions of objects for a single large scale
+simulation run and applications often access multiple runs. These types of
+queries return a large list of object names so the bottleneck is managing,
+transferring, and traversing these lists. The size of RPCs is the problem, not
+the number of RPCs.  POSIX IO hierarchical namespaces may be a good model for
+applications to access simulation data but another technique for handling the
+sheer size of these object name lists is needed.
+
+% solution: compact the metadataa required to name objects and generate only
+% what you need
