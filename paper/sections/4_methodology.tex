@@ -36,7 +36,9 @@ return obj_list
       \begin{minted}[xleftmargin=1em]{c++}
 void recurseBranch(TObjArray *o){
   TIter i(o); 
-  for(TBranch *b=i.Next();i.Next()!=0;b=i.Next()){
+  for(TBranch *b=i.Next();
+      i.Next()!=0;
+      b=i.Next()){
     processBranch(b);
     recurseBranch(b->GetListOfBranches());
   }

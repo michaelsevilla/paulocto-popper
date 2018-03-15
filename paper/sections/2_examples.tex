@@ -127,19 +127,23 @@ checkpoints is largely a solved problem.
 For reading a checkpoint, clients must coalesce index files to reconstruct the
 PLFS file. Figure~\ref{fig:plfs_problem} shows that the read metadata requests
 (``readdir" and ``open") outnumber the create requests by a factor of
-\(4\times\) making RPCs even more untenable. Even worse, if the checkpoint had
-been written with the decoupled namespace approach, file system metadata would
-be scattered across clients so metadata would need to be coalesced before
-restarting the checkpoint.  Current efforts improve read scalability by
-reducing the space overhead of the index files
-themselves~\cite{he:hpdc13-plfs-patterns} and transferring index files after
-each write~\cite{grider:pc17-diddlings} but these approaches do not reduce the
-overhead of transferring file system metadata.
+\(4\times\). Metadata read requests are notoriously
+slow~\cite{carns:ipdps09-pvfs, eshel:fast10-panache}, so like create requests,
+RPCs are probably untenable. Even worse, if the checkpoint had been written
+with the decoupled namespace approach, file system metadata would be scattered
+across clients so metadata would need to be coalesced before restarting the
+checkpoint.  Current efforts improve read scalability by reducing the space
+overhead of the index files themselves~\cite{he:hpdc13-plfs-patterns} and
+transferring index files after each write~\cite{grider:pc17-diddlings} but
+these approaches target the transfer and materialization of the index file
+data, not the index file metadata.
 
 \textbf{Takeaway}: the PLFS namespace scales with the number of client
 processes so RPCs are not an option for reading or writing.  Decoupling the
 namespace helps writes but then the read performance is limited by the speed of
-transferring file system metadata across the network because metadata is
+transferring file system metadata across the network to the reading client {\it
+in addition} to reading the contents of the index files themselves.
+
 coalesced at the reading client.
 
 \vspace{-0.5em}
@@ -382,18 +386,19 @@ return a list of object names to the client}
   \label{fig:empress}
 \end{figure}
 
-\textbf{Namespace Description}: the seven columns in the database are six
-coordinates, which are integers representing the contents at a location in the
-global space, and a string representing the object name. The global space is
-partitioned into non-overlapping, regular shaped cells.  Each row in the
-database is duplicated for each variable in the simulation because variables
-may have a different partitioning of the global space; for example temperature
-is computed for every cell while pressure is computed for every \(n\) cells.
-Figure~\ref{fig:empress} only has three variables, represented by the rows of
-boxes but most simulations will have a minimum of 10 variables.
+\textbf{Namespace Description}: the database has columns for the application
+ID, run ID, timestamp, variabl name, feature name, and bounding box
+coordinates.  The global space is partitioned into non-overlapping, regular
+shaped cells.  Each row in the database is duplicated for each variable in the
+simulation because variables may have a different partitioning of the global
+space; for example temperature is computed for every cell while pressure is
+computed for every \(n\) cells.  Figure~\ref{fig:empress} only has three
+variables, represented by the rows of boxes but most simulations will have a
+minimum of 10 variables.
 
 \textbf{Namespace Size}: a back-of-the-envelope calculation for the number of
 object names for a single run is:
+\vspace{-0.5em}
 \[\frac
   {(\text{processes})\times
    (\text{data/process})\times
@@ -401,6 +406,7 @@ object names for a single run is:
    (\text{timesteps})}
   {(\text{object size})}
 \]
+\vspace{-0.5em}
 %\[=\frac
 %  {(1*10^6)\times
 %   (8*10^{9})\times
