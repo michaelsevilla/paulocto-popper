@@ -29,19 +29,33 @@ each of these domains.
 
 % What is the problem the authors are trying to solve?
 Checkpointing performs small writes to a single shared file but because file
-systems are optimized for large writes, performance is poor.  It easier for
-applications to write checkpoints to a single file with unaligned writes of
-varying length (N-1) but general-purpose distributed file systems are designed
-for writes to different files (N-N).  The general problem is that the
-application understands the workload but cannot communicate a solution to the
-storage system. The common solution is for the file system to expose
-configurations that describe alignment requirements but this forces application
-developers to specify ``magic numbers" for parameters like write
-size~\cite{bent_plfs_2009} or stripe size~\cite{behzad:sc2013-autotuning},
-which are hard to find and may not even exist.  Another solution is to add
-middleware ({\it i.e.} software that sits between the application and the
-storage system) to translate the data into a format the storage system performs
-well at. 
+systems are optimized for large writes, performance is poor.
+PLFS~\cite{bent_plfs_2009} solved the checkpoint-restart problem by mapping
+logical files to physical files on the underlying file system. The solution
+targets N-1 strided checkpoints, where many processes write small IOs to
+offsets in the same logical file. The key insight of PLFS is that general
+purpose file systems perform well for applications that use N-N checkpoints and
+that the N-1 strided checkpoint style can be transformed with a thin
+interposition layer. To map offsets in the logical file to physical files each
+process maintains an index of \{logical offset, physical offset, length,
+physical block id\}.  Each process sequentially writes to its own, unshared
+data file in the hierarchical file system and records an offset and length in
+an an index file. Reads aggregate per-process index files into a global index
+file, which it uses as lookup table for logical file. 
+
+%It easier for
+%applications to write checkpoints to a single file with unaligned writes of
+%varying length (N-1) but general-purpose distributed file systems are designed
+%for writes to different files (N-N).  The general problem is that the
+%application understands the workload but cannot communicate a solution to the
+%storage system. The common solution is for the file system to expose
+%configurations that describe alignment requirements but this forces application
+%developers to specify ``magic numbers" for parameters like write
+%size~\cite{bent_plfs_2009} or stripe size~\cite{behzad:sc2013-autotuning},
+%which are hard to find and may not even exist.  Another solution is to add
+%middleware ({\it i.e.} software that sits between the application and the
+%storage system) to translate the data into a format the storage system performs
+%well at. 
 
 %% What is the problem?
 %The problem is that the underyling file system cannot keep up with the metadata
@@ -56,33 +70,19 @@ well at.
 %\subsubsection{System Architecture}
 %@noah: there is an index because applications do not have regular IO
 
-PLFS~\cite{bent_plfs_2009} solved the checkpoint-restart problem by mapping
-logical files to physical files on the underlying file system. The solution
-targets N-1 strided checkpoints, where many processes write small IOs to
-offsets in the same logical file. The key insight of PLFS is that general
-purpose file systems perform well for applications that use N-N checkpoints and
-that the N-1 strided checkpoint style can be transformed with a thin
-interposition layer. To map offsets in the logical file to physical files each
-process maintains an index of \{logical offset, physical offset, length,
-physical block id\}.  Each process sequentially writes to its own, unshared
-data file in the hierarchical file system and records an offset and length in
-an an index file. Reads aggregate per-process index files into a global index
-file, which it uses as lookup table for logical file. 
-
 % What is the authors' approach or solution?
 %PLFS maps an application's preferred data layout into one that the file system
 %performs well on. 
-\subsubsection{Namespace Description}
 
 % How does PLFS create namespaces
-When PLFS maps a single logical file to many physical files, it
-deterministically creates the namespace in the backend file system.  For
-metadata writes, the number of directories is dependent on the number of
-clients nodes and the number of files is a function of the number of client
-processes.  A directory called a container is created per node and processes
-write data and index files to the container assigned to their host.  So for a
-write workload ({\it i.e.} a checkpoint) the underlying file system creates a
-deep and wide directory hierarchy.
+\textbf{Namespace Description}: when PLFS maps a single logical file to many
+physical files, it deterministically creates the namespace in the backend file
+system.  For metadata writes, the number of directories is dependent on the
+number of clients nodes and the number of files is a function of the number of
+client processes.  A directory called a container is created per node and
+processes write data and index files to the container assigned to their host.
+So for a write workload ({\it i.e.} a checkpoint) the underlying file system
+creates a deep and wide directory hierarchy.
 
 The namespace structure for 3 processes writing to variable offsets in a single
 PLFS file is shown in Figure~\ref{fig:tree_plfs}. The \texttt{host*} directory
@@ -99,18 +99,16 @@ the dashed blue line) in the Figure, representing 2 additional hosts.
   }\label{fig:tree_plfs}
 \end{figure}
 
-\subsubsection{Namespace Size}
-
-Figure~\ref{fig:plfs_problem} scales the number of clients and plots the total
-number of files/directories (text annotations) and the number of metadata
-operations needed to write out the PLFS file (``mkdir" and ``create") and to
-read the PLFS file (``readdir" and ``open"). The number of files is \(2*n*m\)
-for \(m\) servers and \(n\) processes per server. So for a 1 million processes
-each checkpointing a portion of a 3D simulation, the size of the namespace will
-be 2 million files just for the checkpoint. RPC-based approaches like IndexFS
-have been shown to struggle with metadata loads of this size but decoupled
-namespace approaches like DeltaFS report up to 19.69 million creates per
-second, so writing checkpoints is largely a solved problem.
+\textbf{Namespace Size}: Figure~\ref{fig:plfs_problem} scales the number of
+clients and plots the total number of files/directories (text annotations) and
+the number of metadata operations needed to write out the PLFS file (``mkdir"
+and ``create") and to read the PLFS file (``readdir" and ``open"). The number
+of files is \(2*n*m\) for \(m\) servers and \(n\) processes per server. So for
+a 1 million processes each checkpointing a portion of a 3D simulation, the size
+of the namespace will be 2 million files just for the checkpoint. RPC-based
+approaches like IndexFS have been shown to struggle with metadata loads of this
+size but decoupled namespace approaches like DeltaFS report up to 19.69 million
+creates per second, so writing checkpoints is largely a solved problem.
 
 \begin{figure}[tb]
 \centering
@@ -155,25 +153,24 @@ the LHC into large immutable datasets, stored publicly in data centers around
 the world.  Physicists analyze the dataset by downloading interesting events
 stored in ROOT files.
 
-\subsubsection{System Architecture}
 
 % ROOT files
-A ROOT file is a list of objects and data is accessed by consulting metadata in
-the header and seeking to a location in the bytestream, as shown in
-Figure~\ref{fig:tree_hep_a}. Scattered in the ROOT file is both data and ROOT
-file specific metadata called Logical Record Headers (LRH).  For this
-discussion, the following objects are of interest: a ``Tree" is a table of a
-collection of events, listed sequentially and stored in a flat namespace; a
-``Branch" is a data container representing columns of a Tree; and ``Baskets"
-are byte ranges partitioned by events and indexed by LRHs.  Other objects, such
-as ``Keys", ``Directories", and ``Leaves", contain HEP-specific metadata.
-Clients request Branches and data is transferred as Baskets; so Branches are
-the logical view of the data for users and Baskets are the compression,
-parallelization, and tranfer unit. In summary, ROOT files are self-describing
-files containing data located with metadata and serialized/de-serialized with
-the ROOT framework.  Much of the development was done at CERN in parallel with
-other HPC ventures. As a result, the strategies are similar to techniques used
-in HDF5, Parquet, and Avro.
+\textbf{System Architecture}: a ROOT file is a list of objects and data is
+accessed by consulting metadata in the header and seeking to a location in the
+bytestream, as shown in Figure~\ref{fig:tree_hep_a}. Scattered in the ROOT file
+is both data and ROOT file specific metadata called Logical Record Headers
+(LRH).  For this discussion, the following objects are of interest: a ``Tree"
+is a table of a collection of events, listed sequentially and stored in a flat
+namespace; a ``Branch" is a data container representing columns of a Tree; and
+``Baskets" are byte ranges partitioned by events and indexed by LRHs.  Other
+objects, such as ``Keys", ``Directories", and ``Leaves", contain HEP-specific
+metadata.  Clients request Branches and data is transferred as Baskets; so
+Branches are the logical view of the data for users and Baskets are the
+compression, parallelization, and tranfer unit. In summary, ROOT files are
+self-describing files containing data located with metadata and
+serialized/de-serialized with the ROOT framework.  Much of the development was
+done at CERN in parallel with other HPC ventures. As a result, the strategies
+are similar to techniques used in HDF5, Parquet, and Avro.
 
 % WHat does ROOT have?
 The advantages of the ROOT framework is the ability to (1) read only parts of
@@ -218,8 +215,6 @@ is the ``namespace approach"~\cite{pivarski:indico17-root}.
 %size, compression algorithm and level, and alignment of objects with disk
 %pages.
 
-\subsubsection{Namespace Description}
-\label{sec:hep_namespace-description}
 
 \begin{figure}[t!]
     \centering
@@ -243,37 +238,37 @@ Baskets. (b) shows how the namespace approach stores Baskets as files in the
 file system namespace so clients read only the data they need.}
 \end{figure}
 
-The namespace approach views a ROOT file as a namespace of data. At the top of
-the namespace are Keys, each containing pointers to groups of Branches. For
-example, ``MetaData" has data about the run and ``Events" has all the
-proton-proton activity. Physicists ask for Branches, where each Branch can be
-made up of multiple subBranches ({\it i.e.} \texttt{Events/Branch0/Branch1}),
-similar to pathname components in a file system file name.  To accomodate this
-model, the namespace approach partitions the ROOT file onto a file system
-namespace.  As shown in Figure~\ref{fig:tree_hep_b}, file system directories
-hold Branch metadata and files contain Baskets. Clients only pull baskets
-they care about, which prevents read amplification.  Unfortunately, storing
-this metadata in a file system would overwhelm most file systems in two ways:
-(1) too many inodes and (2) per-file overhead.  To quantify (1), consider the
-Analysis Oject Dataset which has a petabyte of data sets made up of a million
-ROOT files. If these ROOT files are split by Branches, there would be a billion
-files. To quantify (2), we benchmark a simple ROOT workload over CephFS.
+\textbf{Namespace Description}: the namespace approach views a ROOT file as a
+namespace of data. At the top of the namespace are Keys, each containing
+pointers to groups of Branches. For example, ``MetaData" has data about the run
+and ``Events" has all the proton-proton activity. Physicists ask for Branches,
+where each Branch can be made up of multiple subBranches ({\it i.e.}
+\texttt{Events/Branch0/Branch1}), similar to pathname components in a file
+system file name.  To accomodate this model, the namespace approach partitions
+the ROOT file onto a file system namespace.  As shown in
+Figure~\ref{fig:tree_hep_b}, file system directories hold Branch metadata and
+files contain Baskets. Clients only pull baskets they care about, which
+prevents read amplification.  Unfortunately, storing this metadata in a file
+system would overwhelm most file systems in two ways: (1) too many inodes and
+(2) per-file overhead.  To quantify (1), consider the Analysis Oject Dataset
+which has a petabyte of data sets made up of a million ROOT files. If these
+ROOT files are split by Branches, there would be a billion files. To quantify
+(2), we benchmark a simple ROOT workload over CephFS.
 
 %is not enough metadata to reconstruct which Branches belong to which events.
 %tely, current file system do not have this many inodes and this setup
 %would require extra metadata to combine TBranches into objects.
 
-\subsubsection{Namespace Size}
 
 \begin{figure}[tb]
 \centering
   \includegraphics[width=1\linewidth]{figures/hep_runtime.png}
-  \caption{ ``Namespace" shows the runtime of storing a file per Basket and
-``File" shows the runtime of storing data as a single ROOT file. RPCs are
-slower because of the metadata load and because many small objects are pulled.
-Decoupling the namespace has less network (because only metadata and relevant
-Baskets get transferred) but the benefit is offset by the cost of materializing
-the namespace.} \label{fig:hep_runtime}
+  \caption{ ``Namespace" is the runtime of reading a file per Basket and
+``File" is the runtime of reading a single ROOT file. RPCs are slower because
+of the metadata load and the overhead of pulling many objects.  Decoupling the
+namespace has less network (because only metadata and relevant Baskets get
+transferred) but the benefit is offset by the cost of namespace
+materialization.}\label{fig:hep_runtime}
 \end{figure}
 
 %%\begin{figure}[t]
@@ -289,52 +284,54 @@ the namespace.} \label{fig:hep_runtime}
 %%  \label{fig:hep_problem}
 %%\end{figure}
 
-We benchmark the write and read overhead of storing HEP data with the file
-approach stored as one object in an object store, with the file approach stored
-as one file in a file system, and with the namespace approach stored as many
-files in a file system.  The file approaches are deployed without any changes
-to the ROOT framework. For the namespace approach, HEP-specific metadata is
-mapped onto the file system namespace. In CephFS, Baskets are stored in Ceph
-objects and the Branch hierarchy is managed by the metadata server.  Clients
-contact the metadata server with a Branch request, receive back the Branch
-hierarchy necessary to name the Ceph object containing the Basket as well as
-the deserialization metadata necessary to read the object.  The workload is a
-list of Branch accesses from a trace of the NPTupleMaker high energy physics
-application. Each Branch access is:
-
-\texttt{Branch0/Branch1,3,1740718587,5847,97,136}
-
-where the tuple is the full Branch name, Basket number, offset into the ROOT
-file, size of the Basket, start entry of the Basket, and end entry of the
-Basket.  For the file approach, we use the offset into the ROOT file and the
-size of the Basket.  In setup 1, the ROOT file is pulled locally and the
-Branches are read from the file. In setup 2, the offset and size of the read
-are sent to the CephFS metadata server.  For setup 3, the full Branch name and
-Basket number are used to traverse the file system namespace.
+%We benchmark the write and read overhead of storing HEP data with the file
+%approach stored as one object in an object store, with the file approach stored
+%as one file in a file system, and with the namespace approach stored as many
+%files in a file system.  The file approaches are deployed without any changes
+%to the ROOT framework. For the namespace approach, HEP-specific metadata is
+%mapped onto the file system namespace. In CephFS, Baskets are stored in Ceph
+%objects and the Branch hierarchy is managed by the metadata server.  Clients
+%contact the metadata server with a Branch request, receive back the Branch
+%hierarchy necessary to name the Ceph object containing the Basket as well as
+%the deserialization metadata necessary to read the object.  The workload is a
+%list of Branch accesses from a trace of the NPTupleMaker high energy physics
+%application. Each Branch access is:
+%
+%\texttt{Branch0/Branch1,3,1740718587,5847,97,136}
+%
+%where the tuple is the full Branch name, Basket number, offset into the ROOT
+%file, size of the Basket, start entry of the Basket, and end entry of the
+%Basket.  For the file approach, we use the offset into the ROOT file and the
+%size of the Basket.  In setup 1, the ROOT file is pulled locally and the
+%Branches are read from the file. In setup 2, the offset and size of the read
+%are sent to the CephFS metadata server.  For setup 3, the full Branch name and
+%Basket number are used to traverse the file system namespace.
 
 %The start and end entry of the Basket are the logical records that
 %bookend the Basket ({\it e.g.}, for a start entry of 10 and end entry of 20 for
 %a Basket storing user ages, the start entry is user 10's age and the end entry
 %is user 20's age).  
 
-The read and write performance for the different approaches are shown in
+\textbf{Namespace Size}: the read and write performance for replaying a trace
+of Branch access from the NTupleMaker application is shown in
 Figure~\ref{fig:hep_runtime}, where the \(x\)-axis is approaches for storing
 ROOT data, the \(y\)-axis is runtime, and the error bars are the standard
-deviations for six runs. Using the namespace approach with RPCs is far slower
+deviations for six runs.  Using the namespace approach with RPCs is far slower
 because of the metadata load and because many small objects are pulled over the
-network. Although the file approach reads more data than is necessary since the
-stripe size of the file is not aligned to Baskets, the runtime is still
+network.  Although the file approach reads more data than is necessary since
+the stripe size of the file is not aligned to Baskets, the runtime is still
 \(16.6\times\) faster. Decoupling the namespace is much faster for the
 namespace approach but the cost of materializing file system metadata makes it
-slower than the file approach. 
+slower than the file approach.  We note that this is one (perhaps pessimistic)
+example workload; the ROOT file is 1.7GB and 65\% of the file is accessed so
+the namespace approach might be more scalable for workloads that access fewer
+Baskets.
 
 %The reason is shown in Figure~\ref{fig:hep_problem}. The file system metadata
 %accesses, characterized by many \texttt{open()} requests, incur many RPCs.
 %This causes worse performance and lower client CPU utilization compared to
 %reading a single ROOT file.  So the cost of read amplification in the file
-%approach is offset by the cost of doing namespace operations. For this
-%experiment, the ROOT file is 1.7GB and 65\% of the file is accessed so the
-%namespace approach might be more scalable for different workloads.\\
+%approach is offset by the cost of doing namespace operations. 
 
 \textbf{Takeaway}: the ROOT namespace stores billions of files and we show that
 RPCs overwhelm a centralized metadata server. Decoupling the namespace helps
@@ -352,20 +349,19 @@ application hints that allow the storage to reconfigure itself for higher
 performance. Techniques include tiering, management policies, data layout,
 quality of service, and load balancing. 
 
-\subsubsection{System Architecture}
-
-SIRIUS includes a metadata service called EMPRESS~\cite{lawson:pdsw17-empress},
-which is a query-able SQLite instance that stores user-defined metadata for
-bounding boxes ({\it i.e.} a 3-dimensional coordinate space).  EMPRESS is
-designed to be used at any granularity, which is especially important for a
-simulation space represented as a 3D mesh. By granularity, we mean that
-metadata access can be optimized per variable ({\it e.g.}, temperature,
-pressure, etc.), per timestamp, per run, or even per set of runs (which is
-possible but may require multiple queries).  EMPRESS is also designed to
-scale-out via additional independent instances. In this distributed case, one
-client per server queries the entire space of interest and shares results with
-other processes that may want the same metadata. This process queries servers,
-coalesces results, and distributes them using MPI messages.
+\textbf{System Architecture}: SIRIUS includes a metadata service called
+EMPRESS~\cite{lawson:pdsw17-empress}, which is a query-able SQLite instance
+that stores user-defined metadata for bounding boxes ({\it i.e.} a
+3-dimensional coordinate space).  EMPRESS is designed to be used at any
+granularity, which is especially important for a simulation space represented
+as a 3D mesh. By granularity, we mean that metadata access can be optimized per
+variable ({\it e.g.}, temperature, pressure, etc.), per timestamp, per run, or
+even per set of runs (which is possible but may require multiple queries).
+EMPRESS is also designed to scale-out via additional independent instances. In
+this distributed case, one client per server queries the entire space of
+interest and shares results with other processes that may want the same
+metadata. This process queries servers, coalesces results, and distributes them
+using MPI messages.
 
 %So clients reading from SIRIUS will first
 %contact EMPRESS with the queries for all data, all of 1 variable, all of a few
@@ -385,22 +381,19 @@ reading from the object store.}
   \label{fig:empress}
 \end{figure}
 
-\subsubsection{Namespace Description}
+\textbf{Namespace Description}: the seven columns in the database are six
+coordinates, which are integers representing the contents at a location in the
+global space, and a string representing the object name. The global space is
+partitioned into non-overlapping, regular shaped cells.  Each row in the
+database is duplicated for each variable in the simulation because variables
+may have a different partitioning of the global space; for example temperature
+is computed for every cell while pressure is computed for every \(n\) cells.
+Figure~\ref{fig:empress} only has three variables, represented by the rows of
+boxes but most simulations will have a minimum of 10 variables.
 
-The seven columns in the database are six coordinates, which are integers
-representing the contents at a location in the global space, and a string
-representing the object name. The global space is partitioned into
-non-overlapping, regular shaped cells.  Each row in the database is duplicated
-for each variable in the simulation because variables may have a different
-partitioning of the global space; for example temperature is computed for every
-cell while pressure is computed for every \(n\) cells.  Figure~\ref{fig:empress}
-only has three variables, represented by the rows of boxes but most simulations
-will have a minimum of 10 variables.
-
-\subsubsection{Namespace Size}
-
-\emph{\# of object names}: a back-of-the-envelope calculation for the number of
+\textbf{Namespace Size}: a back-of-the-envelope calculation for the number of
 object names for a single run is:
+
 \[=\frac
   {(\text{\# processes})\times
    (\text{data/process})\times

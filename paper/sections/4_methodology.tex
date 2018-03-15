@@ -1,4 +1,4 @@
-\section{Methodology: Tintenfisch}
+
 
 %\begin{figure}
 %  \begin{tabular}{ r | c | c | c }
@@ -12,9 +12,9 @@
 %  \label{table:intro}
 %\end{figure}
 
-\begin{figure}[tb]
+\begin{figure*}[tb]
   \centering
-  \begin{subfigure}[b]{1\linewidth}
+  \begin{subfigure}[b]{0.3\linewidth}
     For \(n\) processes on \(m\) servers:
     \begin{itemize}
       \setlength\itemsep{-0.5em}
@@ -24,33 +24,20 @@
     \end{itemize}
     \caption{Function generator for PLFS\vspace{1em}} \label{fig:plfs}
   \end{subfigure}
-
-  \begin{subfigure}[b]{1\linewidth}
+  \begin{subfigure}[b]{0.3\linewidth}
       \footnotesize
       \begin{minted}[xleftmargin=1em]{lua}
 local box require 'box2d'
-for i=_x,_x+x do     -- iterate over the
-  for j=_y,_y+y do   -- given bounding
-    for k=_z,_z+z do -- box coordinates
-      if temperature>30 then
-        -- partition object list one way, e.g.,
-        b0, b1 = box.nsplit(2)
-      else
-        -- partition a different way, e.g.,
-        b0, b1, b2, b3 = box.nsplit(4)
-      end
-end end end
+for i=_x,_x+x do for j=_y,_y+y do
+  if t>30 then b0,b1=box.nsplit(2)
+  else b0,b1,b2,=box.nsplit(4)
+  end
+end end 
 return obj_list
      \end{minted}
       \caption{Code generator for SIRIUS\vspace{1em}} \label{fig:sirius}
   \end{subfigure}
-
-  \begin{subfigure}[b]{1\linewidth}
-
-\noindent\texttt{pointer\_generator}: \texttt{(o0, o2, o9)}
-
-\noindent\texttt{code\_generator}:
-
+  \begin{subfigure}[b]{0.35\linewidth}
       \centering
       \footnotesize
       \begin{minted}[xleftmargin=1em]{c++}
@@ -62,10 +49,10 @@ void recurseBranch(TObjArray *o) {
   }
 }
       \end{minted}
-      \caption{Pointer and Code generators for HEP\vspace{1em}} \label{fig:hep}
+      \caption{Code generators for HEP\vspace{1em}} \label{fig:hep}
   \end{subfigure}
 \caption{Namespace generators subtrees for 3 motivating examples.\label{fig:use-cases}}
-\end{figure}
+\end{figure*}
 
 %local box require 'box2d'
 %o = {}; i = 1   -- o: object list
@@ -95,16 +82,13 @@ generators.  Namespace schemas and generators help clients and servers
 establish an understanding of the final file system metadata shape and size
 ({\it i.e.} a a ``generation" contract) that eliminates metadata overheads.
 
-\subsection{Namespace Schemas}
-\label{sec:namespace-schemas}
-
-Namespace schemas describe the structure of the namespace. A ``balanced"
-namespace means that subtree patterns ({\it i.e.} files per directory) are
-repeated and a ``bounded" namespace means that the range of file/directory
-names can be defined {\it a-priori}\footnote{By {\it a-priori} we mean before
-the job has run but after metadata has been read.}.  In the previous section,
-we observe three types of namespace schemas (1) unbalanced and unbounded, (2)
-balanced and bounded, and (3) unbalanced and bounded.
+\textbf{Namespace Schema}: describes the structure of the namespace. A
+``balanced" namespace means that subtree patterns ({\it i.e.} files per
+directory) are repeated and a ``bounded" namespace means that the range of
+file/directory names can be defined {\it a-priori}\footnote{By {\it a-priori}
+we mean before the job has run but after metadata has been read.}.  In the
+previous section, we observe three types of namespace schemas (1) unbalanced
+and unbounded, (2) balanced and bounded, and (3) unbalanced and bounded.
 
 General file system workloads, like user home directories, have an unbalanced
 and unbounded namespace schema because users can create any combination of
@@ -149,21 +133,19 @@ generators: formula, code, and pointers.
 %tailor the storage system to the use case without having to design a new
 %storage system from scratch.
 
-\subsubsection{Formula Schema} 
-
-For this generator, a formula that generates the file system namespace is stored
-in the inode. This formula takes domain-specific information as input and
-produces a list of files and directories.  For example, because PLFS clients
-deterministically create files and directories based on the number of clients,
-Tintenfisch can use a formula generator like the one in Figure~\ref{fig:plfs}. The
-function takes as input the number of processes and hosts in the cluster and
-outputs the number of directories, the number of files, and the number of files
-per directory.  For the example, the namespace drawn in
-Figure~\ref{fig:tree_plfs} can be generated with the formula in
+\textbf{Formula Generator}: a formula that generates the file system namespace
+is stored in the inode. This formula takes domain-specific information as input
+and produces a list of files and directories.  For example, because PLFS
+clients deterministically create files and directories based on the number of
+clients, Tintenfisch can use a formula generator like the one in
+Figure~\ref{fig:plfs}. The function takes as input the number of processes and
+hosts in the cluster and outputs the number of directories, the number of
+files, and the number of files per directory.  For the example, the namespace
+drawn in Figure~\ref{fig:tree_plfs} can be generated with the formula in
 Figure~\ref{fig:plfs} using an input of 3 hosts each with 1 process. The output
 is 3 directories and 6 files, with 2 files per directory.  With this namespace
-generator, clients can open just the container inode and then compute and access
-its contents without \texttt{lookup()} and \texttt{open()} RPCs to a
+generator, clients can open just the container inode and then compute and
+access its contents without \texttt{lookup()} and \texttt{open()} RPCs to a
 centralized metadata service.
 
 %For \(n\) processes on \(m\) servers:
@@ -173,9 +155,7 @@ centralized metadata service.
 %  \item[] \texttt{\# of file per dir =} \(n/m\)
 %\end{itemize}
 
-\subsubsection{Code Schema}
-
-Sometimes the namespace generator logic is too complex to store as a single
+\textbf{Code Generator}: sometimes the namespace generator logic is too complex to store as a single
 function or requires external libraries to interpret metadata. For example, the
 SIRIUS use case constructs the namespace using domain-specific partitioning
 logic written in Lua (for sandboxing purposes).  Tintenfisch provides a code
@@ -190,15 +170,13 @@ function itself is not realistic, it shows how code generators can accomodate
 domain-specific data layout policies that are complex and/or require external
 libraries.  
 
-\subsubsection{Pointer Schema} 
-
-Sometimes there is no formal specification for the namespace. For example, the
-ROOT framework uses self-describing files so headers and metadata need to be
-read for each ROOT file. In these scenarios, a code generator is insufficient for
-generating the file system namespace because all necessary metadata is in
-objects scattered in the object store. Pointer generators reference data in
-scalable storage and avoids storing large amounts of metadata in inodes, which
-is a frowned upon in distributed file systems like
+\textbf{Pointer Generator}: sometimes there is no formal specification for the
+namespace. For example, the ROOT framework uses self-describing files so
+headers and metadata need to be read for each ROOT file. In these scenarios, a
+code generator is insufficient for generating the file system namespace because
+all necessary metadata is in objects scattered in the object store. Pointer
+generators reference data in scalable storage and avoids storing large amounts
+of metadata in inodes, which is a frowned upon in distributed file systems like
 CephFS~\cite{docs:cephinternals}.
 
 For example, a code generator containing library code for the ROOT framework
@@ -210,9 +188,9 @@ clients requesting Branches would follow the pointer generator to the objects
 containing metadata and would read them to locate Baskets using the code
 generator. An added benefit to this solution is that Tintenfisch can lazily
 construct parts of the namespace as needed, which avoids the problem of running
-out of inodes discussed in Section~\ref{sec:hep_namespace-description}.
+out of inodes discussed.
 
-\subsection*{Does this solve the problem?}
+\section{Conclusion}
 
 This solves the read problems identified in the \textbf{Takeaways} in
 Section~\S\ref{sec:motivating-examples} because clients and servers exchange
@@ -220,21 +198,19 @@ namespace generators instead of the file system metadata in its entirety. This
 means clients and servers can (1) speed up metadata transfer, (2) generate only
 relevant parts of the namespace, and (3) modify large namespaces more quickly.
 The PLFS problem is addressed by (1) and the ROOT and SIRIUS problems are
-addressed by (1) and (2). 
+addressed by (1) and (2). All use cases benefit from (3). For PLFS, client
+processes can be dynamically added or removed by changing the input to the
+formula.  For example, if the original PLFS namespace was constructed with 1
+million processes, scaling the namespace to use 2 million processes is only a
+matter of sending a new input to the formula instead of transferring the
+metadata for 1 million additional files. For ROOT, Branches can be added to the
+namespace by changing the metadata referenced by the pointer. For SIRIUS,
+object naming can be altered by changing the logic in the code schema.  For
+example, if the objects need to be partitioned into different sized blobs, only
+the new code schema with updated stripe size logic needs to be sent to clients
+and servers instead of a list of billions of new object names.
 
-All use cases benefit from (3). For PLFS, client processes can be dynamically
-added or removed by changing the input to the formula.  For example, if the
-original PLFS namespace was constructed with 1 million processes, scaling the
-namespace to use 2 million processes is only a matter of sending a new input to
-the formula instead of transferring the metadata for 1 million additional
-files. For ROOT, Branches can be added to the namespace by changing the
-metadata referenced by the pointer. For SIRIUS, object naming can be altered by
-changing the logic in the code schema.  For example, if the objects need to be
-partitioned into different sized blobs, only the new code schema with updated
-stripe size logic needs to be sent to clients and servers instead of a list of
-billions of new object names.
-
-\subsection*{A Fresh, Unorthodox, Unexpected, Controversial, and Counterintuitive Idea}
+%\subsection*{A Fresh, Unorthodox, Unexpected, Controversial, and Counterintuitive Idea}
 
 Global file systems can be scalable if programmed correctly. For example, the
 following notions are out-dated:
