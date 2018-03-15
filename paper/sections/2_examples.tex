@@ -354,43 +354,33 @@ quality of service, and load balancing.
 
 \subsubsection{System Architecture}
 
-SIRIUS includes a metadata service called Empress~\cite{lawson:pdsw17-empress},
-which is a query-able SQLite instance that stores metadata for bounding boxes
-({\it i.e.} a 3-dimensional coordinate space).  Figure~\ref{fig:empress} shows
-how metadata is stored in and retrieved from Empress; the entire simulation
-space, represented as a 3D torus, is partitioned into bounding boxes, whose
-coordinates are stored in SQLite for each variable ({\it e.g.}, temperature,
-pressure, etc.).  The objecter function, \(F(x)\), translates the bounding box
-coordinates into a list of object names, which are used to write/read data
-to/from the scalable object store. The use of the objecter avoids the need to
-explicitly store object names; instead Empress only needs to store global
-offsets for interesting features. SIRIUS aims to satisfy queries structured
-like the ``Six Patterns in HPC"~\cite{lofstead:hpdc11-6degrees}. 
-
-Empress is designed to be used at any granularity, which is especially
-important for a simulation space represented as a 3D mesh. By granularity, we
-mean that metadata access can be optimized per variable, per timestamp, per
-run, or even per set of runs (which is possible but may require multiple
-queries).  Empress is also designed to scale-out via additional independent
-instances. In this distributed case, one client per server queries the entire
-space of interest and shares results with other processes that may want the
-same metadata. This process queries servers, coalesces results, and distributes
-them using MPI messages.
+SIRIUS includes a metadata service called EMPRESS~\cite{lawson:pdsw17-empress},
+which is a query-able SQLite instance that stores user-defined metadata for
+bounding boxes ({\it i.e.} a 3-dimensional coordinate space).  EMPRESS is
+designed to be used at any granularity, which is especially important for a
+simulation space represented as a 3D mesh. By granularity, we mean that
+metadata access can be optimized per variable ({\it e.g.}, temperature,
+pressure, etc.), per timestamp, per run, or even per set of runs (which is
+possible but may require multiple queries).  EMPRESS is also designed to
+scale-out via additional independent instances. In this distributed case, one
+client per server queries the entire space of interest and shares results with
+other processes that may want the same metadata. This process queries servers,
+coalesces results, and distributes them using MPI messages.
 
 %So clients reading from SIRIUS will first
-%contact Empress with the queries for all data, all of 1 variable, all of a few
+%contact EMPRESS with the queries for all data, all of 1 variable, all of a few
 %variables, a plane in each dimension, an arbitrary rectangular subset, or an
-%arbitrary area on an orthogonal plane, and Empress will return a list of
+%arbitrary area on an orthogonal plane, and EMPRESS will return a list of
 %objects. Armed with this list, the client contacts the object storage system
 %(in our case this is RADOS, Ceph's object store) and reads relevant data.
 
 \begin{figure}[tb]
 \centering
   \includegraphics[width=1\linewidth]{figures/empress.png}
-  \caption{The SIRIUS project uses Empress to store metadata for bounding boxes
+  \caption{The SIRIUS project uses EMPRESS to store metadata for bounding boxes
 in a 3D torus. Bounding box coordinates and a list of object names are stored
 in SQLite. The object names are calculated using an objecter function, labeled
-\(F(x)\) above. For reads, clients query Empress for the object list before
+\(F(x)\) above. For reads, clients query EMPRESS for the object list before
 reading from the object store.}
   \label{fig:empress}
 \end{figure}
@@ -403,29 +393,14 @@ representing the object name. The global space is partitioned into
 non-overlapping, regular shaped cells.  Each row in the database is duplicated
 for each variable in the simulation because variables may have a different
 partitioning of the global space; for example temperature is computed for every
-cell while pressure is computed for ever \(n\) cells.  Figure~\ref{fig:empress}
+cell while pressure is computed for every \(n\) cells.  Figure~\ref{fig:empress}
 only has three variables, represented by the rows of boxes but most simulations
 will have a minimum of 10 variables.
 
 \subsubsection{Namespace Size}
 
-To satisfy bounding box queries, Empress lists and filters relevant coordinates
-before returning a list of (possibly overlapping) object names. The user
-usually knows which bounding boxes are of interest by tagging features at write
-time. So while the client does minimal filtering, aside from slicing objects at
-the ``edge" of the bounding box, the internal Empress implementation is
-bottlenecked by listing and filtering for coordinates \textcolor{red}{UGH is
-this true? If so the objecter fxn doesn't solve this... I think the bottleneck
-should be the cost of sending all those object names over the network!!!}
-of interest. This is a problem because of the size of the object name list.
-Listing large numbers of items in file systems is notoriously slow and studies
-on \texttt{ls} have shown the operation to be especially
-heavy-weight~\cite{carns:ipdps09-pvfs, eshel:fast10-panache}.  As currently
-designed, Empress would store too many object names while the target query
-types only request subsets of the resulting list.
-
 \emph{\# of object names}: a back-of-the-envelope calculation for the number of
-object names in the system is:
+object names for a single run is:
 \[=\frac
   {(\text{\# processes})\times
    (\text{data/process})\times
@@ -451,13 +426,31 @@ floats.  The 8MB object size is the optimal object size in RADOS.  Empirically,
 multiple application runs will increase the number of objects by a factor of
 10.
 
-\emph{Queries use a subset of object names}. When running queries characterized
-by the ``Six Patterns in HPC", Empress must exhaustively list items and
-filter the coordinates of interest.  In addition to the time it would take to
-search 1 trillion objects in SQLite, another problem is the actual storage
-footprint of storing this many items. For distributed Empress, the storage
-footprint may not be as much of an issue but the cost is network transfer as
-reads must be centralized at the designated read process on each client.
+As we integrate EMPRESS with a scalable object store, mapping bounding box
+queries to object names for data sets of this size is a problem. Clients query
+EMPRESS with bounding box coordinates\footnote{Users usually track bounding
+boxes are of interest by tagging features at write time.} and EMPRESS must
+provide the client with a list of (possibly overlapping) object names.  These
+lists can be very large when applications query multiple runs each containing
+trillions of objects.  One option is to calculate object names at write time
+and store them with the bounding box coordinates but this would result in a
+large storage footprint for a trillion objects and long transfer times for
+sending the object name list to the client.  For distributed EMPRESS, the
+storage footprint may not be as much of an issue but the trade-off is
+transferring parts of the object name list over the network as reads must be
+centralized at the designated read process on each client.  Another option in
+shown in Figure~\ref{fig:empress}; coordinates for variables (represented
+by the 3 rows of grey boxes) are stored in the database and object name
+lists are calculated using the \(F(x)\) function at read time and sent back to
+the client. This solves the storage footprint problem but not the long transfer
+times for sending the large object name list back to the client.  Even after
+receiving the object name list, the client may need to do more filtering for
+object names at the ``edge" of the feature of interest.  Clearly, another more
+scalable method is needed to transfer and filter these large object name lists.
+
+%Listing large numbers of items in file systems is notoriously slow and studies
+%on \texttt{ls} have shown the operation to be especially
+%heavy-weight~\cite{carns:ipdps09-pvfs, eshel:fast10-panache}.  
 
 \textbf{Takeaway}: SIRIUS stores trillions of objects for a single large scale
 simulation run and applications often access multiple runs. These types of
