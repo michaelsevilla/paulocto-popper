@@ -7,7 +7,10 @@ many domains, even something as distant as the mail application on a Mac. To
 highlight the scalability challenges for file system metadata management, we
 focus on large scale systems in high performance computing, high energy
 physics, and large scale simulations. Large lists represent common problems in
-each of these domains.
+each of these domains.  To make our results reproducible, this paper adheres to
+The Popper Convention~\cite{jimenez:ipdpsw17-popper} so experiments can be
+examined in more detail, or even re-run, by visiting the \texttt{[source]} link
+next to each figure. 
 
 % This discussion is irrelevant since we are focusing on namespace size/overhead
 %We benchmark over Ceph (Jewel version) with \(n\) object storage daemons
@@ -106,9 +109,12 @@ checkpoints is largely a solved problem.
 \begin{figure}[tb]
 \centering
   \includegraphics[width=1\linewidth]{figures/plfs_problem.png} 
-  \caption{For PLFS, the file system  namespace scales linearly with the number
-of clients.  This makes reading and writing difficult using RPCs so decoupled
-namespace must be used to reduce the number of RPCs.  }\label{fig:plfs_problem}
+  \caption{
+[\href{https://github.com/michaelsevilla/tintenfisch-popper/blob/master/experiments/n1/vizualize.ipynb}{source}]
+For PLFS, the file system  namespace scales linearly with the number of
+clients.  This makes reading and writing difficult using RPCs so decoupled
+namespace must be used to reduce the number of RPCs.}
+\label{fig:plfs_problem}
 \end{figure}
 
 % How does PLFS read the namespace
@@ -214,12 +220,11 @@ ingest remote data over the network.
       \caption{namespace approach}
       \label{fig:tree_hep_b}
     \end{subfigure}
-    \caption{(a) shows how the file approach for handling HEP data stores
-everything in a single ROOT file, where the client reads the header and seeks
-to metadata (LRH) and data. For ROOT files stored in distributed file systems reads will
-have amplification because the system's striping strategies are not aligned to
-Baskets. (b) shows how the namespace approach stores Baskets as files in the
-file system namespace so clients read only the data they need.}
+    \caption{(a) file approach: stores data in a single ROOT file, where
+clients read the header and seek to data/metadata (LRH); a ROOT file stored in
+a distributed file system will have read amplification because the striping
+strategies are not aligned to Baskets. (b) namespace approach: stores Baskets
+as files in the file system namespace so clients read only the data they need.}
 \end{figure}
 
 \textbf{Namespace Description}: the HEP community is running into scalability
@@ -248,7 +253,9 @@ prevents read amplification.
 \begin{figure}[tb]
 \centering
   \includegraphics[width=1\linewidth]{figures/hep_runtime.png}
-  \caption{ ``Namespace" is the runtime of reading a file per Basket and
+  \caption{ 
+[\href{https://github.com/michaelsevilla/tintenfisch-popper/blob/master/pipelines/hep/visualize/viz.ipynb}{source}]
+``Namespace" is the runtime of reading a file per Basket and
 ``File" is the runtime of reading a single ROOT file. RPCs are slower because
 of the metadata load and the overhead of pulling many objects.  Decoupling the
 namespace has less network (because only metadata and relevant Baskets get

@@ -1,5 +1,5 @@
-# paulocto-popper
-Experiments for PaulOcto.
+# tintenfisch-popper
+Experiments for Tintensfisch.
 
 ## Helping Write the Paper
 
