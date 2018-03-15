@@ -1,4 +1,5 @@
 \section{Methodology: Compact Metadata}
+\section{sec:methodology}
 
 %\begin{figure}
 %  \begin{tabular}{ r | c | c | c }
@@ -82,7 +83,10 @@ generators.  Namespace schemas and generators help clients and servers
 establish an understanding of the final file system metadata shape and size
 ({\it i.e.} a a ``generation" contract) that eliminates metadata overheads.
 
-\textbf{Namespace Schema}: describes the structure of the namespace. A
+\subsection{Namespace Schemas}
+\label{sec:namespace-schemas}
+
+Namespace schemas describes the structure of the namespace. A
 ``balanced" namespace means that subtree patterns ({\it i.e.} files per
 directory) are repeated and a ``bounded" namespace means that the range of
 file/directory names can be defined {\it a-priori}\footnote{By {\it a-priori}
@@ -192,23 +196,25 @@ out of inodes discussed.
 
 \section{Conclusion}
 
-This solves the read problems identified in the \textbf{Takeaways} in
+Namespace schemas and generators solve the read problems from
 Section~\S\ref{sec:motivating-examples} because clients and servers exchange
-namespace generators instead of the file system metadata in its entirety. This
-means clients and servers can (1) speed up metadata transfer, (2) generate only
-relevant parts of the namespace, and (3) modify large namespaces more quickly.
-The PLFS problem is addressed by (1) and the ROOT and SIRIUS problems are
-addressed by (1) and (2). All use cases benefit from (3). For PLFS, client
-processes can be dynamically added or removed by changing the input to the
-formula.  For example, if the original PLFS namespace was constructed with 1
-million processes, scaling the namespace to use 2 million processes is only a
-matter of sending a new input to the formula instead of transferring the
-metadata for 1 million additional files. For ROOT, Branches can be added to the
-namespace by changing the metadata referenced by the pointer. For SIRIUS,
-object naming can be altered by changing the logic in the code schema.  For
-example, if the objects need to be partitioned into different sized blobs, only
-the new code schema with updated stripe size logic needs to be sent to clients
-and servers instead of a list of billions of new object names.
+namespace generators instead of the file system metadata in its entirety.  This
+means clients/servers can (1) compact metadata, (2) modify large namespaces
+more quickly and (3) generate relevant parts of the namespace, and (3) modify
+large namespaces more quickly.  (1) benefits all use cases because it speeds up
+network transfers and reduces the storage footprint of metadata.  All use cases
+also benefit from (2):  PLFS client processes can be dynamically added/removed
+by changing the input to the formula so if the original namespace was
+constructed with 1 million processes, scaling to 2 million processes only
+requires sending a new input to the formula instead of transferring the
+metadata for 1 million additional files; ROOT Branches can be added to the
+namespace by changing the metadata referenced by the pointer; and SIRIUS object
+naming can be altered by changing the logic in the code schema so if the
+objects need to be partitioned into different sized blobs, only the new code
+schema with updated stripe size logic needs to be sent to clients and servers
+instead of a list of billions of new object names. SIRIUS and ROOT benefit from
+(3), where long lists are the bottleneck in scenarios where only a fraction of
+the metadata is needed to complete the job.
 
 %\subsection*{A Fresh, Unorthodox, Unexpected, Controversial, and Counterintuitive Idea}
 

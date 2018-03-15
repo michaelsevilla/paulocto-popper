@@ -48,51 +48,41 @@ administrator's ability to select the best cache size for the given workloads.
 Recent work reduces the number of RPCs to 1 without using a cache at all, by
 letting clients ``decouple" the subtrees from the global namespace so that they
 can do metadata operations locally~\cite{zheng:pdsw2015-deltafs,
-sevilla:ipdps18-cudele}.  Unfortunately, {\it even with} this technique, we
-show that the namespaces for these workloads can be very large, which is
-problematic for reads because metadata would be slow to transfer, materialize,
-and scan.
+sevilla:ipdps18-cudele}. {\it Even with} this technique, we show that file
+system metadata is still a bottleneck because namespaces for today's workloads
+can be very large. The size is problematic for reads because metadata needs to
+be transferred and materialized.
 
 % What is our solution
-We propose Tintenfisch, a file system that allows users to succinctly express
-the structure and patterns of the metadata they intend to create.  Using this
-semantic knowledge, Tintenfisch clients and servers can (1) speed up metadata
-transfer, (2) generate only relevant parts of the namespace, and (3) modify
-large namespaces more quickly. This reduces network traffic, the overall
-metadata storage footprint, and the number of metadata operations needed to
-complete a job. Figure~\ref{fig:intro} provides an architectural overview:
-clients first decouple the file system subtree they want to operate
-on\footnote{This is not a contribution as it was presented
-in~\cite{sevilla:ipdps18-cudele}.} then clients and metadata servers lazily
-generate subtrees as needed using a ``namespace generator". The namespace
-generator is stored in the root inode of the decoupled subtree and can be used
-later to efficiently merge new metadata (that was not explicitly stated up
-front) into the global namespace. %This workflow is essentially a
-%contract between clients and servers that relaxes durability and consistency
-%requirements.
-The fundamental insight is that the client and server both understand the final
-structure of the file system metadata so there is no need to communicate.  As a
-consequence, less work is done on the metadata servers and clients help process
-some of the metadata load.  The idea uses concepts from decoupled
-namespaces~\cite{zheng:pdsw2014-batchfs, zheng:pdsw2015-deltafs} and patterned
-IO~\cite{he:hpdc13-plfs-patterns} to build a scalable global namespace. 
-%The actual implementation is similar to predicate push downs in databases,
-%where structure is described to lower storage layers using XML or
-%JSON~\cite{shel:pc17-pushdown}. 
-Our contributions are as follows:
+The management techniques for file system metadata assume that namespaces have
+no structure but we observe that this is not the case for all workloads. We
+propose Tintenfisch, a file system that allows users to succinctly express the
+structure of the metadata they intend to create.  If a user can express the
+structure of the namespace, Tintenfisch clients and servers can (1) compact
+metadata, (2) modify large namespaces more quickly, and (3) generate only
+relevant parts of the namespace. This reduces network traffic, storage
+footprints, and the number of metadata operations needed to complete a job. 
+
+Figure~\ref{fig:intro} provides an architectural overview: clients first
+decouple the file system subtree they want to operate on\footnote{This is not a
+contribution as it was presented in~\cite{sevilla:ipdps18-cudele}.} then
+clients and metadata servers lazily generate subtrees as needed using a
+``namespace generator". The namespace generator is stored in the root inode of
+the decoupled subtree and can be used later to efficiently merge new metadata
+(that was not explicitly stated up front) into the global namespace.  The
+fundamental insight is that the client and server both understand the final
+structure of the file system metadata. Our contributions:
 
 \begin{itemize}
   \setlength\itemsep{-0.5em}
-
-\item analyses of namespaces in 3 domains: high performance computing,
+\item observing namespace structure in  high performance computing,
 high energy physics, and large simulations (\S\ref{sec:motivating-examples})
-
-\item define namespace schemas (\S\ref{sec:namespace-schemas}) for categorizing
-file system hierarchies and propose namespace generators
-(\S\ref{sec:namespace-generators}) to compact metadata
-
-\item a programmable storage approach that pushes user-defined functionality
-into the storage system, facilitating application-specific storage stacks
+\item based on these observations, we defined namespace schemas for
+categorizing namespaces and their amenability to compaction and generation
+(\S\ref{sec:namespace-schemas})
+\item a generalization of existing file storage system services to implement
+namespace generators that compact, modify, and generate metadata
+(\S\ref{sec:namespace-generators})
 
 \end{itemize}
 
@@ -100,9 +90,7 @@ into the storage system, facilitating application-specific storage stacks
   \centering
   \includegraphics[width=0.9\linewidth]{figures/intro.png}
   \caption{In (1), clients decouple file system subtrees and interact with
-their copies locally for high performance. In (2), clients and metadata servers
-generate subtrees using ``namespace generators", thus reducing RPC load.
+their copies locally. In (2), clients and metadata servers generate subtrees,
+reducing network/storage usage and the number of metadata operations.
 \label{fig:intro}}
 \end{figure}
-
-
