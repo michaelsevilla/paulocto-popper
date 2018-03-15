@@ -36,10 +36,12 @@ for writes to different files (N-N).  The general problem is that the
 application understands the workload but cannot communicate a solution to the
 storage system. The common solution is for the file system to expose
 configurations that describe alignment requirements but this forces application
-developers to specify ``magic numbers" for parameters like write size~\cite{bent_plfs_2009} or stripe size~\cite{behzad:sc2013-autotuning}, which are hard to find and may not even
-exist.  Another solution is to add middleware ({\it i.e.} software that sits
-between the application and the storage system) to translate the data into a
-format the storage system performs well at. 
+developers to specify ``magic numbers" for parameters like write
+size~\cite{bent_plfs_2009} or stripe size~\cite{behzad:sc2013-autotuning},
+which are hard to find and may not even exist.  Another solution is to add
+middleware ({\it i.e.} software that sits between the application and the
+storage system) to translate the data into a format the storage system performs
+well at. 
 
 %% What is the problem?
 %The problem is that the underyling file system cannot keep up with the metadata
@@ -99,40 +101,43 @@ the dashed blue line) in the Figure, representing 2 additional hosts.
 
 \subsubsection{Namespace Size}
 
-For writing a checkpoint, the number of file system metadata operations for
-\(n\) client processes is at least \(2n\).   Figure~\ref{fig:prob_reqs} shows
-the number of metadata requests serviced by the file system (\(y\)-axis) over
-time (\(x\)-axis) with inode caching turned off for three client processes.
-Each time the number of requests increases, clients are writing to a new PLFS
-file and the number of \texttt{lookup()}s is \(2\times\) the number of creates.
-For a million processes checkpointing a portion of a 3D simulation for 1000
-timestamps, the size of the namespace will be 2 billion files.
+Figure~\ref{fig:plfs_problem} scales the number of clients and plots the total
+number of files/directories (text annotations) and the number of metadata
+operations needed to write out the PLFS file (``mkdir" and ``create") and to
+read the PLFS file (``readdir" and ``open"). The number of files is \(2*n*m\)
+for \(m\) servers and \(n\) processes per server. So for a 1 million processes
+each checkpointing a portion of a 3D simulation, the size of the namespace will
+be 2 million files just for the checkpoint. RPC-based approaches like IndexFS
+have been shown to struggle with metadata loads of this size but decoupled
+namespace approaches like DeltaFS report up to 19.69 million creates per
+second, so writing checkpoints is largely a solved problem.
 
-%TODO: multiple processes per node
-%TODO: verify path traversal
 \begin{figure}[tb]
 \centering
-  \includegraphics[width=1\linewidth]{figures/prob_reqs.png} 
-  \caption{TODO: Change this GRAPH!. The requests scale linearly with the
-number of clients.  \texttt{lookup()} requests dominate because clients share
-the root and must do path traversal.  }\label{fig:prob_reqs}
+  \includegraphics[width=1\linewidth]{figures/plfs_problem.png} 
+  \caption{For PLFS, the file system  namespace scales linearly with the number
+of clients.  This makes reading and writing difficult using RPCs so decoupled
+namespace must be used to reduce the number of RPCs.  }\label{fig:plfs_problem}
 \end{figure}
 
 % How does PLFS read the namespace
 For reading a checkpoint, clients must coalesce index files to reconstruct the
-logical PLFS file. So for every physical file, the metadata server services a
-\texttt{lookup()} and \texttt{open()} request. Current efforts improve read
-scalability by reducing the space overhead of index
+PLFS file. Figure~\ref{fig:tree_plfs} shows that the read metadata requests
+(``readdir" and ``open") outnumber the create requests by about a factor of
+\(4\times\) making RPCs even more untenable. Unfortunately, if the checkpoint
+had been written with the decoupled namespace approach, file system metadata
+would be scattered across servers (either clients or servers) so metadata would
+need to be coalesced before restarting the checkpoint.  Current efforts improve
+read scalability by reducing the space overhead of index
 files~\cite{he:hpdc13-plfs-patterns} and transferring index files after each
 write~\cite{grider:pc17-diddlings} but these approaches do not reduce the file
 system metadata load and reading the index files still requires multiple RPCs.
 
 \textbf{Takeaway}: the PLFS namespace scales with the number of client
-processes so RPCs would overwhelm the metadata server with metadata requests. 
-Decoupling the namespace helps parallelize writing checkpoints but
-the size of the namespace makes reads problematic; when restarting checkpoints,
-index files need to be coalesced so performance will be bottlenecked by the
-speed of transferring metadata updates across the network.
+processes so RPCs are not an option for reading or writing.  Decoupling the
+namespace helps writes but then the read performance is limited by the speed of
+transferring file system metadata across the network because metadata is
+coalesced at the reading client.
 
 \subsection{High Energy Physics: ROOT}
 
@@ -263,13 +268,12 @@ files. To quantify (2), we benchmark a simple ROOT workload over CephFS.
 \begin{figure}[tb]
 \centering
   \includegraphics[width=1\linewidth]{figures/hep_runtime.png}
-  \caption{The ``File" bars show the runtime of storing HEP data as a single
-ROOT file and the ``Namespace" bars show the runtime of storing a file per
-Basket. The baseline is the runtime of ``ext4" on a single node, ``RADOS" is
-reading HEP data as a Ceph object, and ``CephFS" is reading HEP data as files
-in a CephFS mount. ``CephFS" is far slower because of the file system metadata
-load.}
-  \label{fig:hep_runtime}
+  \caption{ ``Namespace" shows the runtime of storing a file per Basket and
+``File" shows the runtime of storing data as a single ROOT file. RPCs are
+slower because of the metadata load and because many small objects are pulled.
+Decoupling the namespace has less network (because only metadata and relevant
+Baskets get transferred) but the benefit is offset by the cost of materializing
+the namespace.} \label{fig:hep_runtime}
 \end{figure}
 
 %%\begin{figure}[t]
@@ -314,35 +318,39 @@ Basket number are used to traverse the file system namespace.
 %is user 20's age).  
 
 The read and write performance for the different approaches are shown in
-Figure~\ref{fig:hep_runtime}, where the \(x\)-axis is different storage
-backends, the \(y\)-axis is runtime, and the error bars are the standard
-deviations for six runs. Compared to the single node baseline (ext4), the
-namespace approach on CephFS is \(16.8\times\) slower. 
-%The reason is shown in
-%Figure~\ref{fig:hep_problem}. The file system metadata accesses, characterized
-%by many \texttt{open()} requests, incur many RPCs. This causes worse
-%performance and lower client CPU utilization compared to reading a single ROOT
-%file.  So the cost of read amplification in the file approach is offset by the
-%cost of doing namespace operations. For this experiment, the ROOT file is 1.7GB
-%and 65\% of the file is accessed so the namespace approach might be more
-%scalable for different workloads.\\
+Figure~\ref{fig:hep_runtime}, where the \(x\)-axis is approaches for storing
+ROOT data, the \(y\)-axis is runtime, and the error bars are the standard
+deviations for six runs. Using the namespace approach with RPCs is far slower
+because of the metadata load and because many small objects are pulled over the
+network. Although the file approach reads more data than is necessary since the
+stripe size of the file is not aligned to Baskets, the runtime is still
+\(16.6\times\) faster. Decoupling the namespace is much faster for the
+namespace approach but the cost of materializing file system metadata makes it
+slower than the file approach. 
 
-\textbf{Takeaway}: the ROOT namespace stores billions of files so RPCs would
-overwhelm the metadata server with metadata requests. Decoupling the namespace
-helps parallelize writing Baskets into the ROOT namespace but the size of the
-namespace makes reads problematic; when reading Branches, clients need to pull
-metadata so performance will be bottlenecked by the speed of transferring
-metadata. Also, only a fraction of the Baskets need to be read so performance
-will be bottlenecked by the cost of materializing and scanning parts of the
-namespace that are not relevant to the workload.
+%The reason is shown in Figure~\ref{fig:hep_problem}. The file system metadata
+%accesses, characterized by many \texttt{open()} requests, incur many RPCs.
+%This causes worse performance and lower client CPU utilization compared to
+%reading a single ROOT file.  So the cost of read amplification in the file
+%approach is offset by the cost of doing namespace operations. For this
+%experiment, the ROOT file is 1.7GB and 65\% of the file is accessed so the
+%namespace approach might be more scalable for different workloads.\\
+
+\textbf{Takeaway}: the ROOT namespace stores billions of files and we show that
+RPCs overwhelm a centralized metadata server. Decoupling the namespace helps
+writes but then the read performance is limited by the speed of transferring
+file system metadata across the network as clients read Baskets.  Read
+performance is also limited by the cost of materializing and scanning parts of
+the namespace that are not relevant to the workload.
 
 \subsection{Large Scale Simulations: SIRIUS}
 
 SIRIUS~\cite{klasky:journal16-sirius} is the Exascale storage system being
-designed for the Storage System and I/O (SSIO) initiative~\cite{ross:report14-ssio}. The core tenant of
-the SIRIUS project is application hints that allow the storage to reconfigure
-itself for higher performance. Techniques include tiering, management policies,
-data layout, quality of service, and load balancing. 
+designed for the Storage System and I/O (SSIO)
+initiative~\cite{ross:report14-ssio}. The core tenant of the SIRIUS project is
+application hints that allow the storage to reconfigure itself for higher
+performance. Techniques include tiering, management policies, data layout,
+quality of service, and load balancing. 
 
 \subsubsection{System Architecture}
 
@@ -452,11 +460,8 @@ footprint may not be as much of an issue but the cost is network transfer as
 reads must be centralized at the designated read process on each client.
 
 \textbf{Takeaway}: the SIRIUS storage system stores billions of names so RPCs
-would overwhelm the metadata service.  Decoupling the namespace helps
-parallelize writing bounding boxes of the 3D torus but the size of the
-namespace makes reads problematic. When constructing the metadata for a
-bounding box, the distributed version of Empress coalesces metadata from many
-servers so performance will be bottlenecked by the speed of transferring
-metadata. Also, only a fraction of the domain-specific metadata needs to be
-read so performance will be bottlenecked by the cost of materializing and
-scanning parts of the namespace that are not relevant to the workload.
+would overwhelm the metadata service.  Decoupling the namespace helps writes
+but then the read performance is limited by the speed of transferring file
+system metadata over the network as clients coalesce metadata. Read performance
+is also limited by materializing and scanning parts of the namespace that are
+not relevant to the workload.
