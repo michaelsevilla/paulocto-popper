@@ -1,7 +1,7 @@
-\vspace{-0.5em}
+\vspace{-0.75em}
 \section{Motivating Examples}
 \label{sec:motivating-examples}
-\vspace{-0.5em}
+\vspace{-0.75em}
 
 We look at the namespaces of 3 applications.  Each is from different domains
 and this list is not meant to be exhaustive.  To highlight the scalability
@@ -50,10 +50,10 @@ used to reduce the number of RPCs.}
 \end{figure*}
 
 
-\vspace{-0.5em}
+\vspace{-0.75em}
 \subsection{High Performance Computing: PLFS}
 \label{sec:plfs}
-\vspace{-0.5em}
+\vspace{-0.75em}
 
 % What is the problem the authors are trying to solve?
 Checkpointing performs small writes to a single shared file but because file
@@ -147,10 +147,10 @@ namespace helps writes but then the read performance is limited by the speed of
 transferring file system metadata across the network to the reading client {\it
 in addition} to reading the contents of the index files themselves.
 
-\vspace{-0.5em}
+\vspace{-0.75em}
 \subsection{High Energy Physics: ROOT}
 \label{sec:hep}
-\vspace{-0.5em}
+\vspace{-0.75em}
 
 % the data
 The High Energy Physics (HEP) community uses a framework called ROOT to
@@ -348,9 +348,9 @@ writes but then the read performance is limited by (1) the speed of
 transferring file system metadata across the network and (2) the cost of
 materializing parts of the namespace that are not relevant to the workload.
 
-\vspace{-0.5em}
+\vspace{-0.75em}
 \subsection{Large Scale Simulations: SIRIUS}
-\vspace{-0.5em}
+\vspace{-0.75em}
 
 SIRIUS~\cite{klasky:journal16-sirius} is the Exascale storage system being
 designed for the Storage System and I/O (SSIO)
@@ -386,19 +386,19 @@ return a list of object names to the client}
   \label{fig:empress}
 \end{figure}
 
-\textbf{Namespace Description}: the database has columns for the application
-ID, run ID, timestamp, variable name, feature name, and bounding box
-coordinates.  The global space is partitioned into non-overlapping, regular
-shaped cells.  Each row in the database is duplicated for each variable in the
-simulation because variables may have a different partitioning of the global
-space; for example temperature is computed for every cell while pressure is
-computed for every \(n\) cells.  Figure~\ref{fig:empress} only has three
-variables, represented by the rows of boxes but most simulations will have a
-minimum of 10 variables.
+\textbf{Namespace Description}: the global space is partitioned into
+non-overlapping, regular shaped cells.  The EMPRESS database has columns for
+the application ID, run ID, timestamp, variable name, feature name, and
+bounding box coordinates for these cells. Users can also add custom-defined
+metadata.  The namespace we are referring to here is the list of objects
+containing simulation data associated to a bounding box (or row in the
+database).  Variables affect how the space is partitioned into objects;
+temperature may be computed for every cell while pressure is computed for every
+\(n\) cells. For most simulations, there are a minimum of 10 variables. 
 
 \textbf{Namespace Size}: a back-of-the-envelope calculation for the number of
 object names for a single run is:
-\vspace{-0.5em}
+\vspace{-0.75em}
 \[\frac
   {(\text{processes})\times
    (\text{data/process})\times
@@ -406,7 +406,7 @@ object names for a single run is:
    (\text{timesteps})}
   {(\text{object size})}
 \]
-\vspace{-0.5em}
+\vspace{-0.75em}
 %\[=\frac
 %  {(1*10^6)\times
 %   (8*10^{9})\times
