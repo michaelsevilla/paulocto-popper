@@ -358,16 +358,18 @@ initiative~\cite{ross:report14-ssio}. The core tenant of the project is
 application hints that allow the storage to reconfigure itself for higher
 performance using techniques like tiering, management policies, data layout,
 quality of service, and load balancing.  SIRIUS uses a metadata service called
-EMPRESS~\cite{lawson:pdsw17-empress}, which is an SQLite instance
-that stores user-defined metadata for bounding boxes ({\it i.e.} a
-3-dimensional coordinate space).  EMPRESS is designed to be used at any
-granularity, which is important for a simulation space represented as a 3D
-mesh. By granularity, we mean that metadata access can be optimized per
-variable ({\it e.g.}, temperature, pressure, etc.), per timestamp, per run, or
-even per set of runs (which may require multiple queries).  EMPRESS is also
-designed to scale-out via additional independent instances, where one client
-per node queries the entire space of interest by contacting EMPRESS servers,
-coalesces results, and distributes them using MPI messages.
+EMPRESS~\cite{lawson:pdsw17-empress}, which is an SQLite instance that stores
+user-defined metadata for bounding boxes ({\it i.e.} a 3-dimensional coordinate
+space).  EMPRESS is designed to be used at any granularity, which is important
+for a simulation space represented as a 3D mesh. By granularity, we mean that
+metadata access can be optimized per variable ({\it e.g.}, temperature,
+pressure, etc.), per timestamp, per run, or even per set of runs (which may
+require multiple queries).  At this time, EMPRESS is single node but it is
+designed to scale-out via additional independent instances.
+
+%, where one client
+%per node queries the entire space of interest by contacting EMPRESS servers,
+%coalesces results, and distributes them using MPI messages.
 
 %So clients reading from SIRIUS will first
 %contact EMPRESS with the queries for all data, all of 1 variable, all of a few
@@ -379,10 +381,10 @@ coalesces results, and distributes them using MPI messages.
 \begin{figure}[tb]
 \centering
   \includegraphics[width=0.8\linewidth]{figures/empress.png}
-  \caption{SIRIUS uses EMPRESS to store metadata for bounding boxes in a 3D
-torus. Coordinates and user-defined metadata are stored in SQLite and object
-names are calculated using a partitioning function (\(F(x)\)). One approach is to
-return a list of object names to the client}
+  \caption{One potential EMPRESS design for storing bounding box metadata.
+Coordinates and user-defined metadata are stored in SQLite while object names
+are calculated using a partitioning function (\(F(x)\)) and returned as a list
+of object names to the client.}
   \label{fig:empress}
 \end{figure}
 
@@ -398,7 +400,6 @@ temperature may be computed for every cell while pressure is computed for every
 
 \textbf{Namespace Size}: a back-of-the-envelope calculation for the number of
 object names for a single run is:
-\vspace{-0.75em}
 \[\frac
   {(\text{processes})\times
    (\text{data/process})\times
@@ -406,7 +407,6 @@ object names for a single run is:
    (\text{timesteps})}
   {(\text{object size})}
 \]
-\vspace{-0.75em}
 %\[=\frac
 %  {(1*10^6)\times
 %   (8*10^{9})\times
@@ -421,25 +421,22 @@ We calculate \(1*10^{12}\) (1 trillion) objects for a simulation space of
 use 1 million processes, each writing 8GB of data for 10 variables over 100
 timesteps and an object size of 8MB (the optimal object size of Ceph's object
 store).  The data per process and number of variables are scaled to be about
-1/10 of each processes local storage space, so about 80GB. 100 timesteps is
+1/10 of each process's local storage space, so about 80GB. 100 timesteps is
 close to 1 timestep every 15 minutes for 24 hours. 
 
 As we integrate EMPRESS with a scalable object store, mapping bounding box
 queries to object names for data sets of this size is a problem. Clients query
 EMPRESS with bounding box coordinates\footnote{Users usually track bounding
 boxes of interest by tagging features at write time.} and EMPRESS must provide
-the client with a list of (possibly overlapping) object names.  These lists can
-be very large when applications query multiple runs each containing trillions
-of objects.  One option is to calculate object names at write time and store
-them with bounding box coordinates but this would result in a large storage
-footprint and long transfer times for sending the object name list to the
-client.  Another option is shown in Figure~\ref{fig:empress}; coordinates for
-variables (rows of gray boxes) are stored in the database and object name lists
-are calculated using the \(F(x)\) partitioning function at read time and sent
-back to the client. This solves the storage footprint problem but not the long
-transfer times.  Even after receiving the object name list, the client may need
-to do more filtering for object names at the ``edge" of the feature of
-interest.
+the client with a list of object names.  One potential design is shown in
+Figure~\ref{fig:empress}; coordinates for variables are stored in the database
+and object name lists are calculated using the \(F(x)\) partitioning function
+at read time.  The problem is that object name lists can be very large when
+applications query multiple runs each containing trillions of objects,
+resulting in long transfer times as the metadata is sent back to the client.
+Even after receiving the object name list, the client may need to manage and
+traverse the list, doing things like filtering for object names at the ``edge"
+of the feature of interest.
 
 %For distributed EMPRESS, the storage footprint may not be as much
 %of an issue but the trade-off is transferring parts of the object name list

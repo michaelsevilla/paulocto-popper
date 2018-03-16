@@ -21,10 +21,10 @@
 local box require 'box2d'
 for i=_x,_x+x do for j=_y,_y+y do
   if t>30 then 
-    obj_list.append(box(x,y,z))
+    obj_list.insert(box(x,y,z))
   else 
     b0,b1,b2,=box.nsplit(4)
-    obj_list.append(b0,b1,b2)
+    obj_list.insert(b0,b1,b2)
 end end end 
 return obj_list
      \end{minted}
