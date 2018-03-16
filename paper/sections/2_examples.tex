@@ -45,7 +45,7 @@ each figure.
 and predictable; the pattern (solid line) is repeated for each hosts. In this
 case, there are three hosts so the pattern is repeated two more times. (b)
 shows that the namespace scales linearly with the number of clients.  This
-makes reading and writing difficult using RPCs so decoupled namespace must be
+makes reading and writing difficult using RPCs so decoupled subtrees must be
 used to reduce the number of RPCs.}
 \end{figure*}
 
@@ -119,7 +119,7 @@ number of files is \(2\times(\text{\# of processes})\).  So for 1 million
 processes each checkpointing a portion of a 3D simulation, the size of the
 namespace will be 2 million files.  RPC-based approaches like
 IndexFS~\cite{ren:sc2014-indexfs} have been shown to struggle with metadata
-loads of this size but decoupled namespace approaches like
+loads of this size but decoupled subtree approaches like
 DeltaFS~\cite{zheng:pdsw2015-deltafs} report up to 19.69 million creates per
 second, so writing checkpoints is largely a solved problem.
 
@@ -134,7 +134,7 @@ decoupled namespace approach, file system metadata would be scattered across
 clients so metadata would need to be coalesced before restarting the
 checkpoint. If the metadata had already been coalesced at some point they would
 still need to be transferred to the client. Regardless, both decoupled
-namespace scenarios require moving and materializing the file system namespace.
+subtree scenarios require moving and materializing the file system subtree.
 Current efforts improve read scalability by reducing the space overhead of the
 index files themselves~\cite{he:hpdc13-plfs-patterns} and transferring index
 files after each write~\cite{grider:pc17-diddlings} but these approaches target
