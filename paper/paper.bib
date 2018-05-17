@@ -1,3 +1,23 @@
+@inproceedings{sevilla:ccgrid18-parsplice,
+	title={{{Programmable Caches with a Data Management Language and Policy Engine}}},
+	author={Sevilla, Michael A. and Maltzahn, Carlos and Alvaro, Peter and Nasirigerdeh, Reza and Settlemyer, Bradley W. and Perez, Danny and Rich, David and Shipman, Galen M.},
+	booktitle={Proceedings of the International Symposium on Cluster, Cloud and Grid Computing},
+	year={2018},
+	Series={CCGrid '18},
+}
+
+@inproceedings {sevilla:hotstorage18-tintenfisch,
+  author={Sevilla, Michael A. and Nasirigerdeh, Reza and Maltzahn, Carlos and LeFevre, Jeff and Watkins, Noah and Alvaro, Peter and Lawson, Margaret and Lofstead, Jay and Pivarski, Jim},
+  title = {{{Tintenfisch: File System Namespace Schemas and Generators}}},
+  booktitle = {Proceedings of the 10th {USENIX} Workshop on Hot Topics in Storage and File Systems},
+  year = {2018},
+  series = {HotStorage '18},
+}
+  address = {Santa Clara, CA},
+  url = {https://www.usenix.org/conference/hotstorage17/program/presentation/gatla},
+  publisher = {{USENIX} Association},
+}
+
 @inproceedings{sevilla:eurosys17-malacology,
 	title={{M}alacology: {A} {P}rogrammable {S}torage {S}ystem},
 	author={Sevilla, Michael A. and Watkins, Noah and Jimenez, Ivo and Alvaro, Peter and Finkelstein, Shel and LeFevre, Jeff and Maltzahn, Carlos},
@@ -18,7 +38,8 @@
 @inproceedings{jenkins:ipdsw17-mochi,
 	author    = {John Jenkins and Galen M. Shipman and Jamaludin Mohd{-}Yusof and Kipton Barros and Philip H. Carns and Robert B. Ross},
 	title     = {{A} {C}ase {S}tudy in {C}omputational {C}aching {M}icroservices for {HPC}},
-	booktitle = {{IPDPS} Workshops},
+        booktitle = {{{Proceedings of the International Parallel and Distributed Processing Symposium Workshop}}},
+        series = {IPDPSW '17},
 	year      = {2017}
 }
 	pages     = {1309--1316},
@@ -956,8 +977,10 @@
 
 @article{lamport_parttime_1998,
  author = {Lamport, Leslie},
- title = {The Part-time Parliament},
- journal = {ACM Trans. Comput. Syst.},
+ title = {{{The Part-time Parliament}}},
+ journal = {ACM Transactions Computer Systems},
+ year = {1988},
+}
  issue_date = {May 1998},
  volume = {16},
  number = {2},
@@ -1130,8 +1153,8 @@
   booktitle = {{{Proceedings of the Conference on Innovative Data Systems Research}}},
   author = {Herodotou, H. and Lim, H. and Luo, G. and Borisov, N. and Dong, L. and Cetin, F.B. and Babu, S.},
   series = {CIDR '11}
+  year = {2011}
 }
-  date = {2011}
 
 @article{foster_globus_1997,
   title = {Globus: a {{Metacomputing Infrastructure Toolkit}}},
@@ -1273,7 +1296,7 @@
 @inproceedings{ananthanarayanan_pacman_2012,
   title = {{{PACMan}}: coordinated memory caching for parallel jobs},
   booktitle = {Proceedings of the 9th {{USENIX}} conference on {{Networked Systems Design}} and {{Implementation}}},
-  series = {NSDI'12},
+  series = {NSDI '12},
   author = {Ananthanarayanan, Ganesh and Ghodsi, Ali and Wang, Andrew and Borthakur, Dhruba and Kandula, Srikanth and Shenker, Scott and Stoica, Ion},
   date = {2012}
 }
@@ -1685,12 +1708,14 @@
   date = {2002-01},
 }
 
-@report{jimenez_tackling_2015,
+@techreport{jimenez_tackling_2015,
+  type = {Technical Report},
   title = {Tackling the {{Reproducibility Problem}} in {{Systems Research}} with {{Declarative Experiment Specifications}}},
-  institution = {{UC Santa Cruz}},
-  type = {Technical {{Report}}},
+  number = {UCSC-SOE-15-07},
+  institution = {UC Santa Cruz},
   author = {Jimenez, Ivo and Maltzahn, Carlos and Moody, Adam and Mohror, Kathryn and Arpaci-Dusseau, Andrea and Arpaci-Dusseau, Remzi},
-  date = {2015}
+  year = {2015},
+  month = {May},
 }
 
 @book{bryla_oracle_2004,
@@ -1951,9 +1976,10 @@
 
 @inproceedings{shvachko_hadoop_2010,
   title = {The {{Hadoop Distributed File System}}},
-  booktitle = {Mass {{Storage Systems}} and {{Technologies}} ({{MSST}}), 2010 {{IEEE}} 26th {{Symposium}} on},
+  booktitle = {Proceedings of the 26th {{Symposium}} on Mass {{Storage Systems}} and {{Technologies}}},
   author = {Shvachko, K. and Kuang, Hairong and Radia, S. and Chansler, R.},
-  date = {2010-05}
+  series = {MSST '10},
+  year = {2010}
 }
 
 @article{liu_performance_1998,
@@ -2370,7 +2396,7 @@
 @inproceedings{beaver_finding_2010,
   title = {Finding a needle in {{Haystack}}: facebook's photo storage},
   booktitle = {Proceedings of the 9th {{USENIX}} conference on {{Operating}} systems design and implementation},
-  series = {OSDI'10},
+  series = {OSDI '10},
   author = {Beaver, Doug and Kumar, Sanjeev and Li, Harry C. and Sobel, Jason and Vajgel, Peter},
   date = {2010}
 }
@@ -2777,6 +2803,7 @@
   booktitle = {Proceedings of the {{Conference}} on {{High Performance Computing Networking}}, {{Storage}} and {{Analysis}}},
   series = {SC '09},
   author = {Bent, John and Gibson, Garth and Grider, Gary and McClelland, Ben and Nowoczynski, Paul and Nunez, James and Polte, Milo and Wingate, Meghan},
+  year = {2009},
 }
   date = {2009}dd
 
@@ -2897,11 +2924,11 @@
 }
 
 @inproceedings{hunt_zookeeper_2010,
-  title = {{{ZooKeeper}}: wait-free coordination for internet-scale systems},
-  booktitle = {Proceedings of the 2010 {{USENIX}} conference on {{USENIX}} annual technical conference},
-  series = {USENIXATC'10},
+  title = {{{ZooKeeper: Wait-free Coordination for Internet-scale Systems}}},
+  booktitle = {Proceedings of the {{USENIX}} Annual Technical Conference},
+  series = {ATC '10},
   author = {Hunt, Patrick and Konar, Mahadev and Junqueira, Flavio P. and Reed, Benjamin},
-  date = {2010}
+  year = {2010}
 }
 
 @inproceedings{moody_design_2010,
@@ -2930,8 +2957,9 @@
 
 @inproceedings{wang_supporting_2013,
   title = {Supporting a {{Light-Weight Data Management Layer}} over {{HDF5}}},
-  booktitle = {2013 13th {{IEEE}}/{{ACM International Symposium}} on {{Cluster}}, {{Cloud}} and {{Grid Computing}} ({{CCGrid}})},
+  booktitle = {Proceedings of the 13th {{IEEE}}/{{ACM International Symposium}} on {{Cluster}}, {{Cloud}} and {{Grid Computing}}},
   author = {Wang, Yi and Su, Yu and Agrawal, Gagan},
+  series = {CCGrid '13},
   date = {2013}
 }
 
@@ -3029,7 +3057,7 @@
 @inproceedings{li_reprolite_2014,
   title = {{{ReproLite}}: {{A Lightweight Tool}} to {{Quickly Reproduce Hard System Bugs}}},
   booktitle = {Proceedings of the {{ACM Symposium}} on {{Cloud Computing}}},
-  series = {SOCC '14},
+  series = {SoCC '14},
   author = {Li, Kaituo and Joshi, Pallavi and Gupta, Aarti and Ganai, Malay K.},
   date = {2014}
 }
@@ -3043,12 +3071,13 @@
 }
 
 @inproceedings{riedel:vldb98,
-	Address = {New York, NY},
 	Author = {Erik Riedel and Garth A. Gibson and Christos Faloutsos},
-	Booktitle = {24th international Conference on Very Large Databases (VLDB '98)},
-	Title = {Active Storage For Large-Scale Data Mining and Multimedia},
-	Year = {1998}}
-
+	Booktitle = {Proceedings of the 24th international Conference on Very Large Databases},
+        Series = {VLDB '98},
+	Title = {{{Active Storage For Large-Scale Data Mining and Multimedia}}},
+	Year = {1998}
+}
+	Address = {New York, NY},
 @article{riedel_active_2001,
   title = {Active disks for large-scale data processing},
   volume = {34},
@@ -3120,12 +3149,11 @@
 
 @inproceedings{hindman_mesos_2011,
   title = {Mesos: {{A Platform}} for {{Fine}}-grained {{Resource Sharing}} in the {{Data Center}}},
-  booktitle = {Proceedings of the {{Conference}} on {{Networked Systems Design}} and {{Implementation}}},
+  booktitle = {Proceedings of the 8th {{USENIX Conference}} on {{Networked Systems Design}} and {{Implementation}}},
   series = {NSDI '11},
   author = {Hindman, Benjamin and Konwinski, Andy and Zaharia, Matei and Ghodsi, Ali and Joseph, Anthony D. and Katz, Randy and Shenker, Scott and Stoica, Ion},
+  year = {2011}
 }
-  date = {2011}
-  booktitle = {Proceedings of the 8th {{USENIX Conference}} on {{Networked Systems Design}} and {{Implementation}}},
 
 @article{borkar_declarative_2012,
   title = {Declarative {{Systems}} for {{Large-Scale Machine Learning}}},
@@ -3678,9 +3706,9 @@
 @inproceedings{sinnamohideen_transparentlyscalable_2010,
   title = {A {{Transparently}}-scalable {{Metadata Service}} for the {{Ursa Minor Storage System}}},
   booktitle = {Proceedings of the 2010 {{USENIX Conference}} on {{USENIX Annual Technical Conference}}},
-  series = {USENIXATC'10},
+  series = {ATC '10},
   author = {Sinnamohideen, Shafeeq and Sambasivan, Raja R. and Hendricks, James and Liu, Likun and Ganger, Gregory R.},
-  date = {2010}
+  year = {2010},
 }
 
 @article{braunstein_improving_1989,
@@ -3742,7 +3770,7 @@
 @inproceedings{zaharia_discretized_2012,
   title = {Discretized streams: an efficient and fault-tolerant model for stream processing on large clusters},
   booktitle = {Proceedings of the 4th {{USENIX}} conference on {{Hot Topics}} in {{Cloud Ccomputing}}},
-  series = {HotCloud'12},
+  series = {HotCloud '12},
   author = {Zaharia, Matei and Das, Tathagata and Li, Haoyuan and Shenker, Scott and Stoica, Ion},
   date = {2012}
 }
@@ -3820,7 +3848,7 @@
 @inproceedings{zaharia_resilient_2012,
   title = {Resilient distributed datasets: a fault-tolerant abstraction for in-memory cluster computing},
   booktitle = {Proceedings of the 9th {{USENIX}} conference on {{Networked Systems Design}} and {{Implementation}}},
-  series = {NSDI'12},
+  series = {NSDI '12},
   author = {Zaharia, Matei and Chowdhury, Mosharaf and Das, Tathagata and Dave, Ankur and Ma, Justin and McCauley, Murphy and Franklin, Michael J. and Shenker, Scott and Stoica, Ion},
   date = {2012}
 }
@@ -3992,7 +4020,7 @@
 
 @inproceedings{shahzad_evaluation_2013,
   title = {An {{Evaluation}} of {{Different I}}/{{O Techniques}} for {{Checkpoint}}/{{Restart}}},
-  booktitle = {Proceedings of the 2013 {{IEEE}} 27th {{International Symposium}} on {{Parallel}} and {{Distributed Processing Workshops}} and {{PhD Forum}}},
+  booktitle = {Proceedings of the {{IEEE}} 27th {{International Symposium}} on {{Parallel}} and {{Distributed Processing Workshops}} and {{PhD Forum}}},
   series = {IPDPSW '13},
   author = {Shahzad, Faisal and Wittmann, Markus and Zeiser, Thomas and Hager, Georg and Wellein, Gerhard},
   date = {2013}
@@ -4061,8 +4089,8 @@
   booktitle = {{{Proceedings of the International Parallel and Distributed Processing Symposium Workshop}}},
   author = {Jimenez, Ivo and Sevilla, Michael A. and Watkins, Noah and Maltzahn, Carlos and Lofstead, Jay and Mohror, Kathryn and Arpaci-Dusseau, Andrea and Arpaci-Dusseau, Remzi},
   series = {IPDPSW '17},
-}
   year = {2017}
+}
 
 @article{malkhi_paxos_2012,
   title = {From paxos to {{CORFU}}: a flash-speed shared log},
@@ -4232,7 +4260,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{moh_timeline_2004,
   title = {Timeline: {{A High Performance Archive}} for a {{Distributed Object Store}}},
   booktitle = {Proceedings of the 1st {{Conference}} on {{Symposium}} on {{Networked Systems Design}} and {{Implementation}} - {{Volume}} 1},
-  series = {NSDI'04},
+  series = {NSDI '04},
   author = {Moh, Chuang-Hue and Liskov, Barbara},
   date = {2004}
 }
@@ -4390,11 +4418,12 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 
 @inproceedings{burrows_chubby_2006,
   title = {The {{Chubby Lock Service}} for {{Loosely-Coupled Distributed Systems}}},
-  booktitle = {Proceedings of the 7th symposium on {{Operating}} systems design and implementation},
+  booktitle = {Proceedings of the 7th USENIX Symposium on {{Operating}} Systems Design and Implementation},
   series = {OSDI '06},
   author = {Burrows, Mike},
-  date = {2006-11}
+  year = {2006},
 }
+  date = {2006-11}
 
 @inproceedings{wang_scimate_2012,
   title = {{{SciMATE}}: {{A Novel MapReduce-Like Framework}} for {{Multiple Scientific Data Formats}}},
@@ -4756,7 +4785,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{aguilera_olive_2006,
   title = {Olive: {{Distributed Point}}-in-time {{Branching Storage}} for {{Real Systems}}},
   booktitle = {Proceedings of the 3rd {{Conference}} on {{Networked Systems Design}} \& {{Implementation}} - {{Volume}} 3},
-  series = {NSDI'06},
+  series = {NSDI '06},
   author = {Aguilera, Marcos K. and Spence, Susan and Veitch, Alistair},
   date = {2006}
 }
@@ -5118,7 +5147,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{liu_declarative_2011,
   title = {Declarative {{Automated Cloud Resource Orchestration}}},
   booktitle = {Proceedings of the {{2Nd ACM Symposium}} on {{Cloud Computing}}},
-  series = {SOCC '11},
+  series = {SoCC '11},
   author = {Liu, Changbin and Loo, Boon Thau and Mao, Yun},
   date = {2011}
 }
@@ -5389,7 +5418,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 
 @inproceedings{rajachandrasekar_1_2013,
   title = {A 1 {{PB}}/s {{File System}} to {{Checkpoint Three Million MPI Tasks}}},
-  booktitle = {Proceedings of the {{22Nd International Symposium}} on {{High}}-performance {{Parallel}} and {{Distributed Computing}}},
+  booktitle = {Proceedings of the {{22nd International Symposium}} on {{High}}-performance {{Parallel}} and {{Distributed Computing}}},
   series = {HPDC '13},
   author = {Rajachandrasekar, Raghunath and Moody, Adam and Mohror, Kathryn and Panda, Dhabaleswar K. (DK)},
   date = {2013}
@@ -6009,7 +6038,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{sfakianakis_vanguard_2014,
   title = {Vanguard: {{Increasing Server Efficiency}} via {{Workload Isolation}} in the {{Storage I}}/{{O Path}}},
   booktitle = {Proceedings of the {{ACM Symposium}} on {{Cloud Computing}}},
-  series = {SOCC '14},
+  series = {SoCC '14},
   author = {Sfakianakis, Yannis and Mavridis, Stelios and Papagiannis, Anastasios and Papageorgiou, Spyridon and Fountoulakis, Markos and Marazakis, Manolis and Bilas, Angelos},
   date = {2014}
 }
@@ -6181,7 +6210,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{gunawi_fate_2011,
   title = {{{FATE}} and {{DESTINI}}: {{A Framework}} for {{Cloud Recovery Testing}}},
   booktitle = {Proceedings of the 8th {{USENIX Conference}} on {{Networked Systems Design}} and {{Implementation}}},
-  series = {NSDI'11},
+  series = {NSDI '11},
   author = {Gunawi, Haryadi S. and Do, Thanh and Joshi, Pallavi and Alvaro, Peter and Hellerstein, Joseph M. and Arpaci-Dusseau, Andrea C. and Arpaci-Dusseau, Remzi H. and Sen, Koushik and Borthakur, Dhruba},
   date = {2011}
 }
@@ -6237,9 +6266,9 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
    booktitle = {Proceedings of the Conference on High Performance Computing, Networking, Storage and Analysis},
    author = {Tran, Nancy and Reed, Daniel A.},
    series = {SC '01},
+   year = {2001},
 }
    booktitle = {AProceedings of the 15th International Conference on Supercomputing},
-   year = {2001},
    isbn = {1-58113-410-X},
    location = {Sorrento, Italy},
    pages = {473--485},
@@ -6643,7 +6672,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{zhang_optimizing_2012,
   title = {Optimizing data shuffling in data-parallel computation by understanding user-defined functions},
   booktitle = {Proceedings of the 9th {{USENIX}} conference on {{Networked Systems Design}} and {{Implementation}}},
-  series = {NSDI'12},
+  series = {NSDI '12},
   author = {Zhang, Jiaxing and Zhou, Hucheng and Chen, Rishan and Fan, Xuepeng and Guo, Zhenyu and Lin, Haoxiang and Li, Jack Y. and Lin, Wei and Zhou, Jingren and Zhou, Lidong},
   date = {2012}
 }
@@ -7393,8 +7422,8 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   volume = {1},
   author = {Watson, James D. and Baker, Tania A. and Bell, Stephen P. and Gann, Alexander and Levine, Michael and Losick, Richard and Cshlp, Inglis},
   date = {2004-01},
-  note = {** **Though completely up-to-date with the latest research advances, the **Sixth Edition **of James D. Watson’s classic book, **Molecular Biology of the Gene **retains the distinctive character of earlier editions that has made it the most widely used book in molecular biology. Twenty-two concise chapters, co-authored by six highly respected biologists, provide current, authoritative coverage of an exciting, fast-changing discipline. ** **Mendelian View of the World, Nucleic Acids Convey Genetic Information,The Importance of Weak Chemical Interactions, The Importance of High Energy Bonds, Weak and Strong Bonds Determine Macromolecular Interactions, The Structures of DNA and RNA, Genome Structure, Chromatin and the Nucleosome, The Replication of DNA, The Mutability and Repair of DNA, Homologous Recombination at the Molecular Level, Site-Specific Recombination and Transposition of DNA, Mechanisms of Transcription 13 RNA Splicing, Translation, The Genetic Code, Transcriptional Regulation in Prokaryotes, Transcriptional Regulation in Eukaryotes, Regulatory RNAs, Gene Regulation in Development and Evolution, Genomics and Systems Biology, Techniques of Molecular Biology, Model Organisms. ** **Intended for those interested in learning more about the basics of Molecular Biology. \#\#\# About the Author **James D. Watson** was Director of Cold Spring Harbor Laboratory from 1968 to 1993, President from 1994 to 2003, and is now its Chancellor. He spent his undergraduate years at the University of Chicago and received his Ph.D. in 1950 from Indiana University. Between 1950 and 1953, he did postdoctoral research in Copenhagen and Cambridge, England. While at Cambridge, he began the collaboration that resulted in the elucidation of the double-helical structure of DNA in 1953. (For this discovery, Watson, Francis Crick, and Maurice Wilkins were awarded the Nobel Prize in 1962.) Later in 1953, he went to the California Institute of Technology. He moved to Harvard in 1955, where he taught and did research on RNA synthesis and protein synthesis until 1976. He was the first Director of the National Center for Genome Research of the National Institutes of Health from 1989 to 1992. Dr. Watson was sole author of the first, second, and third editions of **Molecular Biology of the Gene**, and a co-author of the fourth and fifth editions. These were published in 1965, 1970, 1976, 1987, and 2003, respectively. He is also a co-author of two other textbooks: **Molecular Biology of the Cell and Recombinant DNA**. * * * **Tania A. Baker** is the Whitehead Professor of Biology at the Massachusetts Institute of Technology and an Investigator of the Howard Hughes Medical Institute. She received a B.S. in biochemistry from the University of Wisconsin, Madison, and a Ph.D. in biochemistry from Stanford University in 1988. Her graduate research was carried out in the laboratory of Professor Arthur Kornberg and focused on mechanisms of initiation of DNA replication. She did postdoctoral research in the laboratory of Dr. Kiyoshi Mizuuchi at the National Institutes of Health, studying the mechanism and regulation of DNA transposition. Her current research explores mechanisms and regulation of genetic recombination, enzyme-catalyzed protein unfolding, and ATP-dependent protein degradation. Professor Baker received the 2001 Eli Lilly Research Award from the American Society of Microbiology and the 2000 MIT School of Science Teaching Prize for Undergraduate Education and was elected as a fellow of the American Academy of Arts and Sciences in 2004. She is co-author (with Arthur Kornberg) of the book **DNA Replication**, Second Edition. * * * **Stephen P. Bell** is a Professor of Biology at the Massachusetts Institute of Technology and an Investigator of the Howard Hughes Medical Institute. He received B.A. degrees from the Department of Biochemistry, Molecular Biology, and Cell Biology and the Integrated Sciences Program at Northwestern University and a Ph.D. in biochemistry at the University of California, Berkeley in 1991. His graduate research was carried out in the laboratory of Dr. Robert Tjian and focused on eukaryotic transcription. He did postdoctoral research in the laboratory of Dr. Bruce Stillman at Cold Spring Harbor Laboratory, working on the initiation of eukaryotic DNA replication. His current research focuses on the mechanisms controlling the duplication of eukaryotic chromosomes. Professor Bell received the 2001 ASBMB–Schering Plough Scientific Achievement Award, the 1998 Everett Moore Baker Memorial Award for Excellence in Undergraduate Teaching at MIT and the 2006 MIT School of Science Teaching Award. * * * **Alexander A. F. Gann** is Editorial Director of Cold Spring Harbor Laboratory Press, and a faculty member of the Watson School of Biological Sciences at Cold Spring Harbor Laboratory. He received his B.Sc in microbiology from University College London and a Ph.D. in molecular biology from The University of Edinburgh in 1989. His graduate research was carried out in the laboratory of Noreen Murray and focused on DNA recognition by restriction enzymes. He did postdoctoral research in the laboratory of Mark Ptashne at Harvard, working on transcriptional regulation, and that of Jeremy Brockes at the Ludwig Institute of Cancer Research at University College London, where he worked on newt limb regeneration. He was a Lecturer at Lancaster University, U.K., from 1996 to 1999, before moving to Cold Spring Harbor Laboratory. He is co-author (with Mark Ptashne) of the book **Genes \& Signals **(2002). * * * **Michael Levine** is a Professor of Molecular and Cell Biology at the University of California, Berkeley, and is also Co-Director of the Center for Integrative Genomics. He received his B.A. from the Department of Genetics at University of California, Berkeley, and his Ph.D. with Alan Garen in the Department of Molecular Biophysics and Biochemistry from Yale University in 1981. As a postdoctoral fellow with Walter Gehring and Gerry Rubin from 1982-1984, he studied the molecular genetics of *Drosophila* development. Professor Levine's research group currently studies the gene networks responsible for the gastrulation of the *Drosophila *and *Ciona* (sea squirt) embryos. He holds the F. Williams Chair in Genetics and Development at University of California, Berkeley. He was awarded the Monsanto Prize in Molecular Biology from the National Academy of Sciences in 1996, and was elected to the American Academy of Arts and Sciences in 1996 and the National Academy of Sciences in 1998. * * * **Richard M. Losick** is the Maria Moors Cabot Professor of Biology, a Harvard College Professor, and a Howard Hughes Medical Institute Professor in the Faculty of Arts \& Sciences at Harvard University. He received his A.B. in chemistry at Princeton University and his Ph.D. in biochemistry at the Massachusetts Institute of Technology. Upon completion of his graduate work, Professor Losick was named a Junior Fellow of the Harvard Society of Fellows when he began his studies on RNA polymerase and the regulation of gene transcription in bacteria. Professor Losick is a past Chairman of the Departments of Cellular and Developmental Biology and Molecular and Cellular Biology at Harvard University. He received the Camille and Henry Dreyfuss Teacher-Scholar Award, is a member of the National Academy of Sciences, a Fellow of the American Academy of Arts and Sciences, a Fellow of the American Association for the Advancement of Science, a Fellow of the American Academy of Microbiology, a member of the American Philosophical Society, and a former Visiting Scholar of the Phi Beta Kappa Society. Professor Losick is the 2007 winner of the Selman A. Waksman Award of the National Academy of Sciences.}
 }
+  note = {** **Though completely up-to-date with the latest research advances, the **Sixth Edition **of James D. Watson’s classic book, **Molecular Biology of the Gene **retains the distinctive character of earlier editions that has made it the most widely used book in molecular biology. Twenty-two concise chapters, co-authored by six highly respected biologists, provide current, authoritative coverage of an exciting, fast-changing discipline. ** **Mendelian View of the World, Nucleic Acids Convey Genetic Information,The Importance of Weak Chemical Interactions, The Importance of High Energy Bonds, Weak and Strong Bonds Determine Macromolecular Interactions, The Structures of DNA and RNA, Genome Structure, Chromatin and the Nucleosome, The Replication of DNA, The Mutability and Repair of DNA, Homologous Recombination at the Molecular Level, Site-Specific Recombination and Transposition of DNA, Mechanisms of Transcription 13 RNA Splicing, Translation, The Genetic Code, Transcriptional Regulation in Prokaryotes, Transcriptional Regulation in Eukaryotes, Regulatory RNAs, Gene Regulation in Development and Evolution, Genomics and Systems Biology, Techniques of Molecular Biology, Model Organisms. ** **Intended for those interested in learning more about the basics of Molecular Biology. \#\#\# About the Author **James D. Watson** was Director of Cold Spring Harbor Laboratory from 1968 to 1993, President from 1994 to 2003, and is now its Chancellor. He spent his undergraduate years at the University of Chicago and received his Ph.D. in 1950 from Indiana University. Between 1950 and 1953, he did postdoctoral research in Copenhagen and Cambridge, England. While at Cambridge, he began the collaboration that resulted in the elucidation of the double-helical structure of DNA in 1953. (For this discovery, Watson, Francis Crick, and Maurice Wilkins were awarded the Nobel Prize in 1962.) Later in 1953, he went to the California Institute of Technology. He moved to Harvard in 1955, where he taught and did research on RNA synthesis and protein synthesis until 1976. He was the first Director of the National Center for Genome Research of the National Institutes of Health from 1989 to 1992. Dr. Watson was sole author of the first, second, and third editions of **Molecular Biology of the Gene**, and a co-author of the fourth and fifth editions. These were published in 1965, 1970, 1976, 1987, and 2003, respectively. He is also a co-author of two other textbooks: **Molecular Biology of the Cell and Recombinant DNA**. * * * **Tania A. Baker** is the Whitehead Professor of Biology at the Massachusetts Institute of Technology and an Investigator of the Howard Hughes Medical Institute. She received a B.S. in biochemistry from the University of Wisconsin, Madison, and a Ph.D. in biochemistry from Stanford University in 1988. Her graduate research was carried out in the laboratory of Professor Arthur Kornberg and focused on mechanisms of initiation of DNA replication. She did postdoctoral research in the laboratory of Dr. Kiyoshi Mizuuchi at the National Institutes of Health, studying the mechanism and regulation of DNA transposition. Her current research explores mechanisms and regulation of genetic recombination, enzyme-catalyzed protein unfolding, and ATP-dependent protein degradation. Professor Baker received the 2001 Eli Lilly Research Award from the American Society of Microbiology and the 2000 MIT School of Science Teaching Prize for Undergraduate Education and was elected as a fellow of the American Academy of Arts and Sciences in 2004. She is co-author (with Arthur Kornberg) of the book **DNA Replication**, Second Edition. * * * **Stephen P. Bell** is a Professor of Biology at the Massachusetts Institute of Technology and an Investigator of the Howard Hughes Medical Institute. He received B.A. degrees from the Department of Biochemistry, Molecular Biology, and Cell Biology and the Integrated Sciences Program at Northwestern University and a Ph.D. in biochemistry at the University of California, Berkeley in 1991. His graduate research was carried out in the laboratory of Dr. Robert Tjian and focused on eukaryotic transcription. He did postdoctoral research in the laboratory of Dr. Bruce Stillman at Cold Spring Harbor Laboratory, working on the initiation of eukaryotic DNA replication. His current research focuses on the mechanisms controlling the duplication of eukaryotic chromosomes. Professor Bell received the 2001 ASBMB–Schering Plough Scientific Achievement Award, the 1998 Everett Moore Baker Memorial Award for Excellence in Undergraduate Teaching at MIT and the 2006 MIT School of Science Teaching Award. * * * **Alexander A. F. Gann** is Editorial Director of Cold Spring Harbor Laboratory Press, and a faculty member of the Watson School of Biological Sciences at Cold Spring Harbor Laboratory. He received his B.Sc in microbiology from University College London and a Ph.D. in molecular biology from The University of Edinburgh in 1989. His graduate research was carried out in the laboratory of Noreen Murray and focused on DNA recognition by restriction enzymes. He did postdoctoral research in the laboratory of Mark Ptashne at Harvard, working on transcriptional regulation, and that of Jeremy Brockes at the Ludwig Institute of Cancer Research at University College London, where he worked on newt limb regeneration. He was a Lecturer at Lancaster University, U.K., from 1996 to 1999, before moving to Cold Spring Harbor Laboratory. He is co-author (with Mark Ptashne) of the book **Genes \& Signals **(2002). * * * **Michael Levine** is a Professor of Molecular and Cell Biology at the University of California, Berkeley, and is also Co-Director of the Center for Integrative Genomics. He received his B.A. from the Department of Genetics at University of California, Berkeley, and his Ph.D. with Alan Garen in the Department of Molecular Biophysics and Biochemistry from Yale University in 1981. As a postdoctoral fellow with Walter Gehring and Gerry Rubin from 1982-1984, he studied the molecular genetics of *Drosophila* development. Professor Levine's research group currently studies the gene networks responsible for the gastrulation of the *Drosophila *and *Ciona* (sea squirt) embryos. He holds the F. Williams Chair in Genetics and Development at University of California, Berkeley. He was awarded the Monsanto Prize in Molecular Biology from the National Academy of Sciences in 1996, and was elected to the American Academy of Arts and Sciences in 1996 and the National Academy of Sciences in 1998. * * * **Richard M. Losick** is the Maria Moors Cabot Professor of Biology, a Harvard College Professor, and a Howard Hughes Medical Institute Professor in the Faculty of Arts \& Sciences at Harvard University. He received his A.B. in chemistry at Princeton University and his Ph.D. in biochemistry at the Massachusetts Institute of Technology. Upon completion of his graduate work, Professor Losick was named a Junior Fellow of the Harvard Society of Fellows when he began his studies on RNA polymerase and the regulation of gene transcription in bacteria. Professor Losick is a past Chairman of the Departments of Cellular and Developmental Biology and Molecular and Cellular Biology at Harvard University. He received the Camille and Henry Dreyfuss Teacher-Scholar Award, is a member of the National Academy of Sciences, a Fellow of the American Academy of Arts and Sciences, a Fellow of the American Association for the Advancement of Science, a Fellow of the American Academy of Microbiology, a member of the American Philosophical Society, and a former Visiting Scholar of the Phi Beta Kappa Society. Professor Losick is the 2007 winner of the Selman A. Waksman Award of the National Academy of Sciences.}
 
 @article{chamberlin_history_1981,
   title = {A history and evaluation of {{System R}}},
@@ -7466,13 +7495,13 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @inproceedings{weil_rados_2007,
-  title = {{{RADOS}}: a scalable, reliable storage service for petabyte-scale storage clusters},
-  booktitle = {Proceedings of the 2nd international workshop on {{Petascale}} data storage: held in conjunction with {{Supercomputing}} '07},
+  title = {{{RADOS: A Scalable, Reliable Storage Service for Petabyte-scale Storage Clusters}}},
+  booktitle = {Proceedings of the 2nd International Workshop on {{Petascale}} Data Storage},
   series = {PDSW '07},
   author = {Weil, Sage A. and Leung, Andrew W. and Brandt, Scott A. and Maltzahn, Carlos},
-  date = {2007},
   year = {2007}
 }
+  date = {2007},
 
 @book{stroustrup_c_1985,
   title = {The {{C}}++ {{Programming Language}}: {{Language Library}} and {{Design Tutorial}}},
@@ -7734,7 +7763,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{atkinson_operational_2014,
   title = {Operational {{Experiences}} with {{Disk Imaging}} in a {{Multi}}-tenant {{Datacenter}}},
   booktitle = {Proceedings of the 11th {{USENIX Conference}} on {{Networked Systems Design}} and {{Implementation}}},
-  series = {NSDI'14},
+  series = {NSDI '14},
   author = {Atkinson, Kevin and Wong, Gary and Ricci, Robert},
   date = {2014}
 }
@@ -7759,6 +7788,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   title = {{MDHIM}: {A} {P}arallel {K}ey/{V}alue {F}ramework for {HPC}},
   booktitle = {Proceedings of the Workshop on Hot Topics in Storage and File Systems},
   series = {HotStorage '15},
+  year = {2015},
 }
   year = {2015},
   booktitle = {7th USENIX Workshop on Hot Topics in Storage and File Systems (HotStorage 15)},
@@ -7878,8 +7908,9 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   booktitle = {Job {{Scheduling Strategies}} for {{Parallel Processing}}},
   series = {Lecture Notes in Computer Science},
   author = {Yoo, Andy B. and Jette, Morris A. and Grondona, Mark},
-  date = {2003-01-01}
+  year = {2003}
 }
+  date = {2003-01-01}
 
 @thesis{schnaitter_online_2010,
   title = {On-line {{Index Selection}} for {{Physical Database Tuning}}},
@@ -7942,10 +7973,12 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 
 @inproceedings{watkins_invivo_2013,
   title = {In-{{Vivo Storage System Development}}},
-  booktitle = {Proceedings of the {{Workshop}} on {{Big Data Management}} in {{Clouds}} 2013},
+  booktitle = {Proceedings of the {{Workshop}} on {{Big Data Management}} in {{Clouds}}},
   author = {Watkins, Noah and Maltzahn, Carlos and Brandt, Scott and Pye, Ian and Manzanares, Adam},
-  date = {2013-08-26}
+  year = {2013},
+  series = {BDMiC '13},
 }
+  date = {2013-08-26}
 
 @book{welling_php_2001,
   title = {{{PHP}} and {{MySQL Web Development}}},
@@ -8266,7 +8299,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{shen_cloudscale_2011,
   title = {{{CloudScale}}: elastic resource scaling for multi-tenant cloud systems},
   booktitle = {Proceedings of the 2nd {{ACM Symposium}} on {{Cloud Computing}}},
-  series = {SOCC '11},
+  series = {SoCC '11},
   author = {Shen, Zhiming and Subbiah, Sethuraman and Gu, Xiaohui and Wilkes, John},
   date = {2011}
 }
@@ -8590,12 +8623,14 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @inproceedings{balakrishnan_corfu_2012,
-	Address = {San Jose, CA},
 	Author = {Mahesh Balakrishnan and Dahlia Malkhi and Vijayan Prabhakaran and Ted Wobber and Michael Wei and John D. Davis},
-	Booktitle = {NSDI'12},
+	booktitle = {Proceedings of the 9th USENIX Conference on Networked Systems Design and Implementation},
+	Series = {NSDI '12},
+	Title = {{{CORFU: A Shared Log Design for Flash Clusters}}},
+	Year = {2012}
+}
 	Month = {April},
-	Title = {CORFU: A Shared Log Design for Flash Clusters},
-	Year = {2012}}
+Address = {San Jose, CA},
 
 
 @article{mohan_aries_1992,
@@ -8879,8 +8914,8 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   volume = {1},
   author = {Enns, Richard H. and McGuire, George C.},
   date = {2001-06},
-  note = {Nonlinear physics continues to be an area of dynamic modern research, with applications to physics, engineering, chemistry, mathematics, computer science, biology, medicine and economics. In this text extensive use is made of the Mathematica computer algebra system. No prior knowledge of Mathematica or programming is assumed. This book includes 33 experimental activities that are designed to deepen and broaden the reader's understanding of nonlinear physics. These activities are correlated with Part I, the theoretical framework of the text. \#\#\# Review "This book is a revision of an earlier work that looked at nonlinear physics using MAPLE® software. As with that work, Enns and McGuire incorporate theory, experiment, and numerical applications in a thorough introduction to a wide range of nonlinear topics. ... The book assumes no familiarity with nonlinear physics or MATHEMATICA® . . . The authors do an extraordinary job of integrating application and theory. They provide applications from a variety of disciplines throughout the sections that introduce the theory and that look at methods of analysis and consider the various approaches to addressing nonlinear problems. It is not an exaggeration to say that this book considers all areas of interest in nonlinear analysis with solid introductions. (This reviewer, having taught the basics of nonlinear physics over the last 15 years, wishes he had had this book as a tutor.) Added to this are 33 experimental activities using MATHEMATICA® that demonstrate concepts and applied examples." —Choice Reviewer comments on the Maple edition of NONLINEAR PHYSICS: "An...excellent book...the authors have been able to cover an extraordinary range of topics and hopefully excite a wide audience to investigate nonlinear phenomena...accessible to advanced undergraduates and yet challenging enough for graduate students and working scientists.... The reader is guided through it all with sound advice and humor.... I hope that many will adopt the text." -American Journal of Physics "Its organization of subject matter, clarity of writing, and smooth integration of analytic and computational techniques put it among the very best...Richard Enns and George McGuire have written an excellent text for introductory nonlinear physics." -Computers in Physics "...correctly balances a good treatment of nonlinear, but also nonchaotic, behavior of systems with some of the exciting findings about chaotic dynamics...one of the book's strength is the diverse selection of examples from mechanical, chemical, electronic, fluid and many other systems .... Another strength of the book is the diversity of approaches that the student is encouraged to take...the authors have chosen well, and the trio of text,...software, and lab manual gives the newcomer to nonlinear physics quite an effective set of tools.... Basic ideas are explained clearly and illustrated with many examples." -Physics Today "... the care that the authors have taken to ensure that their text is as comprehensive, versatile, interactive, and student-friendly as possible place this book far above the average." -Scientific Computing World}
 }
+  note = {Nonlinear physics continues to be an area of dynamic modern research, with applications to physics, engineering, chemistry, mathematics, computer science, biology, medicine and economics. In this text extensive use is made of the Mathematica computer algebra system. No prior knowledge of Mathematica or programming is assumed. This book includes 33 experimental activities that are designed to deepen and broaden the reader's understanding of nonlinear physics. These activities are correlated with Part I, the theoretical framework of the text. \#\#\# Review "This book is a revision of an earlier work that looked at nonlinear physics using MAPLE® software. As with that work, Enns and McGuire incorporate theory, experiment, and numerical applications in a thorough introduction to a wide range of nonlinear topics. ... The book assumes no familiarity with nonlinear physics or MATHEMATICA® . . . The authors do an extraordinary job of integrating application and theory. They provide applications from a variety of disciplines throughout the sections that introduce the theory and that look at methods of analysis and consider the various approaches to addressing nonlinear problems. It is not an exaggeration to say that this book considers all areas of interest in nonlinear analysis with solid introductions. (This reviewer, having taught the basics of nonlinear physics over the last 15 years, wishes he had had this book as a tutor.) Added to this are 33 experimental activities using MATHEMATICA® that demonstrate concepts and applied examples." —Choice Reviewer comments on the Maple edition of NONLINEAR PHYSICS: "An...excellent book...the authors have been able to cover an extraordinary range of topics and hopefully excite a wide audience to investigate nonlinear phenomena...accessible to advanced undergraduates and yet challenging enough for graduate students and working scientists.... The reader is guided through it all with sound advice and humor.... I hope that many will adopt the text." -American Journal of Physics "Its organization of subject matter, clarity of writing, and smooth integration of analytic and computational techniques put it among the very best...Richard Enns and George McGuire have written an excellent text for introductory nonlinear physics." -Computers in Physics "...correctly balances a good treatment of nonlinear, but also nonchaotic, behavior of systems with some of the exciting findings about chaotic dynamics...one of the book's strength is the diverse selection of examples from mechanical, chemical, electronic, fluid and many other systems .... Another strength of the book is the diversity of approaches that the student is encouraged to take...the authors have chosen well, and the trio of text,...software, and lab manual gives the newcomer to nonlinear physics quite an effective set of tools.... Basic ideas are explained clearly and illustrated with many examples." -Physics Today "... the care that the authors have taken to ensure that their text is as comprehensive, versatile, interactive, and student-friendly as possible place this book far above the average." -Scientific Computing World}
 
 @book{muldrow_dish_2003,
   title = {Dish 6: {{On}} the {{Back Burner}}},
@@ -8931,7 +8966,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{wu_query_2011,
   title = {Query optimization for massively parallel data processing},
   booktitle = {Proceedings of the 2nd {{ACM Symposium}} on {{Cloud Computing}}},
-  series = {SOCC '11},
+  series = {SoCC '11},
   author = {Wu, Sai and Li, Feng and Mehrotra, Sharad and Ooi, Beng Chin},
   date = {2011}
 }
@@ -8969,12 +9004,13 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @article{mesnier_objectbased_2003,
-  title = {Object-based storage},
-  volume = {41},
-  journaltitle = {IEEE Communications Magazine},
+  title = {{{Object-based Storage}}},
+  journal = {IEEE Communications Magazine},
   author = {Mesnier, M. and Ganger, G.R. and Riedel, E.},
-  date = {2003-08}
+  year = {2003},
 }
+  date = {2003-08}
+  volume = {41},
 
 @article{morrison_patricia_1968,
   title = {{{PATRICIA}}-- {{Practical Algorithm To Retrieve Information Coded}} in {{Alphanumeric}}},
@@ -9467,11 +9503,9 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @article{shvachko_hdfs_2010,
-  title = {{{HDFS Scalability}}: {{The}} limits to growth},
-  volume = {35},
-  journaltitle = {login},
-  author = {Shvachko, K.V.},
-  date = {2010},
+  author = {Shvachko, K onstantin V.},
+  title = {{HDFS Scalability: The Limits to Growth}},
+  booktitle = {login;, Spring '10},
   year = {2010},
 }
 
@@ -9480,6 +9514,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   author = {Hakimzadeh, Kamal and Sajjad, Hooman Peiro and Dowling, Jim},
   booktitle = {Proceedings of the International Conference on Distributed Applications and Interoperable Systems},
   series = {DAIS '14},
+  year = {2014},
 }
   booktitle = {4th International Conference on Distributed Applications and Interoperable Systems}
  Berlin, Germany
@@ -9811,8 +9846,9 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{carns:ipdps09-pvfs,
  author = {Carns, Philip and Lang, Sam and Ross, Robert and Vilayannur, Murali and Kunkel, Julian and Ludwig, Thomas},
  title = {{{Small-file Access in Parallel File Systems}}},
- booktitle = {Proceedings of the Symposium on Parallel and Distributed Processing},
+ booktitle = {Proceedings of the 23rd IEEE International Symposium on Parallel and Distributed Processing},
  series = {IPDPS '09},
+ year = {2009},
 }
  year = {2009},
  isbn = {978-1-4244-3751-1},
@@ -9827,12 +9863,11 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{eshel:fast10-panache,
   title= {{{Panache: A Parallel File System Cache for Global File Access}}},
   author={Eshel, Marc and Haskin, Roger and Hildebrand, Dean and Naik, Manoj and Schmuck, Frank and Tewari, Renu},
-  booktitle={Proceedings of the Conference on File and Storage Technologies},
+  booktitle={Proceedings of the 8th USENIX Conference on File and Storage Technologies},
   series={FAST '10},
-}
-  booktitle={Proceedings of the 8th USENIX conference on File and storage technologies},
-  pages={12--12},
   year={2010},
+}
+  pages={12--12},
   organization={USENIX Association}
 
 @article{douglas_3d_2001,
@@ -10149,10 +10184,11 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @inproceedings{hitz_file_1994,
-  title = {File system design for an {{NFS}} file server appliance},
+  title = {{{File system design for an {{NFS}} file server appliance}}},
   booktitle = {Proceedings of the {{USENIX Winter}} 1994 {{Technical Conference}} on {{USENIX Winter}} 1994 {{Technical Conference}}},
   author = {Hitz, Dave and Lau, James and Malcolm, Michael},
-  date = {1994}
+  date = {1994},
+  series = {ATC '94},
 }
 
 @inproceedings{chen_operational_2009,
@@ -10466,11 +10502,11 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @inproceedings{dean_evolution_2010,
-  title = {Evolution and future directions of large-scale storage and computation systems at {{Google}}},
-  booktitle = {Proceedings of the 1st {{ACM}} symposium on {{Cloud}} computing},
+  title = {{{Evolution and Future Directions of Large-scale Storage and Computation Systems at Google}}},
+  booktitle = {Proceedings of the 1st {{ACM}} Symposium on {{Cloud}} Computing},
   series = {SoCC '10},
   author = {Dean, Jeffrey},
-  date = {2010}
+  year = {2010}
 }
 
 @misc{chamberlain_using_2014,
@@ -10548,12 +10584,12 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @inproceedings{schwan_lustre_2003,
-  title = {Lustre: {{Building}} a file system for 1000-node clusters},
-  volume = {2003},
-  booktitle = {Proceedings of the 2003 {{Linux Symposium}}},
+  title = {{{Lustre: {{Building}} a File System for 1000-node Clusters}}},
+  booktitle = {Proceedings of the {{Linux Symposium}}},
   author = {Schwan, P.},
-  date = {2003}
+  year = {2003}
 }
+  volume = {2003},
 
 @inproceedings{roure_evolution_2010,
   title = {The {{Evolution}} of {{myExperiment}}},
@@ -11164,7 +11200,8 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   title = {{{Index Interactions in Physical Design Tuning: Modeling, Analysis, and Applications}}},
   booktitle = {Proceedings of the VLDB Endowment},
   author = {Schnaitter, Karl and Polyzotis, Neoklis and Getoor, Lise},
-  series = {VLDB '09}
+  series = {VLDB '09},
+  year = {2009},
 }
   date = {2009}
   volume ={2},
@@ -11461,11 +11498,11 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @inproceedings{povzner_horizon_2010,
-  title = {Horizon: efficient deadline-driven disk {{I}}/{{O}} management for distributed storage systems},
-  booktitle = {Proceedings of the {{International Symposium}} on {{High Performance Distributed Computing}}},
+  title = {{{Horizon: Efficient Deadline-driven Disk {{I}}/{{O}} Management for Distributed Storage Systems}}},
+  booktitle = {Proceedings of the 19th{{International Symposium}} on {{High Performance Distributed Computing}}},
   series = {HPDC '10},
   author = {Povzner, Anna and Sawyer, Darren and Brandt, Scott},
-  date = {2010}
+  year = {2010}
 }
   booktitle = {Proceedings of the 19th {{ACM International Symposium}} on {{High Performance Distributed Computing}}},
 
@@ -11756,7 +11793,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{agarwal_reoptimizing_2012,
   title = {Re-optimizing data-parallel computing},
   booktitle = {Proceedings of the 9th {{USENIX}} conference on {{Networked Systems Design}} and {{Implementation}}},
-  series = {NSDI'12},
+  series = {NSDI '12},
   author = {Agarwal, Sameer and Kandula, Srikanth and Bruno, Nicolas and Wu, Ming-Chuan and Stoica, Ion and Zhou, Jingren},
   date = {2012}
 }
@@ -11937,7 +11974,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 @inproceedings{xiong_activesla_2011,
   title = {{{ActiveSLA}}: a profit-oriented admission control framework for database-as-a-service providers},
   booktitle = {Proceedings of the 2nd {{ACM Symposium}} on {{Cloud Computing}}},
-  series = {SOCC '11},
+  series = {SoCC '11},
   author = {Xiong, Pengcheng and Chi, Yun and Zhu, Shenghuo and Tatemura, Junichi and Pu, Calton and Hacigümü\ensuremath{\backslash}cS, Hakan},
   date = {2011}
 }
@@ -12229,7 +12266,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   booktitle = {Proceedings of the {{International Conference}} for {{High Performance Computing}}, {{Networking}}, {{Storage}} and {{Analysis}}},
   series = {SC '15},
   author = {Gamblin, Todd and LeGendre, Matthew and Collette, Michael R. and Lee, Gregory L. and Moody, Adam and de Supinski, Bronis R. and Futral, Scott},
-  date = {2015},
+  year = {2015},
   options = {useprefix=true}
 }
 
@@ -12548,11 +12585,11 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @inproceedings{watkins_datamods_2012,
-  title = {{{DataMods}}: {{Programmable File System Services}}},
-  booktitle = {{{PDSW}}'12},
   author = {Watkins, Noah and Maltzahn, Carlos and Brandt, Scott and Manzanares, Adam},
-  date = {2012-07},
-  year = {2012}
+  title = {{{{D}ataMods: {P}rogrammable {F}ile {S}ystem {S}ervices}}},
+  booktitle = {Proceedings of the 7th {{Parallel Data Storage Workshop}}},
+  series = {PDSW '12},
+  year = {2012},
 }
 
 @inproceedings{ioannidis_randomized_1990,
@@ -12574,8 +12611,9 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   title = {Hive - a petabyte scale data warehouse using {{Hadoop}}},
   booktitle = {Data {{Engineering}} ({{ICDE}}), 2010 {{IEEE}} 26th {{International Conference}} on},
   author = {Thusoo, A. and Sarma, J.S. and Jain, N. and Shao, Zheng and Chakka, P. and Zhang, Ning and Antony, S. and Liu, Hao and Murthy, R.},
-  date = {2010-03}
+  year = {2010},
 }
+  date = {2010-03}
 
 @book{popper_logic_2002,
   title = {The {{Logic}} of {{Scientific Discovery}}},
@@ -12608,10 +12646,12 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @article{dean_tail_2013,
-  title = {The tail at scale},
-  volume = {56},
-  journaltitle = {Commun. ACM},
+  title = {{{The Tail at Scale}}},
+  journaltitle = {Communications of the ACM},
   author = {Dean, Jeffrey and Barroso, Luiz André},
+  year = {2013}
+}
+  volume = {56},
   date = {2013-02}
 }
 
@@ -12985,7 +13025,7 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @article{mckusick_fast_1984,
-  title = {A fast file system for {{UNIX}}},
+  title = {A Fast File System for {{UNIX}}},
   volume = {2},
   journaltitle = {ACM Trans. Comput. Syst.},
   author = {McKusick, Marshall K. and Joy, William N. and Leffler, Samuel J. and Fabry, Robert S.},
@@ -13257,12 +13297,13 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @article{terry_replicated_2013,
-  title = {Replicated {{Data Consistency Explained Through Baseball}}},
-  volume = {56},
-  journaltitle = {Commun. ACM},
+  title = {{{Replicated {{Data Consistency Explained Through Baseball}}}}},
+  journal = {Communications of the ACM},
   author = {Terry, Doug},
-  date = {2013-12}
+  year = {2013},
 }
+  date = {2013-12}
+  volume = {56},
 
 @article{thakur_optimizing_2002,
   title = {Optimizing noncontiguous accesses in {{MPI–IO}}},
@@ -13693,13 +13734,14 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
   note = {* Presents a complete approach to building XML Web applications and Web services with XSQL, Oracle Text, SQL, XSLT, and Java from data found in Oracle databases * Offers expert tips on how to enhance XSQL with servlets and Java Server Pages (JSP) * Provides a detailed comparison of XSQL and XQuery * Companion Web site contains the code examples in the book as well as useful links where readers can download the Oracle XDK \#\#\# From the Back Cover Discover how to combine the power of SQL, XML, and XSLT to publish dynamic Web content using XSQL XSQL isn't just some razzle-dazzle technology. It allows you to easily leverage the most robust, mature, and usable technologies in the industry: SQL, HTML, HTTP, XML, Java, and the Oracle RDBMS. With an exciting first look at XSQL, this innovative book shows you how to bring all of these powerful technologies together in order to publish dynamic Web content. You'll first find a comprehensive discussion of how XSQL relates to each of these technologies. Then you'll learn how you can use XSQL to present your database data on the Web instantly. The numerous code examples will show you how to develop a complete application with just XSQL and XSLT. While exploring all of the exciting features of XSQL, this book: * Presents a solid approach to building XML Web applications and Web services with XSQL, Oracle Text, SQL, XSLT, and Java from data found in Oracle databases * Offers proven tips on how to enhance XSQL with custom action handlers, serializers, and the XSQL API * Shows how to use XSLT to write scripts based on database data * Explains how to use serializers to produce images and PDF documents on the fly The companion Web site contains all of the author's code examples from the book. \#\#\# About the Author MICHAEL D. THOMAS is a software engineer focusing on XML and Java. In 1998, he received the Outstanding Technical Achievement Award from IBM for his Internet integration work using Java, HTTP, XML, and other technologies to create one of the earliest Web services applications. Thomas is also the author of Java Programming for the Internet.}
 }
 
-@article{jimenez_aver_2016,
+@inproceedings{jimenez_aver_2016,
   title = {I {{Aver}}: {{Providing Declarative Experiment Specifications Facilitates}} the {{Evaluation}} of {{Computer Systems Research}}},
-  volume = {4},
-  journaltitle = {TinyToCS},
+  booktitle = {Tiny Transactions on Computer Systems},
+  series = {TinyToCS '16},
   author = {Jimenez, Ivo and Maltzahn, Carlos and Moody, Adam and Mohror, Kathryn and Arpaci-Dusseau, Andrea and Arpaci-Dusseau, Remzi},
   date = {2016}
 }
+  volume = {4},
 
 @misc{fastforwardteam_fastforward_2012,
   title = {{{FastForward Storage}} and {{I}}/{{O Design Documents}}.},
@@ -14966,9 +15008,9 @@ create\_tecrep.pdf: 1897055 bytes, checksum: 383329abefd0a48d444a0d51b8f4a3c6 (M
 }
 
 @inproceedings{dean_mapreduce_2004,
-  title = {{{MapReduce}}: simplified data processing on large clusters},
-  booktitle = {Proceedings of the 6th conference on {{Symposium}} on {{Opearting Systems Design}} \& {{Implementation}} - {{Volume}} 6},
-  series = {OSDI'04},
+  title = {{{MapReduce: Simplified Data processing on Large Clusters}}},
+  booktitle = {Proceedings of the 6th conference on {{Symposium}} on {{Opearting Systems Design}} and {{Implementation}}},
+  series = {OSDI '04},
   author = {Dean, Jeffrey and Ghemawat, Sanjay},
   date = {2004}
 }
@@ -15626,15 +15668,13 @@ Storage},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @inproceedings{watkins:scc2012-datamods,
-  author = {Watkins, Noah and Maltzahn, Carlos and Brandt, Scott and
-Manzanares, Adam},
-  title = {{D}ataMods: {P}rogrammable {F}ile {S}ystem {S}ervices},
-  booktitle = {Proceedings of the SC Companion: High Performance Computing,
-Networking Storage and Analysis},
-  series = {SCC '12},
+  author = {Watkins, Noah and Maltzahn, Carlos and Brandt, Scott and Manzanares, Adam},
+  title = {{{{D}ataMods: {P}rogrammable {F}ile {S}ystem {S}ervices}}},
+  booktitle = {Proceedings of the 7th {{Parallel Data Storage Workshop}}},
+  series = {PDSW '12},
   year = {2012},
-  pages = {42--47},
 } 
+  pages = {42--47},
 
 @inproceedings{spahn:osdi2014-pebbles,
   author = {Riley Spahn and Jonathan Bell and Michael Lee and Sravan
@@ -15685,12 +15725,10 @@ and Fabry, Robert S.},
   pages = {181--197},
 }
 
-@misc{mckusick:fast2015-FFS,
+@inproceedings{mckusick:fast2015-FFS,
   author = {McKusick, Marshall K.},
-  title = {{K}eynote {A}ddress: {A} {B}rief {H}istory of the {BSD} {F}ast
-{F}ilesystem}, 
-  booktitle = {Proceedings of the 15th USENIX Conference on File and Storage
-Technologies},
+  title = {{K}eynote {A}ddress: {A} {B}rief {H}istory of the {BSD} {F}ast {F}ilesystem}, 
+  booktitle = {Proceedings of the 15th USENIX Conference on File and Storage Technologies},
   series = {FAST '15},
   year = {2015},
   month = {February}
@@ -15701,7 +15739,8 @@ Technologies},
   title={{T}he {D}esign and {I}mplementation of a {L}og-{S}tructured {F}ile
 {S}ystem},
   booktitle={ACM Transactions on Computer Systems},
-  year={TOCS '92},
+  series={TOCS '92},
+  year = {1992},
 }
 
 @inproceedings{rumble:fast2014-lfs-for-dram,
@@ -15758,9 +15797,10 @@ Supercomputing (ICS06)",
 
 @inproceedings{hitz:wtec1994-WAFL,
   author = {Hitz, Dave and Lau, James and Malcolm, Michael},
-  title = {File system design for an NFS file server appliance},
+  title = {{{File System Design for an NFS File Server Appliance}}},
   booktitle = {Proceedings of the USENIX Technical Conference},
   series = {WTEC '94},
+  year = {1994},
 }
 
 @inproceedings{lanyue:fast2013-FS-evolution,
@@ -16141,11 +16181,11 @@ Architectural Support for Programming Languages and Operating Systems},
 }
 
 @conference{desnoyers:linuxsymp2008-hypervisor,
-	title = {{LTTng}: Tracing across execution layers, from the Hypervisor
-to user-space},
+	title = {{{{LTTng}: Tracing across execution layers, from the Hypervisorto user-space}}},
 	author = {Mathieu Desnoyers and Michel R. Dagenais},
-	booktitle = {Linux Symposium 2008},
-	year = 2008,
+	booktitle = {Proceedings of the Linux Symposium 2008},
+        year = {2008},
+}
 	month = jul,
 	pages = {101}
 }
@@ -16939,21 +16979,20 @@ Manipulation},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @inproceedings{weil:osdi2006-ceph,
-  author = {Weil, Sage A. and Brandt, Scott A. and Miller, Ethan L. and Long,
-Darrell D. E. and Maltzahn, Carlos},
-  title = {{C}eph: {A} {S}calable, {H}igh-{P}erformance {D}istributed {F}ile
-{S}ystem},
-  booktitle = {Proceedings of the Symposium on Operating Systems Design and Implementation},
+  author = {Weil, Sage A. and Brandt, Scott A. and Miller, Ethan L. and Long, Darrell D. E. and Maltzahn, Carlos},
+  title = {{C}eph: {A} {S}calable, {H}igh-{P}erformance {D}istributed {F}ile {S}ystem},
+  booktitle = {Proceedings of the 7th USENIX Symposium on Operating Systems Design and Implementation},
   series = {OSDI '06},
-}
   year = {2006},
+}
   booktitle = {Proceedings of the 7th USENIX Symposium on Operating Systems Design \& Implementation},
 
 @inproceedings{wang:pdsw13-ceph-hpc,
    author = {Wang, Feiyi and Nelson, Mark and Oral, Sarp and Atchley, Scott and Weil, Sage and Settlemyer, Bradley W. and Caldwell, Blake and Hill, Jason},
    title = {{{Performance and Scalability Evaluation of the Ceph Parallel File System}}},
-   booktitle = {Proceedings of the Workshop on Parallel Data Storage Workshop},
+   booktitle = {Proceedings of the Parallel Data Storage Workshop},
    series = {PDSW '13},
+   year = {2013},
 }
    booktitle = {Proceedings of the 8th Parallel Data Storage Workshop},
    year = {2013},
@@ -16970,12 +17009,9 @@ Darrell D. E. and Maltzahn, Carlos},
 
 
 @inproceedings{beaver:osdi2010-haystack,
-	author = {Beaver, Doug and Kumar, Sanjeev and Li, Harry C. and Sobel,
-Jason and Vajgel, Peter},
-	title = {{F}inding a {N}eedle in {H}aystack: {F}acebook's {P}hoto
-{S}torage},
-	booktitle = {Proceedings of the 9th USENIX Conference on Operating
-Systems Design \& Implementation},
+	author = {Beaver, Doug and Kumar, Sanjeev and Li, Harry C. and Sobel, Jason and Vajgel, Peter},
+	title = {{F}inding a {N}eedle in {H}aystack: {F}acebook's {P}hoto {S}torage},
+	booktitle = {Proceedings of the 9th USENIX Conference on Operating Systems Design and Implementation},
 	series = {OSDI '10},
 	year = {2010},
 }
@@ -16990,30 +17026,25 @@ Systems Design \& Implementation},
 Hofmann and Jon Howell and Yutaka Suzue},
   title = {{F}lat {D}atacenter {S}torage},
   booktitle = {Proceedings of the 10th USENIX Symposium on Operating Systems
-Design \& Implementation},
-  series = {OSDI'12},
+Design and Implementation},
+  series = {OSDI '12},
   year = {2012},
 }
 
 @inproceedings{toor:nas2012-swift,
-  title={{I}nvestigating an {O}pen {S}ource {C}loud {S}torage {I}nfrastructure
-for {CERN}-{S}pecific {D}ata {A}nalysis},
-  author={Toor, Salman and Toebbicke, Rainer and Resines, Maitane Zotes and
-Holmgren, Sverker},
-  booktitle={Proceedsings of the 7th IEEE International Conference on
-Networking, Architecture and Storage},
-  series={NAS'12},
+  title={{I}nvestigating an {O}pen {S}ource {C}loud {S}torage {I}nfrastructure for {CERN}-{S}pecific {D}ata {A}nalysis},
+  author={Toor, Salman and Toebbicke, Rainer and Resines, Maitane Zotes and Holmgren, Sverker},
+  booktitle={Proceedsings of the 7th IEEE International Conference on Networking, Architecture and Storage},
+  series={NAS '12},
   year={2012},
-  organization={IEEE}
 }
+  organization={IEEE}
 
 @inproceedings{muralidhar:osdi2014-f4,
-  author = {Subramanian Muralidhar and Wyatt Lloyd and Sabyasachi Roy and Cory
-Hill and Ernest Lin and Weiwen Liu and Satadru Pan and Shiva Shankar and
-Viswanath Sivakumar and Linpeng Tang and Sanjeev Kumar},
+  author = {Subramanian Muralidhar and Wyatt Lloyd and Sabyasachi Roy and Cory Hill and Ernest Lin and Weiwen Liu and Satadru Pan and Shiva Shankar and Viswanath Sivakumar and Linpeng Tang and Sanjeev Kumar},
   title = {f4: {F}acebook{\textquoteright}s {W}arm {BLOB} {S}torage {S}ystem},
-  booktitle = {11th USENIX Symposium on Operating Systems Design and
-Implementation (OSDI' 14)},
+  booktitle = {Proceedings of the 11th USENIX Symposium on Operating Systems Design and Implementation},
+  series = {OSDI '14},
   year = {2014},
 }
 
@@ -17023,15 +17054,11 @@ Implementation (OSDI' 14)},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @inproceedings{mickens:ndsi2014-blizzard,
-	author = {James Mickens and Edmund B. Nightingale and Jeremy Elson and
-Darren Gehring and Bin Fan and Asim Kadav and Vijay Chidambaram and Osama Khan
-and Krishna Nareddy},
-	title = {{B}lizzard: {F}ast, {C}loud-scale {B}lock {S}torage for
-{C}loud-oblivious {A}pplications},
-	booktitle = {11th USENIX Symposium on Networked Systems Design \&
-Implementation (NSDI 14)},
+	author = {James Mickens and Edmund B. Nightingale and Jeremy Elson and Darren Gehring and Bin Fan and Asim Kadav and Vijay Chidambaram and Osama Khan and Krishna Nareddy},
+	title = {{B}lizzard: {F}ast, {C}loud-scale {B}lock {S}torage for {C}loud-oblivious {A}pplications},
+	booktitle = {11th USENIX Symposium on Networked Systems Design and Implementation},
 	year = {2014},
-	month = Apr,
+	month = {Apr},
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -17043,10 +17070,10 @@ Implementation (NSDI 14)},
 	title = {{D}ata {W}arehousing and {A}nalytics {I}nfrastructure at {F}acebook},
 	author = {Thusoo, Ashish and Shao, Zheng and Anthony, Suresh and Borthakur, Dhruba and Jain, Namit and Sen Sarma, Joydeep and Murthy, Raghotham and Liu, Hao},
 	booktitle = {Proceedings of the International Conference on Management of Data},
-	series = {SIGMOD '10}
- }
-	booktitle = {Proceedings of the 2010 ACM SIGMOD International Conference on Management of Data},
+	series = {SIGMOD '10},
 	year = {2010},
+}
+	booktitle = {Proceedings of the 2010 ACM SIGMOD International Conference on Management of Data},
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % STORAGE
@@ -17058,6 +17085,7 @@ Implementation (NSDI 14)},
   title = {{A} {C}omparison of {F}ile {S}ystem {W}orkloads},
   booktitle = {Proceedings of the USENIX Annual Technical Conference},
   series = {ATC '00},
+   year = {2000},
 } 
   year = {2000},
   pages = {4--4},
@@ -17066,8 +17094,9 @@ Implementation (NSDI 14)},
   author = {Alam, Sadaf R. and El-Harake, Hussein N. and Howard, Kristopher and
 Stringfellow, Neil and Verzelloni, Fabio},
   title = {{P}arallel {I}/{O} and the {M}etadata {W}all},
-  booktitle = {Proceedings of the Workshop on Parallel Data Storage},
+  booktitle = {Proceedings of the 6th International Workshop on Parallel Data Storage},
   series = {PDSW '11},
+  year = {2011},
 }
   booktitle = {Proceedings of the 6th Workshop on Parallel Data Storage},
   year = {2011},
@@ -17080,7 +17109,8 @@ Stringfellow, Neil and Verzelloni, Fabio},
 @article{shvachko:login2012-hdfs-scalability,
   author = {Shvachko, K onstantin V.},
   title = {{HDFS Scalability: The Limits to Growth}},
-  booktitle = {login; '10},
+  journal = {login;, Spring '10},
+  year = {2010},
 }
 
 @inproceedings{konstantinos:pdsw2014-lustre-metadata,
@@ -17103,10 +17133,10 @@ Ludwig, Thomas},
 Miller, Ethan L.},
   title = {{D}ynamic {M}etadata {M}anagement for {P}etabyte-{S}cale {F}ile
 {S}ystems},
-  booktitle = {Proceedings of the Conference on High Performance Computing Networking, Storage and Analysis},
+  booktitle = {Proceedings of the 17th ACM/IEEE Conference on High Performance Computing Networking, Storage and Analysis},
   series = {SC '04},
-} 
   year = {2004},
+} 
   booktitle = {Proceedings of the 17th ACM/IEEE Conference on Supercomputing},
 
 @phdthesis{weil:phdthesis07,
@@ -17125,19 +17155,17 @@ and Mueller, Brian and Small, Jason and Zelenka, Jim and Zhu, Bin},
 {S}ystem},
   booktitle = {Proceedings of the 6th USENIX Conference on File and Storage
 Technologies},
-  series = {FAST'08},
+  series = {FAST '08},
   year = {2008},
 }
 
 @inproceedings{sevilla:sc15-mantle,
-  author = {Sevilla, Michael A. and Watkins, Noah and Maltzahn, Carlos and
-Nassi, Ike and Brandt, Scott A. and Weil, Sage A. and Farnum, Greg  and
-Fineberg, Sam},
+  author = {Sevilla, Michael A. and Watkins, Noah and Maltzahn, Carlos and Nassi, Ike and Brandt, Scott A. and Weil, Sage A. and Farnum, Greg  and Fineberg, Sam},
   title = {{M}antle: {A} {P}rogrammable {M}etadata {L}oad {B}alancer for the {C}eph {F}ile {S}ystem},
   booktitle = {Proceedings of the Conference on High Performance Computing, Networking, Storage and Analysis},
   series = {SC '15},
-} 
   year = {2015},
+} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % STORAGE
@@ -17145,11 +17173,9 @@ Fineberg, Sam},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 @inproceedings{patil:pdsw2007-giga,
-  author = {Patil, Swapnil V. and Gibson, Garth A. and Lang, Sam and Polte,
-Milo},
+  author = {Patil, Swapnil V. and Gibson, Garth A. and Lang, Sam and Polte, Milo},
   title = {{GIGA}+: {S}calable {D}irectories for {S}hared {F}ile {S}ystems},
-  booktitle = {Proceedings of the 2nd International Workshop on Petascale Data
-Storage: held in conjunction with Supercomputing '07},
+  booktitle = {Proceedings of the 2nd International Workshop on Petascale Data Storage}
   series = {PDSW '07},
   year = {2007},
 }
@@ -17160,28 +17186,24 @@ Storage: held in conjunction with Supercomputing '07},
 with {M}illions of {F}iles},
   booktitle = {Proceedings of the Conference on File and Storage Technologies},
   series = {FAST '11},
-}
   year = {2011},
+}
   booktitle = {Proceedings of the 9th USENIX Conference on File and Storage Technologies},
 
 @inproceedings{brandt:msst2003-lh,
-  author = {Brandt, Scott A. and Miller, Ethan L. and Long, Darrell D.  E. and
-Xue, Lan},
-  title = {{E}fficient {M}etadata {M}anagement in {L}arge {D}istributed
-{S}torage {S}ystems},
-  booktitle = {Proceedings of the 20th IEEE/11th NASA Goddard Conference on
-Mass Storage Systems and Technologies},
+  author = {Brandt, Scott A. and Miller, Ethan L. and Long, Darrell D.  E. and Xue, Lan},
+  title = {{E}fficient {M}etadata {M}anagement in {L}arge {D}istributed {S}torage {S}ystems},
+  booktitle = {Proceedings of the 20th IEEE/11th NASA Goddard Conference on Mass Storage Systems and Technologies},
   series = {MSST '03},
   year = {2003},
 }
 
 @inproceedings {thomson:fast2015-calvinfs,
   author = {Alexander Thomson and Daniel J. Abadi},
-  title = {{C}alvin{FS}: {C}onsistent {WAN} {R}eplication and {S}calable
-{M}etadata {M}anagement for {D}istributed {F}ile {S}ystems},
-  booktitle = {13th USENIX Conference on File and Storage Technologies (FAST
-15)},
+  title = {{C}alvin{FS}: {C}onsistent {WAN} {R}eplication and {S}calable {M}etadata {M}anagement for {D}istributed {F}ile {S}ystems},
+  booktitle = {Proceedings of the 13th USENIX Conference on File and Storage Technologies},
   year = {2015},
+  series = {FAST '15},
 }
  
 @inproceedings{muthitacharoen:sosp2001-nfs,
@@ -17203,22 +17225,18 @@ Systems Principles},
 
 
 @inproceedings{li:msst2006-dynamic,
-	title={{D}ynamic {H}ashing: {A}daptive {M}etadata {M}anagement for
-{P}etabyte-scale {S}cale {S}ystems},
+	title={{D}ynamic {H}ashing: {A}daptive {M}etadata {M}anagement for {P}etabyte-scale {S}cale {S}ystems},
 	author={Li, Weijia and Xue, Wei and Shu, Jiwu and Zheng, Weimin},
-	booktitle={Proceedings of the 23rd IEEE/14th NASA Goddard Conference on
-Mass Storage Systems and Technologies},
+	booktitle={Proceedings of the 23rd IEEE/14th NASA Goddard Conference on Mass Storage Systems and Technologies},
 	series={MSST '06},
 	year={2006}
 }
 
 @inproceedings{grawinkel:pdsw2012-lua,
-	author = {Grawinkel, Matthias and Sub, Tim and Best, Gregor and Popov,
-Ivan and Brinkmann, Andre},
+	author = {Grawinkel, Matthias and Sub, Tim and Best, Gregor and Popov, Ivan and Brinkmann, Andre},
 	title = {{T}owards {D}ynamic {S}cripted p{NFS} {L}ayouts},
-	booktitle = {Proceedings of the 2012 SC Companion: High Performance
-Computing, Networking Storage and Analysis},
-	series = {SCC '12},
+        booktitle = {Proceedings of the 7th {{Parallel Data Storage Workshop}}},
+	series = {PDSW '12},
 	year = {2012},
 }
 	isbn = {978-0-7695-4956-9},
@@ -17275,24 +17293,22 @@ system},
 
 @inproceedings{hildebrand:msst2005-pnfs,
   author = {Hildebrand, Dean and Honeyman, Peter},
-  title = {{E}xporting {S}torage {S}ystems in a {S}calable {M}anner with
-p{NFS}},
-  booktitle = {Proceedings of the 22Nd IEEE / 13th NASA Goddard Conference on
-Mass Storage Systems and Technologies},
+  title = {{E}xporting {S}torage {S}ystems in a {S}calable {M}anner with p{NFS}},
+  booktitle = {Proceedings of the 22nd IEEE/13th NASA Goddard Conference on Mass Storage Systems and Technologies},
   series = {MSST '05},
   year = {2005},
 }
 
 @article{zhu:pds2008-hba,
 	author = {Zhu, Yifeng and Jiang, Hong and Wang, Jun and Xian, Feng},
-	title = {{HBA}: {D}istributed {M}etadata {M}anagement for {L}arge
-{C}luster-{B}ased {S}torage {S}ystems},
-	journal = {IEEE Transactions on Parallel Distribed Systems},
+	title = {{HBA}: {D}istributed {M}etadata {M}anagement for {L}arge {C}luster-{B}ased {S}torage {S}ystems},
+	journal = {IEEE Transactions on Parallel Distributed Systems},
+	year = {2008},
+}
 	series = {IPDPS '08},
 	volume = {19},
 	number = {6},
 	month = {June},
-	year = {2008},
 }
 	pages = {750--763},
 }
@@ -17308,23 +17324,20 @@ Technologies},
 }
 
 @inproceedings{sinnamohideen:atc2010-ursa,
-	Address = {Boston, MA},
-	Author = {Shafeeq Sinnamohideen and Raja R. Sambasivan and James
-Hendricks and Likun Liu and Gregory R. Ganger},
-	Booktitle = {USENIX ATC '10},
-	Month = {June 23-25},
-	Title = {{A} {T}ransparently-{S}calable {M}etadata {S}ervice for the
-{U}rsa {M}inor {S}torage {S}ystem},
+	Author = {Shafeeq Sinnamohideen and Raja R. Sambasivan and James Hendricks and Likun Liu and Gregory R. Ganger},
+	Title = {{A} {T}ransparently-{S}calable {M}etadata {S}ervice for the {U}rsa {M}inor {S}torage {S}ystem},
+        booktitle = {Proceedings of the {{USENIX Annual Technical Conference}}},
 	Year = {2010},
 	Series = {ATC '10}
+}
+	Address = {Boston, MA},
+	Month = {June 23-25},
 }
 
 @inproceedings{doucer:osdi2006-farsite-dir,
 	author = {Douceur, John R. and Howell, Jon},
-	title = {{D}istributed {D}irectory {S}ervice in the {F}arsite {F}ile
-{S}ystem},
-	booktitle = {Proceedings of the 7th Symposium on Operating Systems
-Design \& Implementation},
+	title = {{D}istributed {D}irectory {S}ervice in the {F}arsite {F}ile {S}ystem},
+	booktitle = {Proceedings of the 7th Symposium on Operating Systems Design and Implementation},
 	series = {OSDI '06},
 	year = {2006},
 }
@@ -17352,14 +17365,14 @@ Principles},
 @article{mckusick:acm2010-gfs-evolution,
 	author = {McKusick, Kirk and Quinlan, Sean},
 	title = {{GFS}: {E}volution on {F}ast-forward},
-	journal = {login; '10},
+	journal = {login;, Spring '10},
+	year = {2010},
 }
 	journal = {Commununications ACM},
 	issue_date = {March 2010},
 	volume = {53},
 	number = {3},
 	month = mar,
-	year = {2010},
 	issn = {0001-0782},
 	pages = {42--49},
 }
@@ -17423,13 +17436,10 @@ Storage Technologies},
 }
 
 @inproceedings{pai:asplos1998-lard,
-	author = {Pai, Vivek S. and Aron, Mohit and Banga, Gaurov and Svendsen,
-Michael and Druschel, Peter and Zwaenepoel, Willy and Nahum, Erich},
-	title = {{L}ocality-aware {R}equest {D}istribution in {C}luster-based
-{N}etwork {S}ervers},
- booktitle = {Proceedings of the Eighth International Conference on
-Architectural Support for Programming Languages and Operating Systems},
-	series = {ASPLOS VIII},
+	author = {Pai, Vivek S. and Aron, Mohit and Banga, Gaurov and Svendsen, Michael and Druschel, Peter and Zwaenepoel, Willy and Nahum, Erich},
+	title = {{L}ocality-aware {R}equest {D}istribution in {C}luster-based {N}etwork {S}ervers},
+booktitle = {Proceedings of the 8th International Conference on Architectural Support for Programming Languages and Operating Systems},
+	series = {ASPLOS '98},
 	year = {1998}
 }
 	isbn = {1-58113-107-0},
@@ -17514,7 +17524,7 @@ and Yousif, Mazin},
 {M}achine {M}igration},
 	booktitle = {Proceedings of the 4th USENIX Conference on Networked
 Systems Design \& Implementation},
-	series = {NSDI'07},
+	series = {NSDI '07},
 	year = {2007},
 }
 	location = {Cambridge, MA},
@@ -17526,32 +17536,43 @@ Systems Design \& Implementation},
 	address = {Berkeley, CA, USA},
 } 
 
-@article{behzad:techreport2014-io-autotuning,
-  title={{I}mproving {P}arallel I/O {A}utotuning with {P}erformance
-{M}odeling},
-  author={Behzad, Babak and Byna, Surendra and Wild, Stefan M and Snir, Marc},
-  year={2014}
+@inproceedings{behzad:techreport2014-io-autotuning,
+ author = {Behzad, Babak and Byna, Surendra and Wild, Stefan M. and Prabhat, Mr. and Snir, Marc},
+ title = {{{Improving Parallel I/O Autotuning with Performance Modeling}}},
+ booktitle = {Proceedings of the 23rd International Symposium on High-performance Parallel and Distributed Computing},
+ series = {HPDC '14},
+ year = {2014},
 }
+ isbn = {978-1-4503-2749-7},
+ location = {Vancouver, BC, Canada},
+ pages = {253--256},
+ numpages = {4},
+ url = {http://doi.acm.org/10.1145/2600212.2600708},
+ doi = {10.1145/2600212.2600708},
+ acmid = {2600708},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {autotuning, optimization, parallel i/o, performance, performance modeling},
+} 
+
 
 @inproceedings{behzad:sc2013-autotuning,
   title={{{Taming Parallel I/O Complexity with Auto-Tuning}}},
   author={Behzad, Babak and Luu, Huong Vu Thanh and Huchette, Joseph and Byna, Surendra and Aydt, Ruth and Koziol, Quincey and Snir, Marc and others},
   booktitle={Proceedings of the International Conference on High Performance Computing, Networking, Storage and Analysis},
-  series={SC '13}
+  series={SC '13},
+  year={2013},
 }
   pages={68},
-  year={2013},
   organization={ACM}
 
 @inproceedings{leung:fast2009-spyglass,
-	author = {Leung, Andrew W. and Shao, Minglong and Bisson, Timothy and
-Pasupathy, Shankar and Miller, Ethan L.},
-	title = {{S}pyglass: {F}ast, {S}calable {M}etadata {S}earch for
-{L}arge-scale {S}torage {S}ystems},
-	booktitle = {Proccedings of the 7th Conference on File and Storage
-Technologies},
+	author = {Leung, Andrew W. and Shao, Minglong and Bisson, Timothy and Pasupathy, Shankar and Miller, Ethan L.},
+	title = {{S}pyglass: {F}ast, {S}calable {M}etadata {S}earch for {L}arge-scale {S}torage {S}ystems},
+	booktitle = {Proccedings of the 7th Conference on File and Storage Technologies},
 	series = {FAST '09},
 	year = {2009},
+}
 	location = {San Francisco, California},
 	pages = {153--166},
 	numpages = {14},
@@ -17576,14 +17597,12 @@ Technical Conference},
 } 
 
 @inproceedings{hua:sc2009-smartstore,
-	author = {Hua, Yu and Jiang, Hong and Zhu, Yifeng and Feng, Dan and
-Tian, Lei},
-	title = {{S}mart{S}tore: {A} {N}ew {M}etadata {O}rganization {P}aradigm
-with {S}emantic-awareness for {N}ext-generation {F}ile {S}ystems},
-	booktitle = {Proceedings of the Conference on High Performance
-Computing Networking, Storage and Analysis},
+	author = {Hua, Yu and Jiang, Hong and Zhu, Yifeng and Feng, Dan and Tian, Lei},
+	title = {{S}mart{S}tore: {A} {N}ew {M}etadata {O}rganization {P}aradigm with {S}emantic-awareness for {N}ext-generation {F}ile {S}ystems},
+	booktitle = {Proceedings of the Conference on High Performance Computing Networking, Storage and Analysis},
 	series = {SC '09},
 	year = {2009},
+}
 	isbn = {978-1-60558-744-8},
 	pages = {10:1--10:12},
 	articleno = {10},
@@ -17594,14 +17613,12 @@ Computing Networking, Storage and Analysis},
 }
 
 @inproceedings{cipar:eurosys2012-lazybase,
-	author = {Cipar, James and Ganger, Greg and Keeton, Kimberly and
-Morrey,III, Charles B. and Soules, Craig A.N. and Veitch, Alistair},
-	title = {LazyBase: Trading Freshness for Performance in a Scalable
-Database},
-	booktitle = {Proceedings of the 7th ACM European Conference on Computer
-Systems},
+	author = {Cipar, James and Ganger, Greg and Keeton, Kimberly and Morrey,III, Charles B. and Soules, Craig A.N. and Veitch, Alistair},
+	title = {{{LazyBase: Trading Freshness for Performance in a Scalable Database}}},
+	booktitle = {Proceedings of the 7th ACM European Conference on Computer Systems},
 	series = {EuroSys '12},
 	year = {2012},
+}
 	isbn = {978-1-4503-1223-3},
 	pages = {169--182},
 	numpages = {14},
@@ -17615,13 +17632,10 @@ Systems},
 % Distributed Systems Papers
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 @inproceedings{isard:EuroSys2007-dryad,
-	author = {Isard, Michael and Budiu, Mihai and Yu, Yuan and Birrell,
-Andrew and Fetterly, Dennis},
-	title = {Dryad: distributed data-parallel programs from sequential
-building blocks},
-	booktitle = {Proceedings of the 2nd ACM SIGOPS/EuroSys European
-Conference on Computer Systems 2007},
-	series = {EuroSys'07},
+	author = {Isard, Michael and Budiu, Mihai and Yu, Yuan and Birrell, Andrew and Fetterly, Dennis},
+	title = {{{Dryad: Distributed Data-parallel Programs from Sequential Building Blocks}}},
+	booktitle = {Proceedings of the 2nd ACM SIGOPS European Conference on Computer Systems 2007},
+	series = {EuroSys '07},
 	year = {2007},
 }
 	year = {2007},
@@ -17637,12 +17651,11 @@ programming},
 
 @inproceedings{dean:osdi2004-mapreduce,
 	author = {Dean, Jeffrey and Ghemawat, Sanjay},
-	title = {{M}ap{R}educe: {S}implified {D}ata {P}rocessing on {L}arge
-{C}lusters},
-	booktitle = {Proceedings of the 6th USENIX Symposium on Operarting
-Systems Design \& Implementation},
+	title = {{M}ap{R}educe: {S}implified {D}ata {P}rocessing on {L}arge {C}lusters},
+	booktitle = {Proceedings of the 6th USENIX Symposium on Operarting Systems Design and Implementation},
 	series = {OSDI '04},
 	year = {2004},
+}
 	numpages = {1},
 }
 	%location = {San Francisco, CA},
@@ -17674,18 +17687,14 @@ publisher = {ACM},
 
 
 @inproceedings{zaharia:nsdi2012-spark,
-	oddress = {Berkeley, CA, USA},
-	author = {Zaharia, Matei and Chowdhury, Mosharaf and Das, Tathagata and
-Dave, Ankur and Ma, Justin and McCauley, Murphy and Franklin, Michael J. and
-Shenker, Scott and Stoica, Ion},
-	title = {{R}esilient {D}istributed {D}atasets: {A} {F}ault-{T}olerant
-{A}bstraction for {I}n-{M}emory {C}luster {C}omputing},
-	booktitle = {Proceedings of the 9th USENIX Conference on Networked
-Systems Design \& Implementation},
-	series = {NSDI'12},
+	author = {Zaharia, Matei and Chowdhury, Mosharaf and Das, Tathagata and Dave, Ankur and Ma, Justin and McCauley, Murphy and Franklin, Michael J. and Shenker, Scott and Stoica, Ion},
+	title = {{R}esilient {D}istributed {D}atasets: {A} {F}ault-{T}olerant {A}bstraction for {I}n-{M}emory {C}luster {C}omputing},
+	booktitle = {Proceedings of the 9th USENIX Conference on Networked Systems Design and Implementation},
+	series = {NSDI '12},
 	year = {2012},
 }
 	location = {San Jose, CA},
+	oddress = {Berkeley, CA, USA},
 	pages = {2--2},
 	numpages = {1},
 	url = {http://dl.acm.org/citation.cfm?id=2228298.2228301},
@@ -17764,14 +17773,13 @@ data processing},
 
 
 @inproceedings{chang:osdi2006-bigtable,
-	author = {Chang, Fay and Dean, Jeffrey and Ghemawat, Sanjay and Hsieh,
-Wilson C. and Wallach, Deborah A. and Burrows, Mike and Chandra, Tushar and
-Fikes, Andrew and Gruber, Robert E.},
-	title = {Bigtable: a distributed storage system for structured data},
+	author = {Chang, Fay and Dean, Jeffrey and Ghemawat, Sanjay and Hsieh, Wilson C. and Wallach, Deborah A. and Burrows, Mike and Chandra, Tushar and Fikes, Andrew and Gruber, Robert E.},
+	title = {{{Bigtable: A Distributed Storage System for Structured Data}}},
 	booktitle = {Proceedings of the 7th USENIX Symposium on Operating
 Systems Design and Implementation - Volume 7},
 	series = {OSDI '06},
 	year = {2006},
+}
 	location = {Seattle, WA},
 	pages = {15--15},
 	numpages = {1},
@@ -17855,14 +17863,12 @@ Data Analysis},
 
 
 @inproceedings{decandia:sosp2007-dynamo,
-	author = {DeCandia, Giuseppe and Hastorun, Deniz and Jampani, Madan and
-Kakulapati, Gunavardhan and Lakshman, Avinash and Pilchin, Alex and
-Sivasubramanian, Swaminathan and Vosshall, Peter and Vogels, Werner},
-	title = {Dynamo: amazon's highly available key-value store},
-	booktitle = {Proceedings of twenty-first ACM SIGOPS symposium on
-Operating systems principles},
+	author = {DeCandia, Giuseppe and Hastorun, Deniz and Jampani, Madan and Kakulapati, Gunavardhan and Lakshman, Avinash and Pilchin, Alex and Sivasubramanian, Swaminathan and Vosshall, Peter and Vogels, Werner},
+	title = {{{Dynamo: Amazon's Highly Available Key-value Store}}},
+	booktitle = {Proceedings of 21st ACM SIGOPS Symposium on Operating Systems Principles},
 	series = {SOSP '07},
 	year = {2007},
+}
 	isbn = {978-1-59593-591-5},
 	location = {Stevenson, Washington, USA},
 	pages = {205--220},
@@ -18047,7 +18053,7 @@ Orion and Narayanan, Dushyanth and Dinu, Florin and Rowstron, Antony},
 {S}torage},
 	booktitle = {Proceedings of the 10th USENIX Conference on Networked
 Systems Design and Implementation},
-	series = {NSDI'13},
+	series = {NSDI '13},
 	year = {2013},
 }
 	location = {Lombard, IL},
@@ -18066,7 +18072,7 @@ Indranil and Abad, Christina and Roberts, Nathan and Lin, Philbert},
 Deadlines in Mapreduce Clusters}, 
 	booktitle = {Proceedings of the Fourth ACM Symposium on Cloud
 Computing}, 
-	series = {SOCC '13},
+	series = {SoCC '13},
 	year = {2013}
 }
 
@@ -18091,16 +18097,17 @@ Kihwal and Lu, Yi and Campbell, Roy H.},
 {B}ig {S}torage {S}ystems},
 	booktitle = {Proceedings of the International Conference on Utility and Cloud Computing},
 	series = {UCC '12},
-} 
 	year = {2012},
+} 
 	pages = {125--132},
 	url = {http://dx.doi.org/10.1109/UCC.2012.27},
 
-@techreport{abad:techreport2012-fstrace,
-  title={{M}etadata {W}orkloads for {T}esting {B}ig {S}torage {S}ystems},
-  author={Abad, Christina L. and Luu, Huong and Lu, Yi and Campbell, R},
-  institution={Citeseer},
-  year={2012}
+@phdthesis{abad:techreport2012-fstrace,
+  title={{{Big Data Storage Workload Characterization, Modeling and Synthetic Generation}}},
+  author={Abad, Christina L.},
+  school={University of Illinois at Urbana-Champaign},
+  year={2014},
+  month={May},
 }
 
 @inproceedings{herodotou:cidr2011-starfish,
@@ -18322,10 +18329,8 @@ Systems Principles},
 
 @inproceedings{czechowski:ipdps2013-codesign,
 	author = {Czechowski, Kenneth and Vuduc, Richard},
-	title = {{A} {T}heoretical {F}ramework for {A}lgorithm-{A}rchitecture
-{C}o-design},
-	booktitle = {Proceedings of the IEEE 27th International Symposium on
-Parallel and Distributed Processing},
+	title = {{A} {T}heoretical {F}ramework for {A}lgorithm-{A}rchitecture {C}o-design},
+	booktitle = {Proceedings of the 26th IEEE International Symposium on Parallel and Distributed Processing},
 	series = {IPDPS'13},
 	year = {2013},
 }
@@ -18351,14 +18356,13 @@ Operating Systems Principles},
 % Distributed vs. Single Nodes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 @inproceedings{michael:2007pdps-scale-up-x-scale-out,
-	title={{S}cale-up {X} {S}cale-out: {A} {C}ase {S}tudy {U}sing
-{N}utch/{L}ucene},
-	author={Michael, M. and Moreira, J.E. and Shiloach, D. and Wisniewski,
-R.W.},
-	booktitle={Parallel and Distributed Processing Symposium, 2007. IPDPS
-2007. IEEE International},
-	pages={1--8},
+	title={{S}cale-up {X} {S}cale-out: {A} {C}ase {S}tudy {U}sing {N}utch/{L}ucene},
+	author={Michael, M. and Moreira, J.E. and Shiloach, D. and Wisniewski, R.W.},
+	booktitle={Proceedings of the 21st IEEE International Parallel and Distributed Processing Symposium},
 	year={2007},
+        series={IPDPS '07},
+}
+	pages={1--8},
 	organization={IEEE}
 } 
 
@@ -18371,14 +18375,12 @@ R.W.},
 }
 
 @inproceedings{rowstron:hotcdp2012-hadoop-vs-single-node,
-	author = {Rowstron, Antony and Narayanan, Dushyanth and Donnelly,
-Austin and O'Shea, Greg and Douglas, Andrew},
-	title = {{N}obody {E}ver {G}ot {F}ired for {U}sing {H}adoop on a
-{C}luster},
-	booktitle = {Proceedings of the 1st International Workshop on Hot
-Topics in Cloud Data Processing},
+	author = {Rowstron, Antony and Narayanan, Dushyanth and Donnelly, Austin and O'Shea, Greg and Douglas, Andrew},
+	title = {{N}obody {E}ver {G}ot {F}ired for {U}sing {H}adoop on a {C}luster},
+	booktitle = {Proceedings of the 1st International Workshop on Hot Topics in Cloud Data Processing},
 	series = {HotCDP '12},
 	year = {2012},
+}
 	isbn = {978-1-4503-1162-5},
 	location = {Bern, Switzerland},
 	pages = {2:1--2:5},
@@ -18417,13 +18419,14 @@ Cloud Ccomputing},
 	address = {Berkeley, CA, USA},
 }
 
-@article{perez:jctc20150parsplice,
+@inproceedings{perez:jctc20150parsplice,
   title={{L}ong-{T}ime {D}ynamics {T}hrough {P}arallel {T}rajectory {S}plicing},
   author={Perez, Danny and Cubuk, Ekin D and Waterland, Amos and Kaxiras, Efthimios and Voter, Arthur F},
   journal={Journal of Chemical Theory and Computation},
-  publisher={ACS Publications},
-  booktitle={ACS Publications}
+  booktitle={ACS Publications},
+  year = {2015},
 }
+  publisher={ACS Publications},
   volume={12},
   number={1},
   pages={18--28},
@@ -18533,7 +18536,7 @@ Schuster, Assaf},
         author={Appuswamy, Raja and Gkantsidis, Christos and Narayanan,
 Dushyanth and Hodson, Orion and Rowstron, Antony},
         booktitle={Proceedings of the 4th ACM Symposium on Cloud Computing},
-	series={SOCC'13},
+	series={SoCC'13},
         year={2013}
 }
 
@@ -18550,23 +18553,18 @@ Dushyanth and Hodson, Orion and Rowstron, Antony},
 Brandt, Scott and Maltzahn, Carlos},
 	title={{A} {F}ramework for an {I}n-depth {C}omparison of {S}cale-out
 and {S}cale-up},
-	booktitle = {Proceedings of the 2nd International Workshop on Data
-Intensive Scalable Computing at SuperComputing '13},
+	booktitle = {Proceedings of the 2nd International Workshop on Data Intensive Scalable Computing},
 	year = {2013},
-	series = {DISCS'13}
+	series = {DISCS '13}
 }
 
 
 @inproceedings{sevilla:lspp2014-supmr,
-	author={Sevilla, Michael and Nassi, Ike and Ioannidou, Kleoni and
-Brandt, Scott and Maltzahn, Carlos},
-	title={{S}up{MR}: {C}ircumventing {D}isk and {M}emory {B}andwidth
-{B}ottlenecks for {S}cale-up {M}ap{R}educe},
-	booktitle = {Proceedings of the 6th International Workshop on
-Large-Scale Parallel Processing at IEEE International Parallel and Distributed
-Processing Symposium '14},
+	author={Sevilla, Michael and Nassi, Ike and Ioannidou, Kleoni and Brandt, Scott and Maltzahn, Carlos},
+	title={{S}up{MR}: {C}ircumventing {D}isk and {M}emory {B}andwidth {B}ottlenecks for {S}cale-up {M}ap{R}educe},
+	booktitle = {Proceedings of the 6th International Workshop on Large-Scale Parallel Processing},
 	year = {2014},
-	series = {LSPP'13}
+	series = {LSPP '14}
 }
 
 
@@ -18585,14 +18583,13 @@ Processing Symposium '14},
 }
 
 @inproceedings{swift:osdi2004-shadow-drivers,
-	title={Recovering device drivers},
-	author={Swift, Michael M and Annamalai, Muthukaruppan and Bershad,
-Brian N and Levy, Henry M},
-	booktitle={Proceedings of the 6th conference on Symposium on Opearting
-Systems Design \& Implementation},
-	pages={1--1},
-	year={2004}
+	title={{{Recovering Device Drivers}}},
+	author={Swift, Michael M and Annamalai, Muthukaruppan and Bershad, Brian N and Levy, Henry M},
+	booktitle={Proceedings of the 6th Symposium on Operating Systems Design and Implementation},
+	year={2004},
+        series={OSDI '04},
 }
+	pages={1--1},
 
 @inproceedings{david:osdi2008-curios,
 	title={CuriOS: Improving reliability through operating system
@@ -18649,12 +18646,11 @@ IEEE/IFIP International Conference on},
 
 @inproceedings{ansel:ipdps2009-dmtcp,
 	author = {Ansel, Jason and Arya, Kapil and Cooperman, Gene},
-	title = {DMTCP: Transparent checkpointing for cluster computations and
-the desktop},
-	booktitle = {Proceedings of the 2009 IEEE International Symposium on
-Parallel\&Distributed Processing},
+	title = {DMTCP: Transparent checkpointing for cluster computations and the desktop},
+	booktitle = {Proceedings of the 32nd IEEE International Symposium on Parallel and Distributed Processing},
 	series = {IPDPS '09},
 	year = {2009},
+}
 	isbn = {978-1-4244-3751-1},
 	pages = {1--12},
 	numpages = {12},
@@ -18825,10 +18821,11 @@ Log-Structured Databases}
 
 @inproceedings{chain_rep,
  author = {van Renesse, Robbert and Schneider, Fred B.},
- title = {Chain Replication for Supporting High Throughput and Availability},
- booktitle = {Proceedings of the 6th Conference on Symposium on Opearting Systems Design \& Implementation - Volume 6},
- series = {OSDI'04},
+ title = {{{Chain Replication for Supporting High Throughput and Availability}}},
+ booktitle = {Proceedings of the 6th Conference on Symposium on Operating Systems Design and Implementation},
+ series = {OSDI '04},
  year = {2004},
+}
  location = {San Francisco, CA},
  pages = {7--7},
  numpages = {1},
@@ -18850,13 +18847,12 @@ Log-Structured Databases}
 }
 
 @inproceedings{shvachko:msst10,
-	Address = {Incline Village, NV},
-	Author = {Konstantin V. Shvachko and Hairong Kuang and Sanjay Radia and
-bert Chansler},
-	Booktitle = {MSST2010},
-	Month = {May 3-7},
-	Title = {The Hadoop Distributed File System},
-	Year = {2010}}
+ title = {The {{Hadoop Distributed File System}}},
+  booktitle = {Proceedings of the 26th {{Symposium}} on Mass {{Storage Systems}} and {{Technologies}}},
+  author = {Shvachko, K. and Kuang, Hairong and Radia, S. and Chansler, R.},
+  series = {MSST '10},
+  year = {2010}
+}
 
 @inproceedings{ghemawat:sosp03,
 	Address = {Bolton Landing, NY},
@@ -18873,8 +18869,7 @@ bert Chansler},
 	Booktitle = osdi04,
 	Month = dec,
 	Pages = {91--104},
-	Title = {Chain Replication for Supporting High Throughput and
-ailability},
+	Title = {Chain Replication for Supporting High Throughput and ailability},
 	Year = 2004}
 
 @inproceedings{maccormick:osdi04,
@@ -18898,8 +18893,16 @@ frastructure},
 
 @article{bent:login16-hpc-trends,
   title={{S}erving {D}ata to the {L}unatic {F}ringe},
-  author={PenisBent, John and Settlemyer, Brad and Grider, Gary},
-  journal = {login; '16},
+  author={Bent, John and Settlemyer, Brad and Grider, Gary},
+  journal = {login;, Summer 2016},
+  year = {2016},
+}
+
+@article{jimenez:login16-popper,
+  title={{{Standing on the Shoulders of Giants by Managing Scientific Experiments Like Software}}},
+  author={Jimenez, Ivo and Sevilla, Michael and Watkins, Noah and Maltzahn, Carlos and Lofstead, Jay and Mohror, Kathryn and Arpaci-Dusseau, Remzi and Arpaci-Dusseau, Andrea},
+  journal = {login;, Winter 2016},
+  year = {2016},
 }
 
 @techreport{jimenez_popper_2016,
@@ -18908,9 +18911,31 @@ frastructure},
   number = {UCSC-SOE-16-10},
   institution = {UC Santa Cruz},
   author = {Jimenez, Ivo and Sevilla, Michael and Watkins, Noah and Maltzahn, Carlos and Lofstead, Jay and Mohror, Kathryn and Arpaci-Dusseau, Remzi and Arpaci-Dusseau, Andrea},
-  month = may,
   year = {2016},
 }
+  month = may,
+
+@techreport{sevilla:techreport18-tintenfisch,
+  type = {Technical Report},
+  title = {{{Tintenfisch: File System Namespace Schemas And Generators}}},
+  number = {UCSC-SOE-18-08},
+  institution = {UC Santa Cruz},
+  author = {Sevilla, Michael A. and Nasirigerdeh, Reza and LeFevre, Jeff and Watkins, Noah and Alvaro, Peter and Lawson, Margaret and Lofstead, Jay},
+  month = {April},
+  year = {2018},
+}
+
+@techreport{watkins:techreport16-brados,
+  type = {Technical Report},
+  title = {{{Brados: Declarative, Programmable Object Storage}}},
+  number = {UCSC-SOE-16-12},
+  institution = {UC Santa Cruz},
+  author = {Watkins, Noah and Sevilla, Michael and Jimenez, Ivo and Ojha, Neha and Alvaro, Peter and Maltzahn, Carlos},
+  month = {July},
+  year = {2016},
+}
+
+
 
 @inproceedings{sevilla:eurosys17,
     Author = {Michael A. Sevilla and Noah Watkins and Ivo Jimenez and Peter Alvaro and Shel Finkelstein and Jeff LeFevre and Carlos Maltzahn},
@@ -18924,10 +18949,10 @@ frastructure},
 @inproceedings{patil:pdsw2007-giga+,
   author = {Patil, Swapnil V. and Gibson, Garth A. and Lang, Sam and Polte, Milo},
   title = {{GIGA}+: {S}calable {D}irectories for {S}hared {F}ile {S}ystems},
-  booktitle = {Proceedings of the 2nd International Workshop on Petascale Data Storage: held in conjunction with Supercomputing '07},
+  booktitle = {Proceedings of the 2nd International Workshop on Petascale Data Storage}
   series = {PDSW '07},
-}
   year = {2007},
+}
 
 @inproceedings{patil:fast2011-giga+,
   author = {Patil, Swapnil V. and Gibson, Garth A.},
@@ -18942,8 +18967,8 @@ frastructure},
   title = {{TABLEFS}: {E}nhancing {M}etadata {E}fficiency in the {L}ocal {F}ile {S}ystem},
   booktitle = {Proceedings of the USENIX Annual Technical Conference},
   series = {ATC '13},
-} 
   year = {2013},
+} 
 
 @inproceedings{ren:sc2014-indexfs,
   author = {Ren, Kai and Zheng, Qing and Patil, Swapnil and Gibson, Garth},  
@@ -18952,6 +18977,21 @@ frastructure},
   series = {SC '14},
   year = {2014},
 }
+
+@inproceedings {niaza:fast17-hopsfs,
+  author = {Salman Niazi and Mahmoud Ismail and Seif Haridi and Jim Dowling and Steffen Grohsschmiedt and Mikael Ronstr{\"o}m},
+  title = {{{HopsFS: Scaling Hierarchical File System Metadata Using NewSQL Databases}}},
+  booktitle = {Proceedings of the 15th {USENIX} Conference on File and Storage Technologies},
+  series = {FAST '17},
+  year = {2017},
+}
+  isbn = {978-1-931971-36-2},
+  address = {Santa Clara, CA},
+  pages = {89--104},
+  url = {https://www.usenix.org/conference/fast17/technical-sessions/presentation/niazi},
+  publisher = {{USENIX} Association},
+}
+
   booktitle = {Proceedings of the 20th ACM/IEEE Conference on Supercomputing},
 
 @inproceedings{xiao:socc15-shardfs,
@@ -18959,9 +18999,9 @@ frastructure},
  title = {{{ShardFS vs. IndexFS: Replication vs. Caching Strategies for Distributed Metadata Management in Cloud Storage Systems}}},
  booktitle = {Proceedings of the Symposium on Cloud Computing},
  series = {SoCC '15},
+ year = {2015},
 } 
  booktitle = {Proceedings of the Sixth ACM Symposium on Cloud Computing},
- year = {2015},
  isbn = {978-1-4503-3651-2},
  location = {Kohala Coast, Hawaii},
  pages = {236--249},
@@ -18979,24 +19019,26 @@ frastructure},
   title = {{B}atch{FS}: {S}caling the {F}ile {S}ystem {C}ontrol {P}lane with {C}lient-funded {M}etadata {S}ervers},
   booktitle = {Proceedings of the Workshop on Parallel Data Storage},
   series = {PDSW '14},
+  year = {2014},
 }
   booktitle = {Proceedings of the 9th Workshop on Parallel Data Storage},
-  year = {2014},
 
 @inproceedings{grider:pdsw2015-marfs,
   author={Grider, Gary and Montoya, Dave and Chen, Hsing-bung and Kettering, Brett and Inman, Jeff and DeJager, Chris and Torrez, Alfred and Lamb, Kyle and Hoffman, Chris and Bonnie, David and Croonenberg, Ronald and Broomfield, Matthew and Leffler, Sean and Fields, Parks and Kuehn, Jeff and Bent, John},
   title={{MarFS - A Scalable Near-Posix Metadata File System with Cloud Based Object Backend}},
-  booktitle = {Work-in-Progress at Proceedings of the Workshop on Parallel Data Storage},
+  booktitle = {Work-in-Progress at 10th Parallel Data Storage Workshop},
   series = {PDSW '15},
-}
   year = {2015},
+}
   month = {November},
   booktitle = {Work-in-Progress at Proceedings of the 10th Workshop on Parallel Data Storage},
 
-@inproceedings{bent:slides-twotiers,
+@misc{bent:slides-twotiers,
   title={{{Slides: 2 Tier Storage Architecture}}},
   author={Faibish, Sorin and Bent, John and Gupta, Uday and Ting, Dennis and Tzelnic, Percy},
-  url={http://www.pdl.cmu.edu/SDI/2015/slides/Faibish-CMU-PDL-Spring-2015-final.pdf},
+  howpublished={http://www.pdl.cmu.edu/SDI/2015/slides/Faibish-CMU-PDL-Spring-2015-final.pdf},
+  year = {2015},
+  month = {November},
 }
 
 @conference{samuels:oss16,
@@ -19005,6 +19047,14 @@ frastructure},
   booktitle = {{{OpenStack Summit 2016}}},
   series = {OpenStack '16},
   year = {2016},
+}
+
+@conference{serenyi:pdsw17-keynote,
+  author =    {Denis Serenyi},
+  title =     {{{Cluster-Level Storage @ Google, How we use Colossus to improve storage efficiency}}},
+  booktitle = {Keynote at the Joint International Workshop on Parallel Data Storage and Data Intensive Scalable Computing Systems},
+  series = {PDSW '17},
+  year = {2017},
 }
 
 @inproceedings{klimovic:eurosys16-disagg,
@@ -19017,8 +19067,9 @@ frastructure},
 @inproceedings{chaimov:hpdc16-spark,
   title={{{Scaling Spark on HPC Systems}}},
   author={Chaimov, Nicholas and Malony, Allen and Canon, Shane and Iancu, Costin and Ibrahim, Khaled Z and Srinivasan, Jay},
-  booktitle={Proceedings of the Symposium on High-Performance Parallel and Distributed Computing},
+  booktitle={Proceedings of the 25th International Symposium on High-Performance Parallel and Distributed Computing},
   series={HPDC '16},
+  year = {2016},
 }
   pages={97--110},
 
@@ -19034,9 +19085,11 @@ frastructure},
 }
 
 @inproceedings {watkins:hot17-declstor,
-  title     = {{{DeclStore: Layering Is for the Faint of Heart}}},
+  title     = {{{DeclStore: Layering is for the Faint of Heart}}},
   author    = {Noah Watkins and Michael A. Sevilla and Ivo Jimenez and Kathryn Dahlgren and Peter Alvaro and Shel Finkelstein and Carlos Maltzahn},
-  booktitle    = {HotStorage '17},
+  booktitle = {Proceedings of the 9th {USENIX} Workshop on Hot Topics in Storage and File Systems},
+  year = {2017},
+  series = {HotStorage '17},
 }
 
 @inproceedings{shi:vldb15-spark,
@@ -19044,20 +19097,21 @@ frastructure},
  title = {{{Clash of the Titans: MapReduce vs. Spark for Large Scale Data Analytics}}},
  booktitle = {Proceedings of the VLDB Endowment},
  series = {VLDB '15},
+ year = {2015},
 } 
 
 @misc{docs:cephcaps,
   title        ={{{Ceph Documentation}}},
   year         ={2017},
   month        ={December},
-  howpublished ={\url{http://docs.ceph.com/docs/master/cephfs/capabilities/}},
+  howpublished ={\url{http://docs.ceph.com/docs/jewel/cephfs/capabilities/}},
 }
 
 @misc{docs:cephstripe,
   title        ={{{Ceph Documentation}}},
   year         ={2017},
   month        ={December},
-  howpublished ={\url{http://docs.ceph.com/docs/master/dev/file-striping/}},
+  howpublished ={\url{http://docs.ceph.com/docs/jewel/dev/file-striping/}},
 }
 
 @misc{docs:cephinternals,
@@ -19081,6 +19135,26 @@ frastructure},
   howpublished ={\url{https://github.com/michaelsevilla/ceph/tree/cudele}},
 }
 
+@misc{borthakur:website17,
+  author       ={Borthakur, Dhruba},
+  title        ={{{The Curse of the Singletons! The Vertical Scalability of Hadoop NameNode}}},
+  year         ={2018},
+  month        ={April},
+  howpublished ={\url{http://hadoopblog.blogspot.com/2010/04/curse-of-singletons-vertical.html}},
+}
+
+@misc{kaushik:website14-federation,
+  author       ={Pal, Kaushik},
+  title        ={{{Enhance Existing HDFS Architecture with HDFS Federation}}},
+  year         ={2014},
+  month        ={September},
+  howpublished ={\url{http://www.devx.com/opensource/enhance-existing-hdfs-architecture-with-hadoop-federation.html}},
+}
+
+
+
+
+
 @techreport{wang:tech09-lustre,
   title       = {{{Understanding Lustre Internals}}},
   author      = {Wang, Feiyi and Oral, H Sarp and Shipman, Galen M and Drokin, Oleg and Wang, Di and Huang, He},
@@ -19089,37 +19163,41 @@ frastructure},
 }
 
 @techreport{depardon:tech13-survey,
-  title       = {{{Analysis of six distributed file systems}}},
+  title       = {{{Analysis of Six Distributed File Systems}}},
   author      = {Depardon, Benjamin and Le Mahec, Ga{\"e}l and S{\'e}guin, Cyril},
   year        = {2013},
-  page        = {44},
   institution = {{{French Institute for Research in Computer Science and Automation}}},
 }
+  page        = {44},
 
 @inproceedings{welch:fast08-panasas,
   title     = {{{Scalable Performance of the Panasas Parallel File System}}},
   author    = {Welch, Brent and Unangst, Marc and Abbasi, Zainul and Gibson, Garth A and Mueller, Brian and Small, Jason and Zelenka, Jim and Zhou, Bin},
   booktitle = {Proccedings of the 6th Conference on File and Storage Technologies},
   series    = {FAST '08},
+  year      = {2008},
 }
   volume    = {8},
   pages     = {1--17},
-  year      = {2008}
 }
 
 
 @inproceedings{devulapalli:ipdps07-pvfs2,
-  title={File creation strategies in a distributed metadata file system},
+  title={{{File Creation Strategies in a Distributed Metadata File System}}},
   author={Devulapalli, Ananth and Wyckoff, Pete},
-  booktitle={Parallel and Distributed Processing Symposium, 2007. IPDPS 2007. IEEE International},
-  pages={1--10},
+  booktitle={Proceedings of the 21st Internatioanl Parallel and Distributed Processing Symposium},
+  series={IPDPS '07},
   year={2007},
+}
+  pages={1--10},
   organization={IEEE}
 }
 
 @article{grider:pc17-diddlings,
   author = {Grider, Gary},
-  title = {If the PLFS Index is Still Too Large too Efficiently Read/DistributePull out the HammerPLFS Collectives, Reduces PLFS Index to Nearly Nothingㄢdnabling Strategy for Optimizing Reads and Active Analysis}, 
+  title = {Personal Correspondence}, 
+  year = {2012},
+}If the PLFS Index is Still Too Large too Efficiently Read/DistributePull out the HammerPLFS Collectives, Reduces PLFS Index to Nearly Nothingㄢdnabling Strategy for Optimizing Reads and Active Analysis}, 
   booktitle = {FIXME!},
   series = {FIXME!},
   year = {FIXME!},
@@ -19133,36 +19211,48 @@ frastructure},
   year = {FIXME!},
 }
 
-@article{he:hpdc13-plfs-patterns,
-  author = {He, Jun},
-  title = {IO Acceleration with Pattern Detection},
-  booktitle = {FIXME!},
-  series = {FIXME!},
-  year = {FIXME!},
+@inproceedings{he:hpdc13-plfs-patterns,
+ author = {He, Jun and Bent, John and Torres, Aaron and Grider, Gary and Gibson, Garth and Maltzahn, Carlos and Sun, Xian-He},
+ title = {{{I/O Acceleration with Pattern Detection}}},
+ booktitle = {Proceedings of the 22nd International Symposium on High-performance Parallel and Distributed Computing},
+ series = {HPDC '13},
+ year = {2013},
 }
+ isbn = {978-1-4503-1910-2},
+ location = {New York, New York, USA},
+ pages = {25--36},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/2462902.2462909},
+ doi = {10.1145/2462902.2462909},
+ acmid = {2462909},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {I/O, PLFs, high performance com- puting, large-scale storage systems, pattern, prefetching},
+} 
+
 
 @article{klasky:journal16-sirius,
   author={S A Klasky and H Abbasi and M Ainsworth and J Choi and M Curry and T Kurc and Q Liu and J Lofstead and C Maltzahn and M Parashar and N
 Podhorszki and E Suchyta and F Wang and M Wolf and C S Chang and M Churchill and S Ethier},
   title={{{Exascale Storage Systems the SIRIUS Way}}},
   journal={Journal of Physics: Conference Series},
+  year={2016},
 }
   volume={759},
   number={1},
   pages={012095},
   url={http://stacks.iop.org/1742-6596/759/i=1/a=012095},
-  year={2016},
 
 @inproceedings{lawson:pdsw17-empress,
   author = {Margaret Lawson and Craig Ulmer and Shyamali Mukherjee and Gary Templet and Jay F. Lofstead and Scott Levy and Patrick M. Widener and Todd Kordenbrock},
-  title  = {{{Empress: Extensible Metadata Provider for Extreme-Scale Scientific Simulations}}},
-  booktitle = {Proceedings of the Joint International Workshop on Parallel Data Storage {\&} Data Intensive Scalable Computing Systems},
+  title  = {{{EMPRESS - Extensible Metadata Provider for Extreme-Scale Scientific Simulations}}},
+  booktitle = {Proceedings of the Joint International Workshop on Parallel Data Storage and Data Intensive Scalable Computing Systems},
   series = {PDSW '17},
+  year      = {2017},
 }
   booktitle = {Proceedings of the 2nd Joint International Workshop on Parallel Data Storage {\&} Data Intensive Scalable Computing Systems}
   venue = {2017, Denver, CO, USA, November 13, 2017},
   pages     = {19--24},
-  year      = {2017},
   crossref  = {DBLP:conf/sc/2017pdswdiscs},
   url       = {http://doi.acm.org/10.1145/3149393.3149403},
   doi       = {10.1145/3149393.3149403},
@@ -19179,22 +19269,31 @@ Podhorszki and E Suchyta and F Wang and M Wolf and C S Chang and M Churchill and
 }
     year = {2011}
 
-@inproceedings{pivarski:indico17-root,
+@misc{pivarski:indico17-root,
   title={{{How to make a petabyte ROOT file: proposal for managing data with columnar granularity}}},
   author={Jim Pivarski},
-  url={https://indico.fnal.gov/event/15154/contribution/10/material/slides/0.pdf}
+  howpublished={https://indico.fnal.gov/event/15154/contribution/10/material/slides/0.pdf},
   year={2017},
   month={October},
+}
+
+@inproceedings{jimenez:rr18-popper,
+  title={{{The Popper Experimentation Protocol}}},
+  author={Jimenez, Ivo and Hamedian, Sina and Sevilla, Michael and Watkins, Noah and Maltzahn, Carlos and Mohror, Kathryn and Lofstead, Jay and Arpaci-Dusseau, Andrea and  Arpaci-Dusseau, Remzi},
+  url={https://cross.ucsc.edu/wp-content/uploads/2017/09/jimenez.pdf},
+  booktitle={Series of Webinars on Reproducible Research},
+  year={2017},
+  month={July},
 }
 
 @inproceedings{oldfield:cc06-lwfs,
   title={{{Lightweight I/O for Scientific Applications}}},
   author={Oldfield, Ron A and Ward, Lee and Riesen, Rolf and Maccabe, Arthur B and Widener, Patrick and Kordenbrock, Todd},
-  booktitle={International Conference on Cluster Computing},
-  series={Cluster Computing '06}
+  booktitle={Proceedings of the International Conference on Cluster Computing},
+  series={Cluster Computing '06},
+  year={2006},
 }
   pages={1--11},
-  year={2006},
   organization={IEEE}
 }
 
@@ -19202,4 +19301,199 @@ Podhorszki and E Suchyta and F Wang and M Wolf and C S Chang and M Churchill and
   title={{{Storage Systems and Input/Output to Support Extreme Scale Science}}},
   author={Ross, Rob and et. al.},
   booktitle={Report of the DOE Workshops on Storage Systems and Input/Output},
+  year = {2014},
+}
+
+@inproceedings{leung:atc08-cifs,
+  title={{{Measurement and Analysis of Large-Scale Network File System Workloads}}},
+  author={Leung, Andrew W and Pasupathy, Shankar and Goodson, Garth R and Miller, Ethan L},
+  booktitle={Proceedings of the USENIX Annual Technical Conference},
+  series={ATC '08},
+  year={2008}
+}
+  volume={1},
+  number={2},
+  pages={2--5},
+}
+
+@inproceedings{ramakrishnan:sigmod17-adls,
+ author = {Ramakrishnan, Raghu and Sridharan, Baskar and Douceur, John R. and Kasturi, Pavan and Krishnamachari-Sampath, Balaji and Krishnamoorthy, Karthick and Li, Peng and Manu, Mitica and Michaylov, Spiro and Ramos, Rog{\'e}rio and Sharman, Neil and Xu, Zee and Barakat, Youssef and Douglas, Chris and Draves, Richard and Naidu, Shrikant S. and Shastry, Shankar and Sikaria, Atul and Sun, Simon and Venkatesan, Ramarathnam},
+ title = {{{Azure Data Lake Store: A Hyperscale Distributed File Service for Big Data Analytics}}},
+ booktitle = {Proceedings of the ACM International Conference on Management of Data},
+ series = {SIGMOD '17},
+ year = {2017},
+}
+ isbn = {978-1-4503-4197-4},
+ location = {Chicago, Illinois, USA},
+ pages = {51--63},
+ numpages = {13},
+ url = {http://doi.acm.org/10.1145/3035918.3056100},
+ doi = {10.1145/3035918.3056100},
+ acmid = {3056100},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {aws, azure, big data, cloud service, distributed file system, gce, hadoop, hdfs, map-reduce, storage, tiered storage},
+} 
+
+@inproceedings{lee:asplos18-wsmeter,
+ author = {Lee, Jaewon and Kim, Changkyu and Lin, Kun and Cheng, Liqun and Govindaraju, Rama and Kim, Jangwoo},
+ title = {{{WSMeter: A Performance Evaluation Methodology for Google's Production Warehouse-Scale Computers}}},
+ booktitle = {Proceedings of the 23rd International Conference on Architectural Support for Programming Languages and Operating Systems},
+ series = {ASPLOS '18},
+ year = {2018},
+}
+ isbn = {978-1-4503-4911-6},
+ location = {Williamsburg, VA, USA},
+ pages = {549--563},
+ numpages = {15},
+ url = {http://doi.acm.org/10.1145/3173162.3173196},
+ doi = {10.1145/3173162.3173196},
+ acmid = {3173196},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {performance evaluation, statistical modeling, warehouse-scale computer},
+} 
+
+@inproceedings{seltzer:hotos09-hFSAD,
+ author = {Seltzer, Margo and Murphy, Nicholas},
+ title = {{{Hierarchical File Systems Are Dead}}},
+ booktitle = {Proceedings of the 12th Conference on Hot Topics in Operating Systems},
+ series = {HotOS '09},
+ year = {2009},
+}
+ location = {Monte Verit\&\#224;, Switzerland},
+ pages = {1--1},
+ numpages = {1},
+ url = {http://dl.acm.org/citation.cfm?id=1855568.1855569},
+ acmid = {1855569},
+ publisher = {USENIX Association},
+ address = {Berkeley, CA, USA},
+} 
+[download]
+@inproceedings{kakoulli:sigmod17-octopusfs,
+ author = {Kakoulli, Elena and Herodotou, Herodotos},
+ title = {{{OctopusFS: A Distributed File System with Tiered Storage Management}}},
+ booktitle = {Proceedings of the ACM International Conference on Management of Data},
+ series = {SIGMOD '17},
+ year = {2017},
+}
+ isbn = {978-1-4503-4197-4},
+ location = {Chicago, Illinois, USA},
+ pages = {65--78},
+ numpages = {14},
+ url = {http://doi.acm.org/10.1145/3035918.3064023},
+ doi = {10.1145/3035918.3064023},
+ acmid = {3064023},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {distributed file system, tiered storage management},
+} 
+
+@inproceedings{hua:sc09-smartstore,
+ author = {Hua, Yu and Jiang, Hong and Zhu, Yifeng and Feng, Dan and Tian, Lei},
+ title = {{{SmartStore: A New Metadata Organization Paradigm with Semantic-awareness for Next-generation File Systems}}},
+ booktitle = {Proceedings of the Conference on High Performance Computing Networking, Storage and Analysis},
+ series = {SC '09},
+ year = {2009},
+}
+ isbn = {978-1-60558-744-8},
+ location = {Portland, Oregon},
+ pages = {10:1--10:12},
+ articleno = {10},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/1654059.1654070},
+ doi = {10.1145/1654059.1654070},
+ acmid = {1654070},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+[download]
+
+@inproceedings {zadok:hotstorage17-posix,
+author = {Erez Zadok and Dean Hildebrand and Geoff Kuenning and Keith A. Smith},
+title = {{POSIX} is Dead! Long Live... errr... What Exactly?},
+booktitle = {9th {USENIX} Workshop on Hot Topics in Storage and File Systems},
+year = {2017},
+series = {HotStorage '17},
+}
+address = {Santa Clara, CA},
+url = {https://www.usenix.org/conference/hotstorage17/program/presentation/zadok},
+publisher = {{USENIX} Association},
+}
+
+@article{levy:acm90-survey,
+ author = {Levy, Eliezer and Silberschatz, Abraham},
+ title = {{{Distributed File Systems: Concepts and Examples}}},
+ journal = {ACM Computing Surveys},
+ year = {1990},
+}
+ issue_date = {Dec. 1990},
+ volume = {22},
+ number = {4},
+ month = dec,
+ issn = {0360-0300},
+ pages = {321--374},
+ numpages = {54},
+ url = {http://doi.acm.org/10.1145/98163.98169},
+ doi = {10.1145/98163.98169},
+ acmid = {98169},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+} 
+[download]
+
+@book{tanenbaum:book05-os,
+ author = {Tanenbaum, Andrew S and Woodhull, Albert S},
+ title = {Operating Systems Design and Implementation (3rd Edition)},
+ year = {2005},
+ publisher = {Prentice-Hall, Inc.},
+} 
+ address = {Upper Saddle River, NJ, USA},
+ isbn = {0131429388},
+[download]
+
+@Book{arpaci-dusseau:book14-os,
+  author =       {Remzi H. Arpaci-Dusseau and Andrea C. Arpaci-Dusseau},
+  title =        "{Operating Systems: Three Easy Pieces}",
+  publisher =    {Arpaci-Dusseau Books},
+  month =        "May",
+  year =         {2015},
+  edition =      {0.91},
+}
+
+% ROOT
+@Article{brun:aihenp96-root,
+  author = "Brun, R. and Rademakers, F.",
+  title = "{ROOT: An object oriented data analysis framework}",
+  booktitle = "{Proceedings of the 5th International Workshop on New Computing Techniques in Physics Research}",
+  year = {1996},
+  series = {AIHENP '96},
+  journal = "Nuclear Instruments Methods",
+}
+  booktitle = "{New computing techniques in physics research V. Proceedings, 5th International Workshop, AIHENP '96 Lausanne, Switzerland, September 2-6, 1996}",
+volume = "A389",
+year = "1997",
+pages = "81-86",
+doi = "10.1016/S0168-9002(97)00048-X",
+SLACcitation = "%%CITATION = NUIMA,A389,81;%%"
+}
+
+@techreport{nasiriGerdeh:techreport18-root,
+  type   = {Technical Report},
+  title  = {{{ROOT Files for Computer Scientists}}},
+  author = {NasiriGerdeh, Reza and Pivarski, Jim and Sevilla, Michael A. and Maltzahn, Carlos},
+  number = {UCSC-SOE-18-09},
+  institution = {UC Santa Cruz},
+  month  = {May},
+  year   = {2018},
+}
+
+@techreport{nasiriGerdeh:techreport18-rootutils,
+  type   = {Technical Report},
+  title  = {{{RootUtils: a Library to Better Understand ROOT Files}}},
+  author = {NasiriGerdeh, Reza and Pivarski, Jim and Tadel, Matevz and Sevilla, Michael A. and Maltzahn, Carlos and Bockelman, Brian and Wurthwein, Frank},
+  number = {UCSC-SOE-18-10},
+  institution = {UC Santa Cruz},
+  month  = {May},
+  year   = {2018},
 }
