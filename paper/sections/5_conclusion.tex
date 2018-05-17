@@ -2,27 +2,24 @@
 \section{Conclusion}
 \vspace{-0.75em}
 
-Namespace schemas and generators solve the read problems from the examples
-in~\S\ref{sec:motivating-examples} because clients and servers avoid exchanging
-file system metadata in its entirety. Our examples benefit from \emph{metadata
-compaction} because it speeds up network transfers and reduces the storage
-footprint of metadata.  Our examples also benefit from the ability to
-\emph{modify large namespaces}: if a PLFS namespace was constructed with 1
-million processes, scaling to 2 million processes only requires sending a new
-input to the formula generator; ROOT Branches can be added to the namespace by
-changing the metadata referenced by the pointer generator; and if SIRIUS
-objects need to be repartitioned, only the logic in the code generator needs to
-be updated.  SIRIUS and ROOT benefit from the ability to \emph{generate
-relevant parts of the namespace} because only a fraction of the metadata is
-needed.
-
 Contrary to common belief, global file system namespaces can be scalable if
-they are given enough domain-specific knowledge.  File systems are thought to
-be robust and general because they have been around for a long time. But we
-show that today's applications are specialized, so they have regular, large
-namespaces. As a result, the file system should be changing its internal
-mechanisms to leverage the bounded and balanced nature of these namespaces to
-optimize metadata performance.
+they are given enough domain-specific knowledge.  We show that many of today's
+applications are specialized, so they have regular, large namespaces. As a
+result, the file system should be changing its internal mechanisms to leverage
+the bounded and balanced nature of these namespaces to optimize metadata
+performance.  Namespace schemas and generators solve many file system mtadata
+read problems because clients and servers avoid exchanging large lists. Our
+examples benefit from  \emph{metadata compaction}, which speeds up
+network/storage overheads and gives clients and servers the ability to
+\emph{modify large namespaces} and \emph{generate relevant parts of the
+namespace}.
+
+%File systems are thought to
+%be robust and general because they have been around for a long time. But we
+%show that today's applications are specialized, so they have regular, large
+%namespaces. As a result, the file system should be changing its internal
+%mechanisms to leverage the bounded and balanced nature of these namespaces to
+%optimize metadata performance.
 
 %In this section, we show how clients and metadata servers communicate using the
 %Pattern PLFS language and present our
