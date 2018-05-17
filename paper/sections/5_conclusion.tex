@@ -1,18 +1,34 @@
 \vspace{-0.75em}
-\section{Conclusion}
+\section{Conclusion and Future Work}
 \vspace{-0.75em}
 
 Contrary to common belief, global file system namespaces can be scalable if
-they are given enough domain-specific knowledge.  We show that many of today's
-applications are specialized, so they have regular, large namespaces. As a
-result, the file system should be changing its internal mechanisms to leverage
-the bounded and balanced nature of these namespaces to optimize metadata
-performance.  Namespace schemas and generators solve many file system mtadata
-read problems because clients and servers avoid exchanging large lists. Our
-examples benefit from  \emph{metadata compaction}, which speeds up
-network/storage overheads and gives clients and servers the ability to
-\emph{modify large namespaces} and \emph{generate relevant parts of the
-namespace}.
+they are given enough domain-specific knowledge.  We show that some of today's
+applications are specialized, so they have large, structured namespaces. We
+then argue that the file system should change its internal mechanisms to
+leverage the bounded and balanced nature of these namespaces by exchanging
+compact representations of metadata instead of the metadata in its entirety.
+This work shares many of the risks of programmable
+storage~\cite{sevilla:eurosys17-malacology, sevilla:sc15-mantle}, namely that
+introducing administrator-level functionality into the file system via poorly
+designed generators ({\it e.g.}, non-deterministic naming) or generators with
+malicious intent may jeopardize security and correctness, respectively. The
+environment could mitigate these behaviors ({\it e.g.} Lua sandboxes) but these
+issues are future work.  Also, our generators may not work for applications
+that make use of metadata that cannot be specified at create time, such as
+permissions ({\it e.g}, workflow systems), size of the file ({\it e.g.},
+Hadoop/Spark), or dates ({\it e.g.}, scrubbers/garbage collectors). Another
+avenue of future work will supplement these generators with more metadata
+information.
+
+%  Namespace schemas and generators solve many file system mtadata
+%read problems because clients and servers avoid exchanging large lists. 
+%Our
+%examples benefit from  \emph{metadata compaction}, which speeds up
+%network/storage overheads and gives clients and servers the ability to
+%\emph{modify large namespaces} and \emph{generate relevant parts of the
+%namespace}.
+
 
 %File systems are thought to
 %be robust and general because they have been around for a long time. But we

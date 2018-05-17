@@ -378,15 +378,15 @@ designed to scale-out via additional independent instances.
 %objects. Armed with this list, the client contacts the object storage system
 %(in our case this is RADOS, Ceph's object store) and reads relevant data.
 
-\begin{figure}[tb]
-\centering
-  \includegraphics[width=0.8\linewidth]{figures/empress.png}
-  \caption{One potential EMPRESS design for storing bounding box metadata.
-Coordinates and user-defined metadata are stored in SQLite while object names
-are calculated using a partitioning function (\(F(x)\)) and returned as a list
-of object names to the client.}
-  \label{fig:empress}
-\end{figure}
+%\begin{figure}[tb]
+%\centering
+%  \includegraphics[width=0.8\linewidth]{figures/empress.png}
+%  \caption{One potential EMPRESS design for storing bounding box metadata.
+%Coordinates and user-defined metadata are stored in SQLite while object names
+%are calculated using a partitioning function (\(F(x)\)) and returned as a list
+%of object names to the client.}
+%  \label{fig:empress}
+%\end{figure}
 
 \textbf{Namespace Description}: the global space is partitioned into
 non-overlapping, regular shaped cells.  The EMPRESS database has columns for
@@ -398,15 +398,16 @@ database).  Variables affect how the space is partitioned into objects;
 temperature may be computed for every cell while pressure is computed for every
 \(n\) cells. For most simulations, there are a minimum of 10 variables. 
 
-\textbf{Namespace Size}: a back-of-the-envelope calculation for the number of
-object names for a single run is:
-\[\frac
-  {(\text{processes})\times
-   (\text{data/process})\times
-   (\text{variables})\times
-   (\text{timesteps})}
-  {(\text{object size})}
-\]
+
+%a back-of-the-envelope calculation for the number of
+%object names for a single run is:
+%\[\frac
+%  {(\text{processes})\times
+%   (\text{data/process})\times
+%   (\text{variables})\times
+%   (\text{timesteps})}
+%  {(\text{object size})}
+%\]
 %\[=\frac
 %  {(1*10^6)\times
 %   (8*10^{9})\times
@@ -416,23 +417,24 @@ object names for a single run is:
 %  = 1*10^{12}
 %\text{ objects} \]
 
-We calculate \(1*10^{12}\) (1 trillion) objects for a simulation space of
-\(1\text{K}\times1\text{K}\times1\text{K}\) cells containing 8 byte floats.  We
-use 1 million processes, each writing 8GB of data for 10 variables over 100
-timesteps and an object size of 8MB (the optimal object size of Ceph's object
-store).  The data per process and number of variables are scaled to be about
-1/10 of each process's local storage space, so about 80GB. 100 timesteps is
-close to 1 timestep every 15 minutes for 24 hours. 
+\textbf{Namespace Size}: we calculate \(1*10^{12}\) (1 trillion) objects for a
+simulation space of \(1\text{K}\times1\text{K}\times1\text{K}\) cells
+containing 8 byte floats.  We use 1 million processes, each writing 8GB of data
+for 10 variables over 100 timesteps and an object size of 8MB (the optimal
+object size of Ceph's object store).  The data per process and number of
+variables are scaled to be about 1/10 of each process's local storage space, so
+about 80GB. 100 timesteps is close to 1 timestep every 15 minutes for 24 hours. 
+
+%\footnote{Users usually track bounding
+%boxes of interest by tagging features at write time.} 
 
 As we integrate EMPRESS with a scalable object store, mapping bounding box
 queries to object names for data sets of this size is a problem. Clients query
-EMPRESS with bounding box coordinates\footnote{Users usually track bounding
-boxes of interest by tagging features at write time.} and EMPRESS must provide
-the client with a list of object names.  One potential design is shown in
-Figure~\ref{fig:empress}; coordinates for variables are stored in the database
-and object name lists are calculated using the \(F(x)\) partitioning function
-at read time.  The problem is that object name lists can be very large when
-applications query multiple runs each containing trillions of objects,
+EMPRESS with bounding box coordinates and EMPRESS must provide the client with
+a list of object names.  One potential design is to store coordinates for
+variables in a database and calculate object name lists using a partitioning
+function at read time.  The problem is that object name lists can be very large
+when applications query multiple runs each containing trillions of objects,
 resulting in long transfer times as the metadata is sent back to the client.
 Even after receiving the object name list, the client may need to manage and
 traverse the list, doing things like filtering for object names at the ``edge"
