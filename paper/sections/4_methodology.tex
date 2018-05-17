@@ -103,17 +103,9 @@ before the job starts.
 \label{sec:namespace-generators}
 \vspace{-0.5em}
 
-A namespace generator is a compact representation of a namespace that lets
-clients/servers generate file system metadata. They can be used for bounded or
-balanced namespace schemas.  Tintenfisch is built on
-Cudele~\cite{sevilla:ipdps18-cudele} so a centralized, globally consistent
-metadata service can decouple subtrees and clients can do metadata IO locally
-with the consistency/durability semantics they require. This concept is similar
-to LWFS~\cite{oldfield:cc06-lwfs}, which supplied a core set of functionality
-and applications add additional functionality.  In Tintenfisch, namespace
-generators are stored in the directory inode of the decoupled subtree using the
-``file type" interface from Malacology~\cite{sevilla:eurosys17-malacology}.
-Next we discuss 3 example namespace generators.
+A namespace generator is a compact representation of a namespace with a
+balanced or bounded schema that lets clients/servers generate file system
+metadata. Next we discuss 3 example namespace generators.
 
 %This is similar to push-down predicates in databases, where the application is
 %providing domain-specific knowledge that the storage system knows how to
@@ -173,29 +165,60 @@ discussed in~\S\ref{sec:hep}.
 
 \subsection{Discussion}
 
-Using generators, Tintenfisch clients and servers improve the read performance
-of large file system metadata jobs by \emph{compacting metadata}, which speeds
-up network transfers and reduces the storage footprint of metadata. Metadata
-compaction also gives clients/servers the ability to \emph{modify large
-namespaces}. For our three examples examined in~\ref{sec:motivating-examples}:
-if a PLFS namespace was constructed with 1 million processes, scaling to 2
-million processes only requires sending a new input to the formula generator;
-ROOT Branches can be added to the namespace by changing the metadata referenced
-by the pointer generator; and if SIRIUS objects need to be repartitioned, only
-the logic in the code generator needs to be updated. Metadata compaction also
-gives clients/servers the ability to \emph{generate relevant parts of the
-namespace} because only a fraction of the metadata is needed. This is
-especially important for the SIRIUS use case, which has very large namespaces
-that are often pruned with prefixes.
+We designed these generators by matching the patterns of the namespace to the
+application source code. Often times, we had to consult documentation or the
+developers themselves to create this mapping; automatically creating generators
+based on source code analysis or namespace traversals is left as future work.
+
+\textbf{Advantages}: using generators, Tintenfisch clients and servers improve
+the read performance of large file system metadata jobs by \emph{compacting
+metadata}, which speeds up network transfers and reduces the storage footprint
+of metadata. Metadata compaction also gives clients/servers the ability to
+\emph{modify large namespaces}. For the examples in
+Section~\S\ref{sec:motivating-examples}: if a PLFS namespace was constructed
+with 1 million processes, scaling to 2 million processes only requires sending
+a new input to the formula generator; ROOT Branches can be added to the
+namespace by changing the metadata referenced by the pointer generator; and if
+SIRIUS objects need to be repartitioned, only the logic in the code generator
+needs to be updated. Metadata compaction also gives clients/servers the ability
+to \emph{generate relevant parts of the namespace} because only a fraction of
+the metadata is needed. This is especially important for the SIRIUS use case,
+which has very large namespaces that are often pruned with prefixes.
+
+\textbf{Disadvantages}: introducing administrator-level functionality into the
+file system may jeopardize security and correctness. This work shares many of
+the risks of programmable storage~\cite{sevilla:eurosys17-malacology,
+sevilla:sc15-mantle}, such as introducing generators with bad logic ({\it
+e.g.}, endless looping of names, non-deterministic naming, and creating
+corrupted names) or malicious intent. To a certain extent, the environment we
+choose may help sandbox these negative behaviors ({\it e.g.} with something
+like Lua's sandbox features) but these issues are largely left as future work.
 
 \textbf{Generality}: our generator types work well for our use cases, but this
 is not an exhaustive list. We only argue that our generators work well for
-namespaces that are balanced or bounded (not mutally exclusive), so any
+namespaces that are balanced or bounded (not mutually exclusive), so any
 workload that produces this structure should benefit. Although the generators
 themselves may not generalize to other namespace schemas, the approach of
 compacting metadata should work for workloads that modify or read the namespace
-with a pattern.  Similarly, the approach should also work for non-POSIX IO
-compliant namespaces, such as network ones, as long as the namespace has
-structure.
+with definable (or ``express-able") access pattern.  Similarly, the approach
+should also work for non-POSIX IO compliant namespaces, such as network ones,
+as long as the namespace has structure.
+
+\textbf{Current Implementation}: Tintenfisch is built on
+Cudele~\cite{sevilla:ipdps18-cudele} so a centralized, globally consistent
+metadata service can decouple subtrees and clients can do metadata IO locally
+with the consistency/durability semantics they require.  Namespace generators
+are integrated into file system metadata servers and clients instead of the
+application itself because we find namespace schemas to be common across
+domains and use cases. The generator itself is stored in the directory inode of
+the decoupled subtree using a ``file type"
+interface~\cite{watkins_datamods_2012} and our prototype is built using a
+programmable storage approach~\cite{sevilla:eurosys17-malacology,
+oldfield:cc06-lwfs}.
+
+%Malacology~\cite{sevilla:eurosys17-malacology}.
+%This concept is similar
+%to LWFS~\cite{oldfield:cc06-lwfs}, which supplied a core set of functionality
+%and applications add additional functionality.
 
 

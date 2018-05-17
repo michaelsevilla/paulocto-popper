@@ -4,11 +4,11 @@
 \vspace{-0.75em}
 
 We look at the namespaces for 3 large-scale applications.  Each is from a
-different domain and this list is not meant to be exhaustive.  To highlight the
-scalability challenges for file system metadata management, we focus on large
-scale systems in high performance computing, high energy physics, and large
-scale simulations. Large lists represent common problems in each of these
-domains.  To make our results reproducible, this paper adheres to The Popper
+different domain and this list is not meant to be exhaustive.  Large lists are
+a problem in each of these domains, so building a file system with just general
+metadata ({\it e.g.}, extended attributes) would reduce the size of the
+metadata but the architecture would still suffer from managing a large number
+of names.  To make our results reproducible, this paper adheres to The Popper
 Convention~\cite{jimenez:ipdpsw17-popper} so experiments can be examined in
 more detail, or even re-run, by visiting the \texttt{[source]} link next to
 each figure. 

@@ -68,13 +68,17 @@ job.
 
 Figure~\ref{fig:intro} provides an architectural overview: clients first
 decouple the file system subtree they want to operate on\footnote{This is not a
-contribution as it was presented in~\cite{sevilla:ipdps18-cudele}.} then
-clients and metadata servers lazily generate subtrees as needed using a
-``namespace generator". The namespace generator is stored in the root inode of
-the decoupled subtree and can be used later to efficiently merge new metadata
-(that was not explicitly stated up front) into the global namespace.  The
-fundamental insight is that the client and server both understand the final
-structure of the file system metadata. Our contributions:
+contribution. This functionality and details on merging updates ({\it e.g.,}
+when to merge, how to merge, and how to manage conflicts) were presented in
+DeltaFS~\cite{zheng:pdsw2015-deltafs} and
+Cudele~\cite{sevilla:ipdps18-cudele}.} then clients and metadata servers lazily
+generate subtrees as needed using a ``namespace generator". The namespace
+generator is stored in the root inode of the decoupled subtree and can be used
+later to efficiently merge new metadata (that was not explicitly stated up
+front) into the global namespace.  The fundamental insight is that the client
+and server both understand the final structure of the file system metadata. Our
+contributions:
+
 \vspace{-0.5em}
 \begin{itemize}
   \setlength\itemsep{-0.5em}
