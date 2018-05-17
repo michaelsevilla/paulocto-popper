@@ -46,7 +46,7 @@ void recurseBranch(TObjArray *o){
       \end{minted}
       \caption{Code generator for HEP\vspace{1em}} \label{fig:hep}
   \end{subfigure}
-\caption{Namespace generators for 3 motivating examples. The code generator in Figure~\ref{fig:hep} is coupled with a pointer generator.\label{fig:use-cases}}
+\caption{Generators for 3 motivating examples. The code generator in Figure~\ref{fig:hep} is coupled with a pointer generator.\label{fig:use-cases}}
 \end{figure*}
 
 %local box require 'box2d'
@@ -169,9 +169,10 @@ generator containing library code for the ROOT framework \emph{and} a pointer
 generator for referencing the input to the code can be used to describe a ROOT
 file system namespace.  Figure~\ref{fig:hep} shows a code generator example
 where clients requesting Branches follow the pointer generator (not pictured)
-to objects containing metadata. An added benefit is that Tintenfisch can lazily
-construct parts of the namespace as needed, avoiding the inode problem
-discussed in~\S\ref{sec:hep}.
+to objects containing metadata. 
+%An added benefit is that Tintenfisch can lazily
+%construct parts of the namespace as needed, avoiding the inode problem
+%discussed in~\S\ref{sec:hep}.
 
 %We had to consult documentation or developers to
 %create this mapping and future work will automatically create generators based
@@ -187,8 +188,8 @@ fraction of the metadata is needed ({\it e.g.}, generating object names for
 SIRIUS based on a prefix).  The generator types work well for namespaces that
 are balanced/bounded, so use cases outside POSIX IO, such as network
 namespaces, should also benefit.  Although the generator types may not
-generalize to other schemas, our approach works for jobs that modify/read the
-namespace with definable (or ``express-able") access patterns.  
+generalize to other schemas, our approach works for jobs with definable
+namespace access patterns.  
 
 %If the application needs accurate metadata that cannot be generated in less
 %than linear time in relation to the number of files, then our approach will
