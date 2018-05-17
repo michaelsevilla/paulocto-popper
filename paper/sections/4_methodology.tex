@@ -183,15 +183,12 @@ clients/servers the ability to \emph{modify large namespaces} ({\it e.g.}, PLFS
 namespaces can be scaled from 1 to 2 million processes just by sending a new
 input to the formula generator). Metadata compaction also gives clients/servers
 the ability to \emph{generate relevant parts of the namespace} because only a
-fraction of the metadata is needed ({\it e.g.} generating object names for
+fraction of the metadata is needed ({\it e.g.}, generating object names for
 SIRIUS based on a prefix).  The generator types work well for namespaces that
-are balanced or bounded, so use cases outside POSIX IO namespaces, such as
-network namespaces, may also benefit.  Although the generator types may not
-generalize to other namespace schemas, the approach of compacting metadata
-should work for workloads that modify or read the namespace with definable (or
-``express-able") access pattern.  
-
-
+are balanced/bounded, so use cases outside POSIX IO, such as network
+namespaces, should also benefit.  Although the generator types may not
+generalize to other schemas, our approach works for jobs that modify/read the
+namespace with definable (or ``express-able") access patterns.  
 
 %If the application needs accurate metadata that cannot be generated in less
 %than linear time in relation to the number of files, then our approach will
