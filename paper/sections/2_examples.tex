@@ -1,10 +1,11 @@
+\thispagestyle{empty}
 \vspace{-0.75em}
 \section{Motivating Examples}
 \label{sec:motivating-examples}
 \vspace{-0.75em}
 
 We look at the namespaces for 3 large-scale applications.  Each is from a
-different domain and this list is not meant to be exhaustive.  Large lists are
+different domain and this list is not meant to be exhaustive.  Large lists of metadata are
 a problem in each of these domains, so building a file system with just general
 metadata ({\it e.g.}, extended attributes) would reduce the size of the
 metadata but the architecture would still suffer from managing a large number
@@ -42,7 +43,7 @@ each figure.
      \label{fig:plfs_problem}
    \end{subfigure}
 \caption{PLFS file system metadata. (a) shows that the namespace is structured
-and predictable; the pattern (solid line) is repeated for each hosts. In this
+and predictable; the pattern (solid line) is repeated for each host. In this
 case, there are three hosts so the pattern is repeated two more times. (b)
 shows that the namespace scales linearly with the number of clients.  This
 makes reading and writing difficult using RPCs so decoupled subtrees must be
@@ -58,8 +59,8 @@ used to reduce the number of RPCs.}
 % What is the problem the authors are trying to solve?
 Checkpointing performs small writes to a single shared file but because file
 systems are optimized for large writes, performance is poor.
-PLFS~\cite{bent_plfs_2009} solved the checkpoint-restart problem by mapping
-logical files to physical files on the underlying file system. The solution
+PLFS~\cite{bent_plfs_2009} solved the checkpoint-restart problem by mapping one
+logical file to many physical files on the underlying file system. The solution
 targets N-1 strided checkpoints, where many processes write small IOs to
 offsets in the same logical file.  Each process sequentially writes to its own,
 unshared data file in the hierarchical file system and records an offset and
@@ -107,7 +108,7 @@ processes write data and index files to the container assigned to their host.
 So for a write workload ({\it i.e.} a checkpoint) the underlying file system
 creates a deep and wide directory hierarchy, as shown in
 Figure~\ref{fig:tree_plfs}.  The \texttt{host*} directory and
-\texttt{data*}/\texttt{index} files (denoted by the solid red line) are created
+\texttt{data*}/\texttt{index} files (denoted by the solid line) are created
 for every node in the system. The pattern is repeated twice (denoted by the
 dashed blue line) in the Figure, representing 2 additional hosts each with 1
 process.
@@ -125,7 +126,7 @@ second, so writing checkpoints is largely a solved problem.
 
 % How does PLFS read the namespace
 For reading a checkpoint, clients must coalesce index files to reconstruct the
-PLFS file. Figure~\ref{fig:plfs_problem} shows that the read metadata requests
+PLFS file. Figure~\ref{fig:plfs_problem} shows that the metadata read requests
 (``readdir" and ``open") outnumber the create requests by a factor of
 \(4\times\). Metadata read requests are notoriously
 slow~\cite{carns:ipdps09-pvfs, eshel:fast10-panache}, so like create requests,
@@ -137,7 +138,7 @@ still need to be transferred to the client. Regardless, both decoupled
 subtree scenarios require moving and materializing the file system subtree.
 Current efforts improve read scalability by reducing the space overhead of the
 index files themselves~\cite{he:hpdc13-plfs-patterns} and transferring index
-files after each write~\cite{grider:pc17-diddlings} but these approaches target
+files after each write but these approaches target
 the transfer and materialization of the index file data, not the index file
 metadata.
 
@@ -168,7 +169,7 @@ ROOT-specific metadata called Logical Record Headers (LRH).  For this
 discussion, the following objects are of interest: a ``Tree" is a table of
 events, listed sequentially and stored in a flat namespace; a ``Branch" is a
 column of a Tree, composed of a set of values called ``Entries"; and Entries
-are grouped into an ordered sets called
+are grouped into ordered sets called
 ``Baskets"~\cite{nasiriGerdeh:techreport18-root}.  Clients request Branches and
 data is transferred as Baskets; so Branches are the logical view of the data
 for users and Baskets are the compression, parallelization, and transfer unit.
@@ -257,7 +258,7 @@ incurs a metadata materialization overhead.}
 \end{figure*}
 
 \textbf{Namespace Description}: the HEP community is running into scalability
-problems.  The current effort is to integrate the ROOT framework with Ceph. But
+problems.  The current effort is to integrate the ROOT framework with Ceph~\cite{weil:osdi2006-ceph}. But
 naive approaches such as storing ROOT files as objects in an object store or
 files in a file system have IO read amplification ({\it i.e.} read more than is
 necessary); storing as an object would pull the entire GB-sized blob and
@@ -339,17 +340,17 @@ system metadata makes it slower than the file approach.  Note that this is one
 file is accessed so the namespace approach might be more scalable for workloads
 that access fewer Baskets.
 
-%The reason is shown in Figure~\ref{fig:hep_problem}. The file system metadata
-%accesses, characterized by many \texttt{open()} requests, incur many RPCs.
-%This causes worse performance and lower client CPU utilization compared to
-%reading a single ROOT file.  So the cost of read amplification in the file
-%approach is offset by the cost of doing namespace operations. 
-
 \textbf{Takeaway}: the ROOT namespace stores billions of files and we show that
 RPCs overwhelm a centralized metadata server. Decoupling the namespace helps
 writes but then the read performance is limited by (1) the speed of
 transferring file system metadata across the network and (2) the cost of
 materializing parts of the namespace that are not relevant to the workload.
+
+%The reason is shown in Figure~\ref{fig:hep_problem}. The file system metadata
+%accesses, characterized by many \texttt{open()} requests, incur many RPCs.
+%This causes worse performance and lower client CPU utilization compared to
+%reading a single ROOT file.  So the cost of read amplification in the file
+%approach is offset by the cost of doing namespace operations. 
 
 \vspace{-0.75em}
 \subsection{Large Scale Simulations: SIRIUS}
@@ -357,17 +358,18 @@ materializing parts of the namespace that are not relevant to the workload.
 
 SIRIUS~\cite{klasky:journal16-sirius} is the Exascale storage system being
 designed for the Storage System and I/O (SSIO)
-initiative~\cite{ross:report14-ssio}. The core tenant of the project is
-application hints that allow the storage to reconfigure itself for higher
-performance using techniques like tiering, management policies, data layout,
-quality of service, and load balancing.  SIRIUS uses a metadata service called
+initiative~\cite{ross:report14-ssio}. The core tenant of the project, similar
+to other projects in HPC like PDC~\cite{tang:ccgrid18-pdc}, is application
+hints that allow the storage to reconfigure itself for higher performance using
+techniques like tiering, management policies, data layout, quality of service,
+and load balancing.  SIRIUS uses a metadata service called
 EMPRESS~\cite{lawson:pdsw17-empress}, which is an SQLite instance that stores
 user-defined metadata for bounding boxes ({\it i.e.} a 3-dimensional coordinate
 space).  EMPRESS is designed to be used at any granularity, which is important
 for a simulation space represented as a 3D mesh. By granularity, we mean that
 metadata access can be optimized per variable ({\it e.g.}, temperature,
 pressure, etc.), per timestamp, per run, or even per set of runs (which may
-require multiple queries).  At this time, EMPRESS is single node but it is
+require multiple queries).  At this time, EMPRESS runs on a single node but it is
 designed to scale-out via additional independent instances.
 
 %, where one client

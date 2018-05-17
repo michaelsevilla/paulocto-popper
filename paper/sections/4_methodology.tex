@@ -1,3 +1,4 @@
+\thispagestyle{empty}
 \vspace{-0.5em}
 \section{Methodology: Compact Metadata}
 \label{sec:methodology}
@@ -104,8 +105,8 @@ before the job starts.
 
 A namespace generator is a compact representation of a balanced or
 bounded namespace that lets clients/servers generate file system
-metadata.  Tintenfisch is built on Cudele~\cite{sevilla:ipdps18-cudele}
-so a centralized, globally consistent metadata service can decouple
+metadata.  Tintenfisch supports namespace generators and is built on Cudele~\cite{sevilla:ipdps18-cudele}
+so the centralized, globally consistent metadata service can decouple
 subtrees.  The generator is stored in the directory inode of the
 decoupled subtree using a ``file type"
 interface~\cite{watkins_datamods_2012} and our prototype is built using
