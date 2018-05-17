@@ -123,12 +123,13 @@ produces a list of files and directories.  For example, PLFS creates files and
 directories based on the number of clients, so administrators can use the
 formula in Figure~\ref{fig:plfs}, which takes as input the number of processes
 and hosts in the cluster and outputs the number of directories, files, and
-files per directory.  The namespace drawn in Figure~\ref{fig:tree_plfs} can be
-generated using an input of 3 hosts each with 1 process. 
-%With this namespace
-%generator, clients can open just the container inode and then compute and
-%access its contents without \texttt{lookup()} and \texttt{open()} RPCs to a
-%centralized metadata service.
+files per directory.  The formula assumes that hostnames can be generated ({\it
+e.g.}, a range of hosts named host.[1, 2, 3, 4]). The namespace drawn in
+Figure~\ref{fig:tree_plfs} can be generated using an input of 3 hosts each with
+1 process.
+%With this namespace generator, clients can open just the container inode and
+%then compute and access its contents without \texttt{lookup()} and
+%\texttt{open()} RPCs to a centralized metadata service.
 
 %For \(n\) processes on \(m\) servers:
 %\begin{itemize}
@@ -203,6 +204,14 @@ compacting metadata should work for workloads that modify or read the namespace
 with definable (or ``express-able") access pattern.  Similarly, the approach
 should also work for non-POSIX IO compliant namespaces, such as network ones,
 as long as the namespace has structure.
+
+Our generators may not work for applications that make use of metadata that
+cannot be specified at create time, such as permissions ({\it e.g}
+workflow/batch systems), size of the file ({\it e.g.} Hadoop and Spark), or
+dates ({\it e.g.} scrubbers and garbage collectors). If the application needs
+accurate metadata that cannot be generated in less than linear time in relation
+to the number of files, then our approach will need to be supplemented with
+more information (possibly provided by the pointer generator).
 
 \textbf{Current Implementation}: Tintenfisch is built on
 Cudele~\cite{sevilla:ipdps18-cudele} so a centralized, globally consistent
